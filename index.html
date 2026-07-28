@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification System // 3D Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-input:focus {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- Decorative background glow elements -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 left-1/3 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="w-full max-w-xl z-10 space-y-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-medium text-indigo-400 mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Secure System Active
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                Проверка заказа
+            </h1>
+            <p class="text-slate-400 text-sm">Введите код маркировки для получения детальной информации</p>
+        </div>
+
+        <!-- Search Card -->
+        <div class="glass rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <form id="searchForm" class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <input 
+                        type="text" 
+                        id="codeInput" 
+                        placeholder="Например: PC0000000001" 
+                        autocomplete="off"
+                        class="w-full bg-slate-900/80 border border-slate-800 rounded-2xl px-5 py-4 text-slate-100 placeholder-slate-600 font-mono tracking-wider text-sm outline-none transition-all glow-input uppercase"
+                    >
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-medium px-7 py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-indigo-600/25 cursor-pointer text-sm flex items-center justify-center gap-2"
+                >
+                    <span>Проверить</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Result Container -->
+        <div id="resultContainer" class="hidden animate-fade-in">
+            <div class="glass rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
+                
+                <!-- Status Badge Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800/80">
+                    <span id="resCode" class="font-mono text-xs text-indigo-400 tracking-wider bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/20"></span>
+                    <div id="warrantyBadge"></div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">Получатель / Покупатель</span>
+                        <span id="resClient" class="font-medium text-slate-200 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">Мастер</span>
+                        <span id="resMaster" class="font-medium text-slate-200 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">Наименование товара</span>
+                        <span id="resProduct" class="font-medium text-slate-200 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">Используемый пластик</span>
+                        <span id="resPlastic" class="font-medium text-slate-200 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">Срок гарантии</span>
+                        <span id="resWarranty" class="font-mono font-medium text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                        <span class="text-slate-400">3D-печать</span>
+                        <span id="resPrint" class="font-medium text-slate-200 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-slate-400">Персональная скидка</span>
+                        <span id="resDiscount" class="font-medium text-emerald-400 text-right"></span>
+                    </div>
+                </div>
+
+                <!-- Total Payment Block -->
+                <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800/60">
+                    <span class="text-slate-300 font-semibold">ОБЩИЙ ИТОГ К ОПЛАТЕ:</span>
+                    <span id="resTotal" class="text-xl font-bold text-white font-mono"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Container -->
+        <div id="errorContainer" class="hidden animate-fade-in">
+            <div class="glass rounded-3xl p-6 text-center border-red-500/20 bg-red-950/10">
+                <p class="text-red-400 text-sm font-medium">Код не найден в базе данных мини-сервера.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // База данных мини-сервера (сюда можно легко добавлять новые записи)
+        const db = {
+            "PC0000000001": {
+                client: "Илья Бондаренко",
+                master: "Глеб Бондаренко",
+                product: 'Бесконечный куб игрушка "Анти-Стресс"',
+                plastic: "PLA Lite Bambu Lab",
+                warrantyDays: 1,
+                warrantyDateStr: "26.07.2026",
+                warrantyDateObj: new Date(2026, 6, 26), // Месяцы 0-индексируемые (6 = июль)
+                printDetails: 'Бесконечный куб игрушка "Анти-Стресс" (Чёрный цвет) | 47 ₽',
+                discount: "-27 ₽",
+                total: "20 ₽"
+            },
+            "PC0000000002": {
+                client: "Мария Ермакова",
+                master: "Глеб Бондаренко",
+                product: 'Конусообразная игрушка "Анти-Стресс"',
+                plastic: "PLA Lite Bambu Lab",
+                warrantyDays: 90,
+                warrantyDateStr: "28.11.2026",
+                warrantyDateObj: new Date(2026, 10, 28), // 10 = ноябрь
+                printDetails: 'Конусообразная игрушка "Анти-Стресс" (Чёрный цвет)',
+                discount: "-27 ₽",
+                total: "20 ₽"
+            }
+        };
+
+        const form = document.getElementById('searchForm');
+        const input = document.getElementById('codeInput');
+        const resultContainer = document.getElementById('resultContainer');
+        const errorContainer = document.getElementById('errorContainer');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = input.value.trim().toUpperCase();
+
+            resultContainer.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+
+            if (!code) return;
+
+            const item = db[code];
+
+            if (item) {
+                // Заполняем данные
+                document.getElementById('resCode').textContent = code;
+                document.getElementById('resClient').textContent = item.client;
+                document.getElementById('resMaster').textContent = item.master;
+                document.getElementById('resProduct').textContent = item.product;
+                document.getElementById('resPlastic').textContent = item.plastic;
+                document.getElementById('resPrint').textContent = item.printDetails;
+                document.getElementById('resDiscount').textContent = item.discount;
+                document.getElementById('resTotal').textContent = item.total;
+
+                // Динамическая проверка времени (сравнение с текущей датой системы)
+                const now = new Date();
+                const isExpired = now > item.warrantyDateObj;
+
+                const warrantyBadge = document.getElementById('warrantyBadge');
+                const resWarranty = document.getElementById('resWarranty');
+
+                if (isExpired) {
+                    warrantyBadge.innerHTML = `<span class="px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-wide">ПРОСРОЧЕНО</span>`;
+                    resWarranty.innerHTML = `${item.warrantyDays} ${item.warrantyDays === 1 ? 'день' : 'дней'} <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                } else {
+                    warrantyBadge.innerHTML = `<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">ДЕЙСТВИТЕЛЬНА</span>`;
+                    resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-emerald-400 font-semibold">[ НЕ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                }
+
+                resultContainer.classList.remove('hidden');
+            } else {
+                errorContainer.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
