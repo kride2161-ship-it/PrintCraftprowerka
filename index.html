@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification System // 3D Lab</title>
+    <title>Verification Portal // 3D Lab</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
         .glass {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 17, 23, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .glow-input:focus {
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
-            border-color: rgba(99, 102, 241, 0.5);
+        .glow-box {
+            box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.15);
+        }
+        .glow-input:focus-within {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+            border-color: rgba(99, 102, 241, 0.6);
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in {
@@ -27,92 +31,98 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+<body class="bg-[#07090e] text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
-    <!-- Decorative background glow elements -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-1/4 left-1/3 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Ambient background glows -->
+    <div class="absolute top-1/5 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 left-1/4 w-[350px] h-[350px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-    <div class="w-full max-w-xl z-10 space-y-6">
+    <div class="w-full max-w-xl z-10 space-y-8">
         
         <!-- Header -->
-        <div class="text-center space-y-2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-medium text-indigo-400 mb-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Secure System Active
+        <div class="text-center space-y-3">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-indigo-400 shadow-inner">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Secured Authentication Node
             </div>
-            <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                Проверка заказа
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-br from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                Проверка подлинности товара
             </h1>
-            <p class="text-slate-400 text-sm">Введите код маркировки для получения детальной информации</p>
+            <p class="text-slate-400 text-sm max-w-md mx-auto">Введите номер гарантийного талона для доступа к техническим спецификациям</p>
         </div>
 
         <!-- Search Card -->
-        <div class="glass rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <form id="searchForm" class="flex flex-col sm:flex-row gap-3">
-                <div class="relative flex-1">
-                    <input 
-                        type="text" 
-                        id="codeInput" 
-                        placeholder="Например: PC0000000001" 
-                        autocomplete="off"
-                        class="w-full bg-slate-900/80 border border-slate-800 rounded-2xl px-5 py-4 text-slate-100 placeholder-slate-600 font-mono tracking-wider text-sm outline-none transition-all glow-input uppercase"
+        <div class="glass rounded-3xl p-6 sm:p-8 glow-box relative">
+            <form id="searchForm" class="space-y-4">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Номер изделия</label>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1 flex items-center bg-slate-950/80 border border-slate-800/80 rounded-2xl overflow-hidden glow-input transition-all">
+                        <span class="pl-4 pr-1 font-mono text-sm text-slate-500 select-none tracking-wider">PC000000000</span>
+                        <input 
+                            type="text" 
+                            id="suffixInput" 
+                            placeholder="4" 
+                            maxlength="3"
+                            autocomplete="off"
+                            class="w-full bg-transparent py-4 pr-4 text-slate-100 placeholder-slate-700 font-mono text-base tracking-wider outline-none"
+                        >
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-sm flex items-center justify-center gap-2 shrink-0"
                     >
+                        <span>Проверить</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
                 </div>
-                <button 
-                    type="submit" 
-                    class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-medium px-7 py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-indigo-600/25 cursor-pointer text-sm flex items-center justify-center gap-2"
-                >
-                    <span>Проверить</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
             </form>
         </div>
 
         <!-- Result Container -->
         <div id="resultContainer" class="hidden animate-fade-in">
-            <div class="glass rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
+            <div class="glass rounded-3xl p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-2xl border-slate-800/80">
                 
                 <!-- Status Badge Header -->
                 <div class="flex items-center justify-between pb-4 border-b border-slate-800/80">
-                    <span id="resCode" class="font-mono text-xs text-indigo-400 tracking-wider bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/20"></span>
+                    <span id="resCode" class="font-mono text-xs text-indigo-400 tracking-wider bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/20"></span>
                     <div id="warrantyBadge"></div>
                 </div>
 
                 <!-- Details Grid -->
-                <div class="space-y-4 text-sm">
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                <div class="space-y-3.5 text-sm">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">Получатель / Покупатель</span>
                         <span id="resClient" class="font-medium text-slate-200 text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">Мастер</span>
                         <span id="resMaster" class="font-medium text-slate-200 text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">Наименование товара</span>
                         <span id="resProduct" class="font-medium text-slate-200 text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">Используемый пластик</span>
                         <span id="resPlastic" class="font-medium text-slate-200 text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">Срок гарантии</span>
                         <span id="resWarranty" class="font-mono font-medium text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-slate-800/40">
+                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
                         <span class="text-slate-400">3D-печать</span>
                         <span id="resPrint" class="font-medium text-slate-200 text-right"></span>
                     </div>
-                    <div class="flex justify-between items-center py-2">
+                    <div id="discountRow" class="flex justify-between items-center py-2.5 border-b border-slate-800/40 hidden">
                         <span class="text-slate-400">Персональная скидка</span>
                         <span id="resDiscount" class="font-medium text-emerald-400 text-right"></span>
                     </div>
                 </div>
 
                 <!-- Total Payment Block -->
-                <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between bg-slate-900/50 p-4 rounded-2xl border border-slate-800/60">
-                    <span class="text-slate-300 font-semibold">ОБЩИЙ ИТОГ К ОПЛАТЕ:</span>
+                <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between bg-slate-900/60 px-5 py-4 rounded-2xl border border-slate-800/60">
+                    <span class="text-slate-300 font-semibold text-sm">ОБЩИЙ ИТОГ К ОПЛАТЕ:</span>
                     <span id="resTotal" class="text-xl font-bold text-white font-mono"></span>
                 </div>
             </div>
@@ -120,15 +130,17 @@
 
         <!-- Error Container -->
         <div id="errorContainer" class="hidden animate-fade-in">
-            <div class="glass rounded-3xl p-6 text-center border-red-500/20 bg-red-950/10">
-                <p class="text-red-400 text-sm font-medium">Код не найден в базе данных мини-сервера.</p>
+            <div class="glass rounded-3xl p-6 text-center border-red-500/20 bg-red-950/10 shadow-xl">
+                <p class="text-red-400 text-sm font-medium leading-relaxed">
+                    Ваш код подленный, или неверный. Проверьте что написано на бумаге и введите снова
+                </p>
             </div>
         </div>
 
     </div>
 
     <script>
-        // База данных мини-сервера (сюда можно легко добавлять новые записи)
+        // База данных мини-сервера
         const db = {
             "PC0000000001": {
                 client: "Илья Бондаренко",
@@ -137,7 +149,8 @@
                 plastic: "PLA Lite Bambu Lab",
                 warrantyDays: 1,
                 warrantyDateStr: "26.07.2026",
-                warrantyDateObj: new Date(2026, 6, 26), // Месяцы 0-индексируемые (6 = июль)
+                warrantyDateObj: new Date(2026, 6, 26),
+                isNoWarranty: false,
                 printDetails: 'Бесконечный куб игрушка "Анти-Стресс" (Чёрный цвет) | 47 ₽',
                 discount: "-27 ₽",
                 total: "20 ₽"
@@ -149,26 +162,54 @@
                 plastic: "PLA Lite Bambu Lab",
                 warrantyDays: 90,
                 warrantyDateStr: "28.11.2026",
-                warrantyDateObj: new Date(2026, 10, 28), // 10 = ноябрь
+                warrantyDateObj: new Date(2026, 10, 28),
+                isNoWarranty: false,
                 printDetails: 'Конусообразная игрушка "Анти-Стресс" (Чёрный цвет)',
                 discount: "-27 ₽",
                 total: "20 ₽"
+            },
+            "PC0000000003": {
+                client: "Георгий Бондаренко",
+                master: "Глеб Бондаренко",
+                product: "Глушитель сигнализации ремня",
+                plastic: "PLA Lite Bambu Lab (чёрный)",
+                warrantyDays: 90,
+                warrantyDateStr: "29.11.2026",
+                warrantyDateObj: new Date(2026, 10, 29),
+                isNoWarranty: false,
+                printDetails: "Глушитель сигнализации ремня (Чёрный цвет, без AMS) | 35 руб",
+                discount: null,
+                total: "35 руб"
+            },
+            "PC0000000004": {
+                client: "Сергей Ерофеев",
+                master: "Глеб Бондаренко",
+                product: "Зажим/защёлка головки Dyson Submarine",
+                plastic: "PLA Bambu Lab",
+                warrantyDays: null,
+                warrantyDateStr: "БЕЗ ГАРАНТИИ",
+                warrantyDateObj: null,
+                isNoWarranty: true,
+                printDetails: "Зажим/защёлка головки Dyson Submarine (Оранжевый, Без AMS) | 40 руб",
+                discount: null,
+                total: "40 руб"
             }
         };
 
         const form = document.getElementById('searchForm');
-        const input = document.getElementById('codeInput');
+        const suffixInput = document.getElementById('suffixInput');
         const resultContainer = document.getElementById('resultContainer');
         const errorContainer = document.getElementById('errorContainer');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const code = input.value.trim().toUpperCase();
+            const suffix = suffixInput.value.trim();
+            const code = "PC000000000" + suffix;
 
             resultContainer.classList.add('hidden');
             errorContainer.classList.add('hidden');
 
-            if (!code) return;
+            if (!suffix) return;
 
             const item = db[code];
 
@@ -180,22 +221,35 @@
                 document.getElementById('resProduct').textContent = item.product;
                 document.getElementById('resPlastic').textContent = item.plastic;
                 document.getElementById('resPrint').textContent = item.printDetails;
-                document.getElementById('resDiscount').textContent = item.discount;
                 document.getElementById('resTotal').textContent = item.total;
 
-                // Динамическая проверка времени (сравнение с текущей датой системы)
-                const now = new Date();
-                const isExpired = now > item.warrantyDateObj;
+                // Скидка (если есть)
+                const discountRow = document.getElementById('discountRow');
+                if (item.discount) {
+                    document.getElementById('resDiscount').textContent = item.discount;
+                    discountRow.classList.remove('hidden');
+                } else {
+                    discountRow.classList.add('hidden');
+                }
 
                 const warrantyBadge = document.getElementById('warrantyBadge');
                 const resWarranty = document.getElementById('resWarranty');
 
-                if (isExpired) {
-                    warrantyBadge.innerHTML = `<span class="px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-wide">ПРОСРОЧЕНО</span>`;
-                    resWarranty.innerHTML = `${item.warrantyDays} ${item.warrantyDays === 1 ? 'день' : 'дней'} <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                // Проверка типа гарантии
+                if (item.isNoWarranty) {
+                    warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-400 text-xs font-semibold tracking-wide">БЕЗ ГАРАНТИИ</span>`;
+                    resWarranty.innerHTML = `<span class="text-slate-400 font-semibold">БЕЗ ГАРАНТИИ</span>`;
                 } else {
-                    warrantyBadge.innerHTML = `<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">ДЕЙСТВИТЕЛЬНА</span>`;
-                    resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-emerald-400 font-semibold">[ НЕ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                    const now = new Date();
+                    const isExpired = now > item.warrantyDateObj;
+
+                    if (isExpired) {
+                        warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-wide">ПРОСРОЧЕНО</span>`;
+                        resWarranty.innerHTML = `${item.warrantyDays} ${item.warrantyDays === 1 ? 'день' : 'дней'} <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                    } else {
+                        warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">НЕ ПРОСРОЧЕНО</span>`;
+                        resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-emerald-400 font-semibold">[ НЕ ПРОСРОЧЕНО ]</span> ${item.warrantyDateStr}`;
+                    }
                 }
 
                 resultContainer.classList.remove('hidden');
