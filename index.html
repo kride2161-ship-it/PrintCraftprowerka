@@ -61,7 +61,7 @@
                         <input 
                             type="text" 
                             id="suffixInput" 
-                            placeholder="4" 
+                            placeholder="5" 
                             maxlength="3"
                             autocomplete="off"
                             class="w-full bg-transparent py-4 pr-4 text-slate-100 placeholder-slate-700 font-mono text-base tracking-wider outline-none"
@@ -193,6 +193,19 @@
                 printDetails: "Зажим/защёлка головки Dyson Submarine (Оранжевый, Без AMS) | 40 руб",
                 discount: null,
                 total: "40 руб"
+            },
+            "PC0000000005": {
+                client: "Данил Казубович",
+                master: "Глеб Бондаренко",
+                product: 'Человечик из игры "Chemeleon Mechi"',
+                plastic: "Petg Basic Bambu Lab",
+                warrantyDays: 7,
+                warrantyDateStr: "06.08.2026",
+                warrantyDateObj: new Date(2026, 7, 6), // 7 = август
+                isNoWarranty: false,
+                printDetails: 'Человечик из игры "Chemeleon Mechi" (Белый, без AMS) | 20₽',
+                discount: null,
+                total: "20₽"
             }
         };
 
@@ -245,7 +258,7 @@
 
                     if (isExpired) {
                         warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-wide">ПРОСРОЧЕНО</span>`;
-                        resWarranty.innerHTML = `${item.warrantyDays} ${item.warrantyDays === 1 ? 'день' : 'дней'} <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
+                        resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
                     } else {
                         warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">НЕ ПРОСРОЧЕНО</span>`;
                         resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-emerald-400 font-semibold">[ НЕ ПРОСРОЧЕНО ]</span> ${item.warrantyDateStr}`;
