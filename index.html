@@ -1,275 +1,514 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Portal // 3D Lab</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .glass {
-            background: rgba(13, 17, 23, 0.75);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .glow-box {
-            box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.15);
-        }
-        .glow-input:focus-within {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
-            border-color: rgba(99, 102, 241, 0.6);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Табло Заказов</title>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      color: #ffffff;
+      background: linear-gradient(-45deg, #0f172a, #1e3a8a, #2563eb, #cbd5e1);
+      background-size: 400% 400%;
+      animation: matteShift 18s ease infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes matteShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .selector-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 20px;
+    }
+    .btn {
+      padding: 18px 36px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.35); transform: translateY(-2px); }
+
+    /* ТВ Экран */
+    .tv-container {
+      display: none;
+      padding: 30px;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .tv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 15px 30px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .tv-title { font-size: 2.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    .pair-code { font-size: 1.4rem; background: rgba(0, 0, 0, 0.3); padding: 8px 18px; border-radius: 12px; display:flex; gap:8px; align-items:center; }
+
+    .columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      flex: 1;
+    }
+    .column {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(25px);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+    .col-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .col-title.ready { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
+
+    .orders-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+      align-content: start;
+    }
+    .order-card {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 18px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .order-card.ready-card {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(16, 185, 129, 0.4));
+      border: 2px solid #4ade80;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+    }
+    .empty-msg {
+      font-size: 1.5rem;
+      opacity: 0.6;
+      font-style: italic;
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    /* Панель Управления */
+    .admin-container {
+      display: none;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 25px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .admin-input {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      margin-bottom: 15px;
+      outline: none;
+    }
+    .admin-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 12px 20px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
-<body class="bg-[#07090e] text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+<body>
 
-    <!-- Ambient background glows -->
-    <div class="absolute top-1/5 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-[350px] h-[350px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+  <!-- Выбор режима -->
+  <div id="modeSelector" class="selector-screen">
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Система Заказов</h1>
+    <button class="btn" onclick="startTV()">🖥 Открыть Табло (для ТВ)</button>
+    <button class="btn" onclick="startAdmin()">📱 Открыть Пульт Управления</button>
+  </div>
 
-    <div class="w-full max-w-xl z-10 space-y-8">
-        
-        <!-- Header -->
-        <div class="text-center space-y-3">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-indigo-400 shadow-inner">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Secured Authentication Node
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-br from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                Проверка подлинности товара
-            </h1>
-            <p class="text-slate-400 text-sm max-w-md mx-auto">Введите номер гарантийного талона для доступа к техническим спецификациям</p>
+  <!-- ТВ Экран -->
+  <div id="tvScreen" class="tv-container">
+    <div class="tv-header">
+      <div class="tv-title">Заказы</div>
+      <div class="pair-code" id="tvPairCode">
+        <span id="tvPairText">Код подключения: Подключение...</span>
+        <button id="copyPairBtn" class="btn" style="padding:8px 12px; font-size:0.9rem;">Копировать</button>
+        <button id="enableSoundBtn" class="btn" style="padding:8px 12px; font-size:0.9rem; background:rgba(34,197,94,0.25);">Включить звук</button>
+      </div>
+    </div>
+    <div class="columns-grid">
+      <div class="column">
+        <div class="col-title">Готовятся:</div>
+        <div class="orders-list" id="preparingList">
+          <div class="empty-msg">Тут ничего нет...</div>
         </div>
+      </div>
+      <div class="column">
+        <div class="col-title ready">Готово:</div>
+        <div class="orders-list" id="readyList"></div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Search Card -->
-        <div class="glass rounded-3xl p-6 sm:p-8 glow-box relative">
-            <form id="searchForm" class="space-y-4">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Номер изделия</label>
-                
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative flex-1 flex items-center bg-slate-950/80 border border-slate-800/80 rounded-2xl overflow-hidden glow-input transition-all">
-                        <span class="pl-4 pr-1 font-mono text-sm text-slate-500 select-none tracking-wider">PC000000000</span>
-                        <input 
-                            type="text" 
-                            id="suffixInput" 
-                            placeholder="5" 
-                            maxlength="3"
-                            autocomplete="off"
-                            class="w-full bg-transparent py-4 pr-4 text-slate-100 placeholder-slate-700 font-mono text-base tracking-wider outline-none"
-                        >
-                    </div>
-                    <button 
-                        type="submit" 
-                        class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-sm flex items-center justify-center gap-2 shrink-0"
-                    >
-                        <span>Проверить</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Result Container -->
-        <div id="resultContainer" class="hidden animate-fade-in">
-            <div class="glass rounded-3xl p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-2xl border-slate-800/80">
-                
-                <!-- Status Badge Header -->
-                <div class="flex items-center justify-between pb-4 border-b border-slate-800/80">
-                    <span id="resCode" class="font-mono text-xs text-indigo-400 tracking-wider bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/20"></span>
-                    <div id="warrantyBadge"></div>
-                </div>
-
-                <!-- Details Grid -->
-                <div class="space-y-3.5 text-sm">
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">Получатель / Покупатель</span>
-                        <span id="resClient" class="font-medium text-slate-200 text-right"></span>
-                    </div>
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">Мастер</span>
-                        <span id="resMaster" class="font-medium text-slate-200 text-right"></span>
-                    </div>
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">Наименование товара</span>
-                        <span id="resProduct" class="font-medium text-slate-200 text-right"></span>
-                    </div>
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">Используемый пластик</span>
-                        <span id="resPlastic" class="font-medium text-slate-200 text-right"></span>
-                    </div>
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">Срок гарантии</span>
-                        <span id="resWarranty" class="font-mono font-medium text-right"></span>
-                    </div>
-                    <div class="flex justify-between items-center py-2.5 border-b border-slate-800/40">
-                        <span class="text-slate-400">3D-печать</span>
-                        <span id="resPrint" class="font-medium text-slate-200 text-right"></span>
-                    </div>
-                    <div id="discountRow" class="flex justify-between items-center py-2.5 border-b border-slate-800/40 hidden">
-                        <span class="text-slate-400">Персональная скидка</span>
-                        <span id="resDiscount" class="font-medium text-emerald-400 text-right"></span>
-                    </div>
-                </div>
-
-                <!-- Total Payment Block -->
-                <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between bg-slate-900/60 px-5 py-4 rounded-2xl border border-slate-800/60">
-                    <span class="text-slate-300 font-semibold text-sm">ОБЩИЙ ИТОГ К ОПЛАТЕ:</span>
-                    <span id="resTotal" class="text-xl font-bold text-white font-mono"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Error Container -->
-        <div id="errorContainer" class="hidden animate-fade-in">
-            <div class="glass rounded-3xl p-6 text-center border-red-500/20 bg-red-950/10 shadow-xl">
-                <p class="text-red-400 text-sm font-medium leading-relaxed">
-                    Ваш код подленный, или неверный. Проверьте что написано на бумаге и введите снова
-                </p>
-            </div>
-        </div>
-
+  <!-- Пульт Управления -->
+  <div id="adminScreen" class="admin-container">
+    <h2 style="margin-bottom: 20px;">Управление ТВ</h2>
+    <div id="connectBlock">
+      <input type="text" id="codePinInput" class="admin-input" placeholder="Введите код с экрана ТВ (например: 4821)">
+      <button id="connectBtn" class="btn" style="width: 100%;" onclick="connectToTV()" disabled>Подключиться к ТВ</button>
+      <div style="opacity:0.7; margin-top:8px; font-size:0.9rem;">Ждите: создаётся подключение к signaling-серверу...</div>
     </div>
 
-    <script>
-        // База данных мини-сервера
-        const db = {
-            "PC0000000001": {
-                client: "Илья Бондаренко",
-                master: "Глеб Бондаренко",
-                product: 'Бесконечный куб игрушка "Анти-Стресс"',
-                plastic: "PLA Lite Bambu Lab",
-                warrantyDays: 1,
-                warrantyDateStr: "26.07.2026",
-                warrantyDateObj: new Date(2026, 6, 26),
-                isNoWarranty: false,
-                printDetails: 'Бесконечный куб игрушка "Анти-Стресс" (Чёрный цвет) | 47 ₽',
-                discount: "-27 ₽",
-                total: "20 ₽"
-            },
-            "PC0000000002": {
-                client: "Мария Ермакова",
-                master: "Глеб Бондаренко",
-                product: 'Конусообразная игрушка "Анти-Стресс"',
-                plastic: "PLA Lite Bambu Lab",
-                warrantyDays: 90,
-                warrantyDateStr: "28.11.2026",
-                warrantyDateObj: new Date(2026, 10, 28),
-                isNoWarranty: false,
-                printDetails: 'Конусообразная игрушка "Анти-Стресс" (Чёрный цвет)',
-                discount: "-27 ₽",
-                total: "20 ₽"
-            },
-            "PC0000000003": {
-                client: "Георгий Бондаренко",
-                master: "Глеб Бондаренко",
-                product: "Глушитель сигнализации ремня",
-                plastic: "PLA Lite Bambu Lab (чёрный)",
-                warrantyDays: 90,
-                warrantyDateStr: "29.11.2026",
-                warrantyDateObj: new Date(2026, 10, 29),
-                isNoWarranty: false,
-                printDetails: "Глушитель сигнализации ремня (Чёрный цвет, без AMS) | 35 руб",
-                discount: null,
-                total: "35 руб"
-            },
-            "PC0000000004": {
-                client: "Сергей Ерофеев",
-                master: "Глеб Бондаренко",
-                product: "Зажим/защёлка головки Dyson Submarine",
-                plastic: "PLA Bambu Lab",
-                warrantyDays: null,
-                warrantyDateStr: "БЕЗ ГАРАНТИИ",
-                warrantyDateObj: null,
-                isNoWarranty: true,
-                printDetails: "Зажим/защёлка головки Dyson Submarine (Оранжевый, Без AMS) | 40 руб",
-                discount: null,
-                total: "40 руб"
-            },
-            "PC0000000005": {
-                client: "Данил Казубович",
-                master: "Глеб Бондаренко",
-                product: 'Человечик из игры "Chemeleon Mechi"',
-                plastic: "Petg Basic Bambu Lab",
-                warrantyDays: 7,
-                warrantyDateStr: "06.08.2026",
-                warrantyDateObj: new Date(2026, 7, 6), // 7 = август
-                isNoWarranty: false,
-                printDetails: 'Человечик из игры "Chemeleon Mechi" (Белый, без AMS) | 20₽',
-                discount: null,
-                total: "20₽"
-            }
-        };
+    <div id="controlBlock" style="display: none;">
+      <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+        <input type="text" id="orderNumInput" class="admin-input" style="margin:0;" placeholder="Номер заказа (напр. 9 или PC0000000009)">
+        <button class="btn" onclick="addOrder()">Добавить</button>
+      </div>
 
-        const form = document.getElementById('searchForm');
-        const suffixInput = document.getElementById('suffixInput');
-        const resultContainer = document.getElementById('resultContainer');
-        const errorContainer = document.getElementById('errorContainer');
+      <h3 style="margin-bottom: 10px;">Список заказов:</h3>
+      <div id="adminOrdersList"></div>
+    </div>
+  </div>
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const suffix = suffixInput.value.trim();
-            const code = "PC000000000" + suffix;
+  <script>
+    // State and persistence
+    let peer = null;
+    let adminReady = false;
+    let conn = null; // admin's connection
+    // TV side supports multiple connections
+    let tvPeer = null;
+    let tvConns = [];
+    let audioCtx = null;
+    const STORAGE_KEY = 'orders_state_v1';
 
-            resultContainer.classList.add('hidden');
-            errorContainer.classList.add('hidden');
+    let state = { preparing: ['PC0000000008'], ready: ['PC0000000009'] };
 
-            if (!suffix) return;
+    // Load persisted state if available
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) state = JSON.parse(saved);
+    } catch (e) {
+      console.warn('Failed to load saved state', e);
+    }
 
-            const item = db[code];
+    function persistState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
 
-            if (item) {
-                // Заполняем данные
-                document.getElementById('resCode').textContent = code;
-                document.getElementById('resClient').textContent = item.client;
-                document.getElementById('resMaster').textContent = item.master;
-                document.getElementById('resProduct').textContent = item.product;
-                document.getElementById('resPlastic').textContent = item.plastic;
-                document.getElementById('resPrint').textContent = item.printDetails;
-                document.getElementById('resTotal').textContent = item.total;
+    function playSound() {
+      try {
+        if (!audioCtx) {
+          // If no audio context yet, create one only when user enabled sound (button)
+          console.warn('Audio context not initialized; click "Включить звук" on TV first.');
+          return;
+        }
+        const ctx = audioCtx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) { console.warn(e); }
+    }
 
-                // Скидка (если есть)
-                const discountRow = document.getElementById('discountRow');
-                if (item.discount) {
-                    document.getElementById('resDiscount').textContent = item.discount;
-                    discountRow.classList.remove('hidden');
-                } else {
-                    discountRow.classList.add('hidden');
-                }
+    function renderTV() {
+      const prepEl = document.getElementById('preparingList');
+      const readyEl = document.getElementById('readyList');
 
-                const warrantyBadge = document.getElementById('warrantyBadge');
-                const resWarranty = document.getElementById('resWarranty');
+      if (state.preparing.length === 0) {
+        prepEl.innerHTML = '<div class="empty-msg">Тут ничего нет...</div>';
+      } else {
+        prepEl.innerHTML = state.preparing.map(num => `<div class="order-card">${escapeHtml(num)}</div>`).join('');
+      }
 
-                // Проверка типа гарантии
-                if (item.isNoWarranty) {
-                    warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-400 text-xs font-semibold tracking-wide">БЕЗ ГАРАНТИИ</span>`;
-                    resWarranty.innerHTML = `<span class="text-slate-400 font-semibold">БЕЗ ГАРАНТИИ</span>`;
-                } else {
-                    const now = new Date();
-                    const isExpired = now > item.warrantyDateObj;
+      readyEl.innerHTML = state.ready.map(num => `<div class="order-card ready-card">${escapeHtml(num)}</div>`).join('');
+    }
 
-                    if (isExpired) {
-                        warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold tracking-wide">ПРОСРОЧЕНО</span>`;
-                        resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-red-400 font-semibold">[ ПРОСРОЧЕНО ]</span> | ${item.warrantyDateStr}`;
-                    } else {
-                        warrantyBadge.innerHTML = `<span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">НЕ ПРОСРОЧЕНО</span>`;
-                        resWarranty.innerHTML = `${item.warrantyDays} дней <span class="text-emerald-400 font-semibold">[ НЕ ПРОСРОЧЕНО ]</span> ${item.warrantyDateStr}`;
-                    }
-                }
+    function renderAdmin() {
+      const listEl = document.getElementById('adminOrdersList');
+      let html = '';
+      state.preparing.forEach(num => {
+        html += `
+          <div class="admin-item">
+            <span><b>${escapeHtml(num)}</b> (Готовится)</span>
+            <div>
+              <button class="btn" style="padding: 6px 12px; font-size:0.9rem;" onclick="moveToReady('${escapeJs(num)}')">В готово ➔</button>
+              <button class="btn" style="padding: 6px 12px; font-size:0.9rem; background:rgba(239,68,68,0.4);" onclick="removeOrder('${escapeJs(num)}')">✕</button>
+            </div>
+          </div>`;
+      });
+      state.ready.forEach(num => {
+        html += `
+          <div class="admin-item" style="border-left: 4px solid #4ade80;">
+            <span><b>${escapeHtml(num)}</b> (Готово)</span>
+            <button class="btn" style="padding: 6px 12px; font-size:0.9rem; background:rgba(239,68,68,0.4);" onclick="removeOrder('${escapeJs(num)}')">Выдан / Удалить</button>
+          </div>`;
+      });
+      listEl.innerHTML = html || '<div style="opacity:0.6;">Нет активных заказов</div>';
+    }
 
-                resultContainer.classList.remove('hidden');
-            } else {
-                errorContainer.classList.remove('hidden');
-            }
+    // UTIL: basic escaping for safety in innerHTML
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+    // UTIL: escape for embedding inside quoted JS onclick attributes (only used for matching existing numbers)
+    function escapeJs(s) {
+      return String(s).replace(/'/g, "\\'");
+    }
+
+    // TV: start and accept multiple admin connections
+    function startTV() {
+      document.getElementById('modeSelector').style.display = 'none';
+      document.getElementById('tvScreen').style.display = 'flex';
+
+      // 4-digit shortCode shown to the admin. Keep short for easy entry.
+      const shortCode = Math.floor(1000 + Math.random() * 9000);
+      // peer id uses prefix + shortCode so admin can use only the short code to connect.
+      // If you want stronger security, switch to tokens and show full id or exchange via a backend.
+      const peerId = 'pc-tv-' + shortCode;
+      tvPeer = new Peer(peerId);
+
+      tvPeer.on('open', id => {
+        document.getElementById('tvPairText').innerText = `Код подключения: ${shortCode}`;
+      });
+
+      // When admin connects, keep the connection in an array so TV can handle multiple admin clients.
+      tvPeer.on('connection', connection => {
+        tvConns.push(connection);
+        connection.on('open', () => {
+          // send current state to the newly connected admin so they see current orders immediately
+          connection.send({ type: 'STATE', state: state });
         });
-    </script>
+
+        connection.on('data', data => {
+          // From admin: handle commands
+          if (!data || !data.type) return;
+          if (data.type === 'SOUND') {
+            playSound();
+          } else if (data.type === 'STATE' && data.state) {
+            // Accept state updates from admins — keep server-of-truth on TV
+            state = data.state;
+            persistState();
+            renderTV();
+            // broadcast new state to all other connected admins
+            broadcastState();
+          } else if (data.type === 'REQUEST_STATE') {
+            connection.send({ type:'STATE', state });
+          }
+        });
+
+        connection.on('close', () => {
+          tvConns = tvConns.filter(c => c !== connection);
+        });
+        connection.on('error', () => {
+          tvConns = tvConns.filter(c => c !== connection);
+        });
+      });
+
+      renderTV();
+
+      // Copy button behavior
+      document.getElementById('copyPairBtn').addEventListener('click', () => {
+        const text = document.getElementById('tvPairText').innerText.replace('Код подключения: ', '').trim();
+        navigator.clipboard?.writeText(text).then(()=> {
+          const btn = document.getElementById('copyPairBtn');
+          const prev = btn.innerText;
+          btn.innerText = 'Скопировано';
+          setTimeout(()=> btn.innerText = prev, 1200);
+        }).catch(()=> alert('Не удалось скопировать код'));
+      });
+
+      // Enable sound button: user gesture to unlock audio context (browsers block auto-play otherwise)
+      document.getElementById('enableSoundBtn').addEventListener('click', async () => {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') {
+            await audioCtx.resume();
+          }
+          const btn = document.getElementById('enableSoundBtn');
+          btn.innerText = 'Звук включён';
+          btn.disabled = true;
+        } catch (e) {
+          console.warn('Cannot enable audio context', e);
+          alert('Включение звука не удалось: ' + e.message);
+        }
+      });
+    }
+
+    function broadcastState() {
+      tvConns.forEach(c => {
+        if (c.open) c.send({ type:'STATE', state });
+      });
+    }
+
+    // Admin: start client peer and wait until ready
+    function startAdmin() {
+      document.getElementById('modeSelector').style.display = 'none';
+      document.getElementById('adminScreen').style.display = 'block';
+
+      peer = new Peer(); // random id
+      adminReady = false;
+      document.getElementById('connectBtn').disabled = true;
+
+      peer.on('open', id => {
+        adminReady = true;
+        document.getElementById('connectBtn').disabled = false;
+      });
+
+      peer.on('error', err => {
+        console.warn('Peer error', err);
+        alert('Ошибка соединения: ' + (err && err.type ? err.type : err));
+      });
+    }
+
+    function connectToTV() {
+      const code = document.getElementById('codePinInput').value.trim();
+      if (!code) return alert('Введите код!');
+      if (!adminReady) return alert('Подождите: сигнализация ещё не готова (peer not open).');
+
+      const targetId = 'pc-tv-' + code;
+      conn = peer.connect(targetId, { reliable: true });
+
+      conn.on('open', () => {
+        document.getElementById('connectBlock').style.display = 'none';
+        document.getElementById('controlBlock').style.display = 'block';
+        // request the latest state from TV
+        conn.send({ type: 'REQUEST_STATE' });
+        // initial send of local state to ensure sync if needed
+        sendState();
+      });
+
+      conn.on('data', data => {
+        if (!data || !data.type) return;
+        if (data.type === 'STATE' && data.state) {
+          state = data.state;
+          persistState();
+          renderAdmin();
+        }
+      });
+
+      conn.on('close', () => {
+        alert('Соединение с ТВ закрыто');
+        document.getElementById('connectBlock').style.display = 'block';
+        document.getElementById('controlBlock').style.display = 'none';
+        conn = null;
+      });
+
+      conn.on('error', (e) => {
+        console.warn('Connection error', e);
+        alert('Ошибка соединения: ' + e);
+      });
+    }
+
+    function formatNum(input) {
+      if (!input) return '';
+      const trimmed = String(input).trim();
+      // If it already starts with PC (case-insensitive) and has digits, keep uppercase
+      if (/^pc/i.test(trimmed)) {
+        return trimmed.toUpperCase();
+      }
+      // Keep only digits and pad
+      const digits = trimmed.replace(/\D/g, '');
+      if (!digits) return 'PC' + String(trimmed).padStart(10, '0');
+      return 'PC' + String(digits).padStart(10, '0');
+    }
+
+    function addOrder() {
+      const inputEl = document.getElementById('orderNumInput');
+      if (!inputEl.value.trim()) return;
+      const formatted = formatNum(inputEl.value.trim());
+      // prevent duplicates across both arrays
+      if (state.preparing.includes(formatted) || state.ready.includes(formatted)) {
+        alert('Такой заказ уже существует: ' + formatted);
+        inputEl.value = '';
+        return;
+      }
+      state.preparing.push(formatted);
+      inputEl.value = '';
+      persistState();
+      renderAdmin();
+      sendState();
+    }
+
+    function moveToReady(num) {
+      state.preparing = state.preparing.filter(n => n !== num);
+      if (!state.ready.includes(num)) state.ready.push(num);
+      persistState();
+      renderAdmin();
+      sendState(true);
+    }
+
+    function removeOrder(num) {
+      state.preparing = state.preparing.filter(n => n !== num);
+      state.ready = state.ready.filter(n => n !== num);
+      persistState();
+      renderAdmin();
+      sendState();
+    }
+
+    function sendState(playSoundFlag = false) {
+      renderAdmin();
+      if (conn && conn.open) {
+        if (playSoundFlag) conn.send({ type: 'SOUND' });
+        conn.send({ type: 'STATE', state: state });
+      } else {
+        // No connection: persist locally so TV can pick up when admin reconnects
+        persistState();
+      }
+    }
+  </script>
 </body>
 </html>
