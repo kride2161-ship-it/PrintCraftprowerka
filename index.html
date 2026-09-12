@@ -1,514 +1,808 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Табло Заказов</title>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <title>ПРИНТКРАФТ × АРТС&КРАФТИНГ | Beta 1.0v</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandNavy: '#1a3560',
+            brandTeal: '#127462',
+            navyDark: '#0b1628',
+            tealDark: '#08332b',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'glass': '0 20px 50px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+            'glass-light': '0 20px 40px rgba(26, 53, 96, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8)',
+            'glow-teal': '0 0 30px rgba(18, 116, 98, 0.3)',
+            'glow-navy': '0 0 30px rgba(26, 53, 96, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Custom iOS 28 Animations & Glass Utilities */
+    :root {
+      --bg-gradient-1: #1a3560;
+      --bg-gradient-2: #127462;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      color: #ffffff;
-      background: linear-gradient(-45deg, #0f172a, #1e3a8a, #2563eb, #cbd5e1);
-      background-size: 400% 400%;
-      animation: matteShift 18s ease infinite;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
       overflow-x: hidden;
+      transition: background-color 0.6s ease, color 0.6s ease;
     }
 
-    @keyframes matteShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Vibrant Mesh Dynamic Background */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(18, 116, 98, 0.45), transparent 45%),
+        radial-gradient(circle at 85% 20%, rgba(26, 53, 96, 0.55), transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(18, 116, 98, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(26, 53, 96, 0.4), transparent 50%);
+      filter: blur(60px);
+      transition: all 0.8s ease;
     }
 
-    .selector-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      gap: 20px;
+    .light .mesh-bg {
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(18, 116, 98, 0.18), transparent 45%),
+        radial-gradient(circle at 85% 20%, rgba(26, 53, 96, 0.22), transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(18, 116, 98, 0.15), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(26, 53, 96, 0.18), transparent 50%);
+      filter: blur(50px);
     }
-    .btn {
-      padding: 18px 36px;
-      font-size: 1.3rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 16px;
+
+    /* iOS 28 Liquid Glass Cards */
+    .ios-card {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+    }
+
+    .light .ios-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 10px 30px rgba(26, 53, 96, 0.06);
+    }
+
+    /* Spring Hover Effects */
+    .ios-card-interactive {
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.2s ease;
     }
-    .btn:hover { background: rgba(255, 255, 255, 0.35); transform: translateY(-2px); }
-
-    /* ТВ Экран */
-    .tv-container {
-      display: none;
-      padding: 30px;
-      height: 100vh;
-      flex-direction: column;
-    }
-    .tv-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      padding: 15px 30px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .tv-title { font-size: 2.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-    .pair-code { font-size: 1.4rem; background: rgba(0, 0, 0, 0.3); padding: 8px 18px; border-radius: 12px; display:flex; gap:8px; align-items:center; }
-
-    .columns-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      flex: 1;
-    }
-    .column {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(25px);
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-    }
-    .col-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .col-title.ready { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
-
-    .orders-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 15px;
-      align-content: start;
-    }
-    .order-card {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 20px;
-      border-radius: 18px;
-      font-size: 1.8rem;
-      font-weight: 700;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .order-card.ready-card {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(16, 185, 129, 0.4));
-      border: 2px solid #4ade80;
-      color: #ffffff;
-      box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
-    }
-    .empty-msg {
-      font-size: 1.5rem;
-      opacity: 0.6;
-      font-style: italic;
-      grid-column: 1 / -1;
-      text-align: center;
-      margin-top: 40px;
+    .ios-card-interactive:active {
+      transform: scale(0.98);
     }
 
-    /* Панель Управления */
-    .admin-container {
-      display: none;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 25px;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Bottom Dock Bar Glass */
+    .dock-glass {
+      background: rgba(11, 22, 40, 0.75);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     }
-    .admin-input {
-      width: 100%;
-      padding: 16px;
-      font-size: 1.2rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      margin-bottom: 15px;
+
+    .light .dock-glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px -10px rgba(26, 53, 96, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    }
+
+    /* Custom Gram Slider Styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+
+    input[type=range]:focus {
       outline: none;
     }
-    .admin-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 12px 20px;
-      border-radius: 12px;
-      margin-bottom: 10px;
+
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 10px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    @keyframes popIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .light input[type=range]::-webkit-slider-runnable-track {
+      background: rgba(26, 53, 96, 0.1);
+      border: 1px solid rgba(26, 53, 96, 0.15);
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      height: 26px;
+      width: 26px;
+      border-radius: 50%;
+      background: #127462;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -8px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Tab Fade Transitions */
+    .tab-content {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px) scale(0.99);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-content.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
   </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-36 pt-6 px-4 sm:px-6">
 
-  <!-- Выбор режима -->
-  <div id="modeSelector" class="selector-screen">
-    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Система Заказов</h1>
-    <button class="btn" onclick="startTV()">🖥 Открыть Табло (для ТВ)</button>
-    <button class="btn" onclick="startAdmin()">📱 Открыть Пульт Управления</button>
-  </div>
+  <div class="mesh-bg"></div>
 
-  <!-- ТВ Экран -->
-  <div id="tvScreen" class="tv-container">
-    <div class="tv-header">
-      <div class="tv-title">Заказы</div>
-      <div class="pair-code" id="tvPairCode">
-        <span id="tvPairText">Код подключения: Подключение...</span>
-        <button id="copyPairBtn" class="btn" style="padding:8px 12px; font-size:0.9rem;">Копировать</button>
-        <button id="enableSoundBtn" class="btn" style="padding:8px 12px; font-size:0.9rem; background:rgba(34,197,94,0.25);">Включить звук</button>
+  <!-- Header Section -->
+  <header class="max-w-3xl mx-auto mb-6">
+    <div class="ios-card rounded-3xl p-5 sm:p-6 shadow-glass relative overflow-hidden">
+      <!-- Ambient Card Accents -->
+      <div class="absolute -top-12 -right-12 w-40 h-40 bg-brandTeal/20 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-brandNavy/30 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+        
+        <!-- Brand Title & Subtitle -->
+        <div>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-xl bg-brandTeal/20 border border-brandTeal/40 text-emerald-400 dark:text-emerald-300 text-[11px] font-bold tracking-wider uppercase shadow-sm">
+              Beta 1.0v
+            </span>
+            <span id="store-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800/60 dark:bg-slate-900/60 border border-white/10 text-xs font-semibold text-slate-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="status-text">Проверка работы...</span>
+            </span>
+          </div>
+
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white dark:text-white text-slate-900 mt-2 flex items-center gap-2">
+            ПРИНТКРАФТ <span class="text-brandTeal font-light">×</span> <span class="text-slate-300 dark:text-slate-300 text-slate-700">АРТС&КРАФТИНГ</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-600 font-medium mt-0.5">
+            Лаборатория 3D-печати & Кастомный Крафтинг
+          </p>
+        </div>
+
+        <!-- Controls: Language & Theme Switchers -->
+        <div class="flex items-center gap-2 self-end sm:self-center">
+          
+          <!-- Language / Currency Switcher Button -->
+          <button onclick="toggleLanguage()" class="px-3.5 py-2 rounded-2xl bg-slate-800/50 hover:bg-slate-700/60 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/10 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm">
+            <span id="lang-flag">🇷🇺</span>
+            <span id="lang-text" class="tracking-wide">RU (₽)</span>
+          </button>
+
+          <!-- Light/Dark Mode Switcher -->
+          <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-slate-800/50 hover:bg-slate-700/60 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/10 text-slate-200 flex items-center justify-center text-base transition-all active:scale-95 shadow-sm">
+            <span id="theme-icon">🌙</span>
+          </button>
+        </div>
+
       </div>
-    </div>
-    <div class="columns-grid">
-      <div class="column">
-        <div class="col-title">Готовятся:</div>
-        <div class="orders-list" id="preparingList">
-          <div class="empty-msg">Тут ничего нет...</div>
+
+      <!-- Working Hours Bar -->
+      <div class="mt-4 pt-4 border-t border-white/10 dark:border-white/10 border-slate-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-300 dark:text-slate-300 text-slate-600 font-medium">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-brandTeal shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span id="schedule-title" class="font-bold text-slate-200 dark:text-slate-200 text-slate-800">Часы работы PrintCraft:</span>
+        </div>
+        <div id="schedule-hours" class="bg-slate-900/40 dark:bg-slate-900/40 bg-slate-200/60 px-3 py-1 rounded-xl text-[11px] font-mono tracking-tight text-slate-300 dark:text-slate-300 text-slate-700">
+          Пн-Вт: 15:00-20:00 | Ср: 17:00-20:00 | Чт: 15:00-20:00 | Пт: 17:00-20:00
         </div>
       </div>
-      <div class="column">
-        <div class="col-title ready">Готово:</div>
-        <div class="orders-list" id="readyList"></div>
-      </div>
+
     </div>
-  </div>
+  </header>
 
-  <!-- Пульт Управления -->
-  <div id="adminScreen" class="admin-container">
-    <h2 style="margin-bottom: 20px;">Управление ТВ</h2>
-    <div id="connectBlock">
-      <input type="text" id="codePinInput" class="admin-input" placeholder="Введите код с экрана ТВ (например: 4821)">
-      <button id="connectBtn" class="btn" style="width: 100%;" onclick="connectToTV()" disabled>Подключиться к ТВ</button>
-      <div style="opacity:0.7; margin-top:8px; font-size:0.9rem;">Ждите: создаётся подключение к signaling-серверу...</div>
-    </div>
+  <!-- Main Container for Tabs -->
+  <main class="max-w-3xl mx-auto relative">
 
-    <div id="controlBlock" style="display: none;">
-      <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-        <input type="text" id="orderNumInput" class="admin-input" style="margin:0;" placeholder="Номер заказа (напр. 9 или PC0000000009)">
-        <button class="btn" onclick="addOrder()">Добавить</button>
-      </div>
-
-      <h3 style="margin-bottom: 10px;">Список заказов:</h3>
-      <div id="adminOrdersList"></div>
-    </div>
-  </div>
-
-  <script>
-    // State and persistence
-    let peer = null;
-    let adminReady = false;
-    let conn = null; // admin's connection
-    // TV side supports multiple connections
-    let tvPeer = null;
-    let tvConns = [];
-    let audioCtx = null;
-    const STORAGE_KEY = 'orders_state_v1';
-
-    let state = { preparing: ['PC0000000008'], ready: ['PC0000000009'] };
-
-    // Load persisted state if available
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) state = JSON.parse(saved);
-    } catch (e) {
-      console.warn('Failed to load saved state', e);
-    }
-
-    function persistState() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
-    }
-
-    function playSound() {
-      try {
-        if (!audioCtx) {
-          // If no audio context yet, create one only when user enabled sound (button)
-          console.warn('Audio context not initialized; click "Включить звук" on TV first.');
-          return;
-        }
-        const ctx = audioCtx;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      } catch (e) { console.warn(e); }
-    }
-
-    function renderTV() {
-      const prepEl = document.getElementById('preparingList');
-      const readyEl = document.getElementById('readyList');
-
-      if (state.preparing.length === 0) {
-        prepEl.innerHTML = '<div class="empty-msg">Тут ничего нет...</div>';
-      } else {
-        prepEl.innerHTML = state.preparing.map(num => `<div class="order-card">${escapeHtml(num)}</div>`).join('');
-      }
-
-      readyEl.innerHTML = state.ready.map(num => `<div class="order-card ready-card">${escapeHtml(num)}</div>`).join('');
-    }
-
-    function renderAdmin() {
-      const listEl = document.getElementById('adminOrdersList');
-      let html = '';
-      state.preparing.forEach(num => {
-        html += `
-          <div class="admin-item">
-            <span><b>${escapeHtml(num)}</b> (Готовится)</span>
-            <div>
-              <button class="btn" style="padding: 6px 12px; font-size:0.9rem;" onclick="moveToReady('${escapeJs(num)}')">В готово ➔</button>
-              <button class="btn" style="padding: 6px 12px; font-size:0.9rem; background:rgba(239,68,68,0.4);" onclick="removeOrder('${escapeJs(num)}')">✕</button>
+    <!-- ================= TAB 1: ГЛАВНАЯ ================= -->
+    <section id="tab-home" class="tab-content active space-y-5">
+      
+      <!-- Special Discounts Card -->
+      <div class="ios-card rounded-3xl p-6 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-brandTeal/20 border border-brandTeal/30 text-brandTeal flex items-center justify-center font-bold text-base">
+              %
             </div>
-          </div>`;
-      });
-      state.ready.forEach(num => {
-        html += `
-          <div class="admin-item" style="border-left: 4px solid #4ade80;">
-            <span><b>${escapeHtml(num)}</b> (Готово)</span>
-            <button class="btn" style="padding: 6px 12px; font-size:0.9rem; background:rgba(239,68,68,0.4);" onclick="removeOrder('${escapeJs(num)}')">Выдан / Удалить</button>
-          </div>`;
-      });
-      listEl.innerHTML = html || '<div style="opacity:0.6;">Нет активных заказов</div>';
-    }
+            <h2 id="discount-title" class="text-lg font-bold text-slate-100 dark:text-slate-100 text-slate-900">
+              Последние скидки
+            </h2>
+          </div>
+          <span id="discount-tag" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider">
+            Акция
+          </span>
+        </div>
 
-    // UTIL: basic escaping for safety in innerHTML
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
-    // UTIL: escape for embedding inside quoted JS onclick attributes (only used for matching existing numbers)
-    function escapeJs(s) {
-      return String(s).replace(/'/g, "\\'");
-    }
+        <!-- Offer Item -->
+        <div class="ios-card rounded-2xl p-4 bg-slate-900/40 dark:bg-slate-900/40 bg-white/50 border border-white/5 flex items-center justify-between">
+          <div class="space-y-1">
+            <div id="discount-item-name" class="font-semibold text-sm text-slate-200 dark:text-slate-200 text-slate-800">
+              Набор деталей из PLA пластика (90 грамм)
+            </div>
+            <div id="discount-desc" class="text-xs text-slate-400 dark:text-slate-400 text-slate-500">
+              Скидка на распечатанную массу от 90г для первых заказов
+            </div>
+          </div>
+          <div class="text-right pl-3 shrink-0">
+            <div id="discount-old-price" class="text-xs text-slate-500 line-through">100 ₽</div>
+            <div id="discount-new-price" class="text-base font-extrabold text-emerald-400">60 - 80 ₽</div>
+          </div>
+        </div>
+      </div>
 
-    // TV: start and accept multiple admin connections
-    function startTV() {
-      document.getElementById('modeSelector').style.display = 'none';
-      document.getElementById('tvScreen').style.display = 'flex';
+      <!-- Price Overview Teaser -->
+      <div class="ios-card rounded-3xl p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-brandNavy/30 border border-brandNavy/50 text-slate-300 flex items-center justify-center font-bold text-sm">
+              ⚖️
+            </div>
+            <h2 id="pricing-teaser-title" class="text-lg font-bold text-slate-100 dark:text-slate-100 text-slate-900">
+              Последние предложения по граммам
+            </h2>
+          </div>
+          <button onclick="switchTab('calculator')" class="text-xs font-semibold text-brandTeal hover:underline flex items-center gap-1">
+            <span id="btn-calc-more">Калькулятор</span> →
+          </button>
+        </div>
 
-      // 4-digit shortCode shown to the admin. Keep short for easy entry.
-      const shortCode = Math.floor(1000 + Math.random() * 9000);
-      // peer id uses prefix + shortCode so admin can use only the short code to connect.
-      // If you want stronger security, switch to tokens and show full id or exchange via a backend.
-      const peerId = 'pc-tv-' + shortCode;
-      tvPeer = new Peer(peerId);
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
+            <div class="text-xs text-slate-400 font-medium">10 грамм</div>
+            <div class="text-sm font-bold text-slate-100 dark:text-slate-100 text-slate-800 mt-1 price-10g">15 ₽</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 text-center relative overflow-hidden">
+            <span class="absolute top-0 right-0 bg-brandTeal text-white text-[8px] px-1.5 py-0.5 rounded-bl font-bold">-30₽</span>
+            <div class="text-xs text-slate-400 font-medium">30 грамм</div>
+            <div class="text-sm font-bold text-emerald-400 mt-1 price-30g">45 ₽</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
+            <div class="text-xs text-slate-400 font-medium">100 грамм</div>
+            <div class="text-sm font-bold text-slate-100 dark:text-slate-100 text-slate-800 mt-1 price-100g">150 ₽</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
+            <div class="text-xs text-slate-400 font-medium">1 кг (1000g)</div>
+            <div class="text-sm font-bold text-brandTeal mt-1 price-1kg">1390 ₽</div>
+          </div>
+        </div>
+      </div>
 
-      tvPeer.on('open', id => {
-        document.getElementById('tvPairText').innerText = `Код подключения: ${shortCode}`;
-      });
+      <!-- Recent Reviews Empty State Card -->
+      <div class="ios-card rounded-3xl p-6 text-center space-y-3">
+        <div class="flex items-center justify-center gap-2">
+          <h2 id="home-reviews-title" class="text-base font-bold text-slate-200 dark:text-slate-200 text-slate-800">
+            Последние отзывы
+          </h2>
+        </div>
+        <div class="py-6 px-4 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-slate-100/50 border border-dashed border-white/10 dark:border-white/10 border-slate-300">
+          <div class="text-3xl mb-2 opacity-50">⭐</div>
+          <p id="empty-reviews-text" class="text-sm font-medium text-slate-400 dark:text-slate-400 text-slate-500">
+            Их пока нет...
+          </p>
+        </div>
+      </div>
 
-      // When admin connects, keep the connection in an array so TV can handle multiple admin clients.
-      tvPeer.on('connection', connection => {
-        tvConns.push(connection);
-        connection.on('open', () => {
-          // send current state to the newly connected admin so they see current orders immediately
-          connection.send({ type: 'STATE', state: state });
-        });
+    </section>
 
-        connection.on('data', data => {
-          // From admin: handle commands
-          if (!data || !data.type) return;
-          if (data.type === 'SOUND') {
-            playSound();
-          } else if (data.type === 'STATE' && data.state) {
-            // Accept state updates from admins — keep server-of-truth on TV
-            state = data.state;
-            persistState();
-            renderTV();
-            // broadcast new state to all other connected admins
-            broadcastState();
-          } else if (data.type === 'REQUEST_STATE') {
-            connection.send({ type:'STATE', state });
-          }
-        });
+    <!-- ================= TAB 2: ОТЗЫВЫ ================= -->
+    <section id="tab-reviews" class="tab-content space-y-5">
+      <div class="ios-card rounded-3xl p-6 sm:p-8 text-center space-y-5">
+        <div class="w-16 h-16 rounded-3xl bg-brandTeal/20 border border-brandTeal/30 text-emerald-400 flex items-center justify-center mx-auto text-2xl shadow-glow-teal">
+          ⭐
+        </div>
 
-        connection.on('close', () => {
-          tvConns = tvConns.filter(c => c !== connection);
-        });
-        connection.on('error', () => {
-          tvConns = tvConns.filter(c => c !== connection);
-        });
-      });
+        <div>
+          <h2 id="tab-reviews-heading" class="text-xl font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
+            Отзывы о ПринтКрафт
+          </h2>
+          <p id="tab-reviews-sub" class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-500 mt-1 max-w-sm mx-auto">
+            Здесь будет выводиться честное мнение наших клиентов о качестве 3D-печати и скорости изготовления.
+          </p>
+        </div>
 
-      renderTV();
+        <!-- Empty State UI Box -->
+        <div class="py-12 px-6 rounded-2xl bg-slate-900/40 dark:bg-slate-900/40 bg-slate-100/80 border border-dashed border-white/10 dark:border-white/10 border-slate-300 max-w-md mx-auto">
+          <p id="reviews-no-items" class="text-base font-semibold text-slate-400 dark:text-slate-400 text-slate-600">
+            Их пока нет...
+          </p>
+          <p id="reviews-no-items-desc" class="text-xs text-slate-500 dark:text-slate-500 text-slate-400 mt-1">
+            Будьте первыми, кто оставит свой отзыв после первого заказа!
+          </p>
+        </div>
+      </div>
+    </section>
 
-      // Copy button behavior
-      document.getElementById('copyPairBtn').addEventListener('click', () => {
-        const text = document.getElementById('tvPairText').innerText.replace('Код подключения: ', '').trim();
-        navigator.clipboard?.writeText(text).then(()=> {
-          const btn = document.getElementById('copyPairBtn');
-          const prev = btn.innerText;
-          btn.innerText = 'Скопировано';
-          setTimeout(()=> btn.innerText = prev, 1200);
-        }).catch(()=> alert('Не удалось скопировать код'));
-      });
+    <!-- ================= TAB 3: ГРАММЫ В РУБЛИ (УСЛУГИ) ================= -->
+    <section id="tab-calculator" class="tab-content space-y-5">
+      
+      <!-- Interactive Gram-to-Currency Calculator -->
+      <div class="ios-card rounded-3xl p-6 space-y-6 relative overflow-hidden">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <!-- Icon: Filament Spool + Coin -->
+            <div class="w-10 h-10 rounded-2xl bg-brandTeal/20 border border-brandTeal/40 text-brandTeal flex items-center justify-center text-lg shadow-sm">
+              🧵
+            </div>
+            <div>
+              <h2 id="calc-title" class="text-lg font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
+                Калькулятор: Граммы в <span id="calc-currency-name">Рубли</span>
+              </h2>
+              <p id="calc-subtitle" class="text-xs text-slate-400 dark:text-slate-400 text-slate-500">
+                Рассчитайте примерную стоимость 3D-печати по весу модели
+              </p>
+            </div>
+          </div>
+        </div>
 
-      // Enable sound button: user gesture to unlock audio context (browsers block auto-play otherwise)
-      document.getElementById('enableSoundBtn').addEventListener('click', async () => {
-        try {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          if (audioCtx.state === 'suspended') {
-            await audioCtx.resume();
-          }
-          const btn = document.getElementById('enableSoundBtn');
-          btn.innerText = 'Звук включён';
-          btn.disabled = true;
-        } catch (e) {
-          console.warn('Cannot enable audio context', e);
-          alert('Включение звука не удалось: ' + e.message);
-        }
-      });
-    }
+        <!-- Calculator Control Box -->
+        <div class="p-5 rounded-2xl bg-slate-900/50 dark:bg-slate-900/50 bg-slate-100/80 border border-white/10 dark:border-white/10 border-slate-300 space-y-4">
+          
+          <div class="flex items-center justify-between">
+            <span id="slider-label" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Масса модели:</span>
+            <span id="slider-gram-display" class="text-lg font-black text-brandTeal">50 грамм</span>
+          </div>
 
-    function broadcastState() {
-      tvConns.forEach(c => {
-        if (c.open) c.send({ type:'STATE', state });
-      });
-    }
+          <!-- Range Input Slider -->
+          <input type="range" id="gramSlider" min="10" max="1000" step="5" value="50" oninput="updateCalculator(this.value)" class="w-full">
 
-    // Admin: start client peer and wait until ready
-    function startAdmin() {
-      document.getElementById('modeSelector').style.display = 'none';
-      document.getElementById('adminScreen').style.display = 'block';
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+            <span>10g</span>
+            <span>250g</span>
+            <span>500g</span>
+            <span>1000g (1 kg)</span>
+          </div>
 
-      peer = new Peer(); // random id
-      adminReady = false;
-      document.getElementById('connectBtn').disabled = true;
+          <!-- Result Display Pill -->
+          <div class="pt-2 border-t border-white/10 dark:border-white/10 border-slate-200 flex items-center justify-between">
+            <span id="calc-cost-label" class="text-xs text-slate-300 dark:text-slate-300 text-slate-700 font-semibold">Итоговая стоимость:</span>
+            <div id="calc-total-display" class="text-2xl font-black text-emerald-400">
+              75 ₽
+            </div>
+          </div>
 
-      peer.on('open', id => {
-        adminReady = true;
-        document.getElementById('connectBtn').disabled = false;
-      });
+          <!-- Discount Info Box inside Calc -->
+          <div class="p-3 rounded-xl bg-brandTeal/15 border border-brandTeal/30 text-[11px] text-emerald-300 dark:text-emerald-300 text-emerald-800 flex items-center gap-2">
+            <span>💡</span>
+            <span id="calc-discount-note">
+              На заказы от 30 грамм действует скидка минус 30 рублей!
+            </span>
+          </div>
 
-      peer.on('error', err => {
-        console.warn('Peer error', err);
-        alert('Ошибка соединения: ' + (err && err.type ? err.type : err));
-      });
-    }
+        </div>
 
-    function connectToTV() {
-      const code = document.getElementById('codePinInput').value.trim();
-      if (!code) return alert('Введите код!');
-      if (!adminReady) return alert('Подождите: сигнализация ещё не готова (peer not open).');
+        <!-- Tariff Table -->
+        <div class="space-y-3">
+          <h3 id="tariff-table-title" class="text-sm font-bold text-slate-200 dark:text-slate-200 text-slate-800">
+            Официальный сетчатый тариф:
+          </h3>
 
-      const targetId = 'pc-tv-' + code;
-      conn = peer.connect(targetId, { reliable: true });
+          <div class="divide-y divide-white/5 dark:divide-white/5 divide-slate-200 text-xs">
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="text-slate-400">10 грамм</span>
+              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-10g">15 ₽</span>
+            </div>
+            <div class="py-2.5 flex justify-between items-center text-emerald-400 font-medium">
+              <span class="flex items-center gap-1">30 грамм <span class="text-[9px] bg-emerald-500/20 border border-emerald-500/30 px-1 rounded">-30₽ скидка</span></span>
+              <span class="font-bold price-30g">45 ₽</span>
+            </div>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="text-slate-400">50 грамм</span>
+              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-50g">75 ₽</span>
+            </div>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="text-slate-400">100 грамм</span>
+              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-100g">150 ₽</span>
+            </div>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="text-slate-400">500 грамм</span>
+              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-500g">720 ₽</span>
+            </div>
+            <div class="py-2.5 flex justify-between items-center font-bold text-brandTeal text-sm">
+              <span>1 кг (1000 грамм)</span>
+              <span class="price-1kg">1390 ₽</span>
+            </div>
+          </div>
+        </div>
 
-      conn.on('open', () => {
-        document.getElementById('connectBlock').style.display = 'none';
-        document.getElementById('controlBlock').style.display = 'block';
-        // request the latest state from TV
-        conn.send({ type: 'REQUEST_STATE' });
-        // initial send of local state to ensure sync if needed
-        sendState();
-      });
+      </div>
+    </section>
 
-      conn.on('data', data => {
-        if (!data || !data.type) return;
-        if (data.type === 'STATE' && data.state) {
-          state = data.state;
-          persistState();
-          renderAdmin();
-        }
-      });
+    <!-- ================= TAB 4: ПРИМЕРНЫЕ ФОТО (УСЛУГИ) ================= -->
+    <section id="tab-gallery" class="tab-content space-y-5">
+      <div class="ios-card rounded-3xl p-6 sm:p-8 text-center space-y-5">
+        
+        <div class="w-16 h-16 rounded-3xl bg-brandNavy/40 border border-brandNavy/60 text-slate-200 flex items-center justify-center mx-auto text-2xl shadow-glow-navy">
+          🔨
+        </div>
 
-      conn.on('close', () => {
-        alert('Соединение с ТВ закрыто');
-        document.getElementById('connectBlock').style.display = 'block';
-        document.getElementById('controlBlock').style.display = 'none';
-        conn = null;
-      });
+        <div>
+          <h2 id="tab-gallery-heading" class="text-xl font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
+            Примеры выполненных работ
+          </h2>
+          <p id="tab-gallery-sub" class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-500 mt-1 max-w-sm mx-auto">
+            Фотографии напечатанных 3D-деталей, брелоков и кастомных сувениров от ПринтКрафт.
+          </p>
+        </div>
 
-      conn.on('error', (e) => {
-        console.warn('Connection error', e);
-        alert('Ошибка соединения: ' + e);
-      });
-    }
+        <!-- Empty Gallery State -->
+        <div class="py-12 px-6 rounded-2xl bg-slate-900/40 dark:bg-slate-900/40 bg-slate-100/80 border border-dashed border-white/10 dark:border-white/10 border-slate-300 max-w-md mx-auto">
+          <div class="text-3xl mb-2 opacity-40">🖼️</div>
+          <p id="gallery-no-items" class="text-base font-semibold text-slate-400 dark:text-slate-400 text-slate-600">
+            Их пока нет...
+          </p>
+          <p id="gallery-no-items-desc" class="text-xs text-slate-500 dark:text-slate-500 text-slate-400 mt-1">
+            Мы скоро загрузим фотографии готовых 3D-моделей!
+          </p>
+        </div>
 
-    function formatNum(input) {
-      if (!input) return '';
-      const trimmed = String(input).trim();
-      // If it already starts with PC (case-insensitive) and has digits, keep uppercase
-      if (/^pc/i.test(trimmed)) {
-        return trimmed.toUpperCase();
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FLOATING BOTTOM NAVIGATION DOCK (iOS 28 STYLE) ================= -->
+  <nav class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md">
+    <div class="dock-glass rounded-full p-2 flex items-center justify-around relative">
+      
+      <!-- Tab 1: Home (Домик) -->
+      <button onclick="switchTab('home')" id="nav-btn-home" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
+        <div class="icon-badge w-10 h-10 rounded-full bg-white dark:bg-white text-slate-950 flex items-center justify-center transition-all duration-300 shadow-md group-hover:scale-105">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+        </div>
+        <span class="text-[10px] font-semibold text-white dark:text-white text-slate-900 mt-1">Главная</span>
+      </button>
+
+      <!-- Tab 2: Reviews (Звезда) -->
+      <button onclick="switchTab('reviews')" id="nav-btn-reviews" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
+        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+        </div>
+        <span class="text-[10px] font-semibold text-slate-400 mt-1">Отзывы</span>
+      </button>
+
+      <!-- Tab 3: Grams to Rubles Calculator (Катушка + Монетка) -->
+      <button onclick="switchTab('calculator')" id="nav-btn-calculator" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
+        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105 relative">
+          <!-- Filament spool + coin icon SVG -->
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="10" cy="10" r="7" />
+            <circle cx="10" cy="10" r="2" />
+            <circle cx="17" cy="17" r="4" class="fill-current stroke-none" />
+            <text x="17" y="19" font-size="5" font-weight="bold" text-anchor="middle" fill="#000">₽</text>
+          </svg>
+        </div>
+        <span class="text-[10px] font-semibold text-slate-400 mt-1">Граммы в ₽</span>
+      </button>
+
+      <!-- Tab 4: Sample Photos Gallery (Лопатка/Спатель + Монетка) -->
+      <button onclick="switchTab('gallery')" id="nav-btn-gallery" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
+        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+          <!-- Spatula + coin icon SVG -->
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 4l6 6-8 8-6-6z" />
+            <path d="M4 20l4-4" />
+            <circle cx="18" cy="18" r="3.5" class="fill-current stroke-none" />
+          </svg>
+        </div>
+        <span class="text-[10px] font-semibold text-slate-400 mt-1">Примеры</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- JavaScript Application Controller -->
+  <script>
+    // State variables
+    let currentTab = 'home';
+    let currentLang = 'RU'; // 'RU' or 'EN'
+    let isDarkMode = true;
+    let currentGrams = 50;
+
+    // Exchange Rate (1 USD ~ 90 RUB for conversion)
+    const USD_RATE = 90;
+
+    // Translations Dictionary
+    const translations = {
+      RU: {
+        statusOpen: 'Магазин открыт',
+        statusClosed: 'Магазин закрыт',
+        scheduleTitle: 'Часы работы PrintCraft:',
+        scheduleHours: 'Пн-Вт: 15:00-20:00 | Ср: 17:00-20:00 | Чт: 15:00-20:00 | Пт: 17:00-20:00',
+        discountTitle: 'Последние скидки',
+        discountTag: 'Акция',
+        discountItemName: 'Набор деталей из PLA пластика (90 грамм)',
+        discountDesc: 'Скидка на распечатанную массу от 90г для первых заказов',
+        pricingTeaserTitle: 'Последние предложения по граммам',
+        calcMore: 'Калькулятор',
+        homeReviewsTitle: 'Последние отзывы',
+        emptyReviewsText: 'Их пока нет...',
+        tabReviewsHeading: 'Отзывы о ПринтКрафт',
+        tabReviewsSub: 'Здесь будет выводиться честное мнение наших клиентов о качестве 3D-печати и скорости изготовления.',
+        reviewsNoItems: 'Их пока нет...',
+        reviewsNoItemsDesc: 'Будьте первыми, кто оставит свой отзыв после первого заказа!',
+        calcTitle: 'Калькулятор: Граммы в Рубли',
+        calcSubtitle: 'Рассчитайте примерную стоимость 3D-печати по весу модели',
+        calcCurrencyName: 'Рубли',
+        sliderLabel: 'Масса модели:',
+        calcCostLabel: 'Итоговая стоимость:',
+        calcDiscountNote: 'На заказы от 30 грамм действует скидка минус 30 рублей!',
+        tariffTableTitle: 'Официальный сетчатый тариф:',
+        tabGalleryHeading: 'Примеры выполненных работ',
+        tabGallerySub: 'Фотографии напечатанных 3D-деталей, брелоков и кастомных сувениров от ПринтКрафт.',
+        galleryNoItems: 'Их пока нет...',
+        galleryNoItemsDesc: 'Мы скоро загрузим фотографии готовых 3D-моделей!',
+        dockHome: 'Главная',
+        dockReviews: 'Отзывы',
+        dockCalc: 'Граммы в ₽',
+        dockGallery: 'Примеры'
+      },
+      EN: {
+        statusOpen: 'Store is Open',
+        statusClosed: 'Store is Closed',
+        scheduleTitle: 'PrintCraft Hours:',
+        scheduleHours: 'Mon-Tue: 15:00-20:00 | Wed: 17:00-20:00 | Thu: 15:00-20:00 | Fri: 17:00-20:00',
+        discountTitle: 'Latest Discounts',
+        discountTag: 'Special',
+        discountItemName: 'PLA Plastic Parts Set (90 grams)',
+        discountDesc: 'Discount on 3D printed mass starting from 90g',
+        pricingTeaserTitle: 'Latest Gram Pricing Offers',
+        calcMore: 'Calculator',
+        homeReviewsTitle: 'Recent Reviews',
+        emptyReviewsText: 'None yet...',
+        tabReviewsHeading: 'PrintCraft Reviews',
+        tabReviewsSub: 'Honest reviews from our clients regarding 3D print quality and production speed.',
+        reviewsNoItems: 'None yet...',
+        reviewsNoItemsDesc: 'Be the first to leave a review after your first order!',
+        calcTitle: 'Calculator: Grams to USD',
+        calcSubtitle: 'Calculate estimated 3D printing cost by model weight',
+        calcCurrencyName: 'Dollars ($)',
+        sliderLabel: 'Model Mass:',
+        calcCostLabel: 'Estimated Total Cost:',
+        calcDiscountNote: 'Orders from 30g get a $0.35 discount!',
+        tariffTableTitle: 'Official Weight Rate Table:',
+        tabGalleryHeading: 'Portfolio & Examples',
+        tabGallerySub: 'Photos of 3D printed parts, keychains, and custom crafts from PrintCraft.',
+        galleryNoItems: 'None yet...',
+        galleryNoItemsDesc: 'We will upload photos of completed 3D models soon!',
+        dockHome: 'Home',
+        dockReviews: 'Reviews',
+        dockCalc: 'Grams to $',
+        dockGallery: 'Examples'
       }
-      // Keep only digits and pad
-      const digits = trimmed.replace(/\D/g, '');
-      if (!digits) return 'PC' + String(trimmed).padStart(10, '0');
-      return 'PC' + String(digits).padStart(10, '0');
-    }
+    };
 
-    function addOrder() {
-      const inputEl = document.getElementById('orderNumInput');
-      if (!inputEl.value.trim()) return;
-      const formatted = formatNum(inputEl.value.trim());
-      // prevent duplicates across both arrays
-      if (state.preparing.includes(formatted) || state.ready.includes(formatted)) {
-        alert('Такой заказ уже существует: ' + formatted);
-        inputEl.value = '';
-        return;
+    // Calculate Store Opening Status based on schedule
+    function updateStoreStatus() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      let isOpen = false;
+
+      // Schedule:
+      // Mon (1), Tue (2), Thu (4): 15:00 - 20:00 (900m - 1200m)
+      // Wed (3), Fri (5): 17:00 - 20:00 (1020m - 1200m)
+      if (day === 1 || day === 2 || day === 4) {
+        if (currentMinutes >= 900 && currentMinutes < 1200) isOpen = true;
+      } else if (day === 3 || day === 5) {
+        if (currentMinutes >= 1020 && currentMinutes < 1200) isOpen = true;
       }
-      state.preparing.push(formatted);
-      inputEl.value = '';
-      persistState();
-      renderAdmin();
-      sendState();
-    }
 
-    function moveToReady(num) {
-      state.preparing = state.preparing.filter(n => n !== num);
-      if (!state.ready.includes(num)) state.ready.push(num);
-      persistState();
-      renderAdmin();
-      sendState(true);
-    }
+      const statusBadge = document.getElementById('store-status-badge');
+      const statusText = document.getElementById('status-text');
 
-    function removeOrder(num) {
-      state.preparing = state.preparing.filter(n => n !== num);
-      state.ready = state.ready.filter(n => n !== num);
-      persistState();
-      renderAdmin();
-      sendState();
-    }
-
-    function sendState(playSoundFlag = false) {
-      renderAdmin();
-      if (conn && conn.open) {
-        if (playSoundFlag) conn.send({ type: 'SOUND' });
-        conn.send({ type: 'STATE', state: state });
+      if (isOpen) {
+        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-xs font-semibold text-emerald-400';
+        statusText.innerText = translations[currentLang].statusOpen;
       } else {
-        // No connection: persist locally so TV can pick up when admin reconnects
-        persistState();
+        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800/80 border border-white/10 text-xs font-semibold text-slate-400';
+        statusText.innerText = translations[currentLang].statusClosed;
       }
     }
+
+    // Tab Switcher with spring animation
+    function switchTab(tabId) {
+      currentTab = tabId;
+      
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected tab
+      const activeTabEl = document.getElementById(`tab-${tabId}`);
+      if (activeTabEl) {
+        activeTabEl.classList.add('active');
+      }
+
+      // Update Bottom Navigation Dock Buttons Highlight
+      const navButtons = {
+        home: 'nav-btn-home',
+        reviews: 'nav-btn-reviews',
+        calculator: 'nav-btn-calculator',
+        gallery: 'nav-btn-gallery'
+      };
+
+      Object.keys(navButtons).forEach(key => {
+        const btn = document.getElementById(navButtons[key]);
+        const badge = btn.querySelector('.icon-badge');
+        const label = btn.querySelector('span');
+
+        if (key === tabId) {
+          badge.className = 'icon-badge w-10 h-10 rounded-full bg-white dark:bg-white text-slate-950 flex items-center justify-center transition-all duration-300 shadow-md scale-110';
+          label.className = 'text-[10px] font-bold text-white dark:text-white text-slate-900 mt-1';
+        } else {
+          badge.className = 'icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105';
+          label.className = 'text-[10px] font-semibold text-slate-400 mt-1';
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Format Currency Helper
+    function formatPrice(rubles) {
+      if (currentLang === 'RU') {
+        return `${Math.round(rubles)} ₽`;
+      } else {
+        const usd = (rubles / USD_RATE).toFixed(2);
+        return `$${usd}`;
+      }
+    }
+
+    // Calculator Logic
+    function updateCalculator(grams) {
+      currentGrams = grams;
+      document.getElementById('slider-gram-display').innerText = `${grams} ${currentLang === 'RU' ? 'грамм' : 'g'}`;
+
+      // Price calculation formula:
+      // Base: 1.5 Rubles per gram
+      // If grams >= 30, discount 30 Rubles
+      let baseRubles = grams * 1.5;
+      if (grams >= 30) {
+        baseRubles = Math.max(15, baseRubles - 30);
+      }
+
+      document.getElementById('calc-total-display').innerText = formatPrice(baseRubles);
+    }
+
+    // Refresh all static prices across tables
+    function refreshPrices() {
+      document.querySelector('.price-10g').innerText = formatPrice(15);
+      document.querySelector('.price-30g').innerText = formatPrice(45);
+      if (document.querySelector('.price-50g')) document.querySelector('.price-50g').innerText = formatPrice(75);
+      document.querySelector('.price-100g').innerText = formatPrice(150);
+      if (document.querySelector('.price-500g')) document.querySelector('.price-500g').innerText = formatPrice(720);
+      document.querySelector('.price-1kg').innerText = formatPrice(1390);
+
+      document.getElementById('discount-old-price').innerText = formatPrice(100);
+      document.getElementById('discount-new-price').innerText = `${formatPrice(60)} - ${formatPrice(80)}`;
+
+      updateCalculator(currentGrams);
+    }
+
+    // Language Toggle
+    function toggleLanguage() {
+      currentLang = currentLang === 'RU' ? 'EN' : 'RU';
+      document.getElementById('lang-flag').innerText = currentLang === 'RU' ? '🇷🇺' : '🇺🇸';
+      document.getElementById('lang-text').innerText = `${currentLang} (${currentLang === 'RU' ? '₽' : '$'})`;
+
+      // Translate DOM elements
+      const langData = translations[currentLang];
+      
+      document.getElementById('schedule-title').innerText = langData.scheduleTitle;
+      document.getElementById('schedule-hours').innerText = langData.scheduleHours;
+      document.getElementById('discount-title').innerText = langData.discountTitle;
+      document.getElementById('discount-tag').innerText = langData.discountTag;
+      document.getElementById('discount-item-name').innerText = langData.discountItemName;
+      document.getElementById('discount-desc').innerText = langData.discountDesc;
+      document.getElementById('pricing-teaser-title').innerText = langData.pricingTeaserTitle;
+      document.getElementById('btn-calc-more').innerText = langData.calcMore;
+      document.getElementById('home-reviews-title').innerText = langData.homeReviewsTitle;
+      document.getElementById('empty-reviews-text').innerText = langData.emptyReviewsText;
+      
+      document.getElementById('tab-reviews-heading').innerText = langData.tabReviewsHeading;
+      document.getElementById('tab-reviews-sub').innerText = langData.tabReviewsSub;
+      document.getElementById('reviews-no-items').innerText = langData.reviewsNoItems;
+      document.getElementById('reviews-no-items-desc').innerText = langData.reviewsNoItemsDesc;
+
+      document.getElementById('calc-title').innerText = langData.calcTitle;
+      document.getElementById('calc-subtitle').innerText = langData.calcSubtitle;
+      document.getElementById('calc-currency-name').innerText = langData.calcCurrencyName;
+      document.getElementById('slider-label').innerText = langData.sliderLabel;
+      document.getElementById('calc-cost-label').innerText = langData.calcCostLabel;
+      document.getElementById('calc-discount-note').innerText = langData.calcDiscountNote;
+      document.getElementById('tariff-table-title').innerText = langData.tariffTableTitle;
+
+      document.getElementById('tab-gallery-heading').innerText = langData.tabGalleryHeading;
+      document.getElementById('tab-gallery-sub').innerText = langData.tabGallerySub;
+      document.getElementById('gallery-no-items').innerText = langData.galleryNoItems;
+      document.getElementById('gallery-no-items-desc').innerText = langData.galleryNoItemsDesc;
+
+      // Update Dock Labels
+      document.querySelector('#nav-btn-home span').innerText = langData.dockHome;
+      document.querySelector('#nav-btn-reviews span').innerText = langData.dockReviews;
+      document.querySelector('#nav-btn-calculator span').innerText = langData.dockCalc;
+      document.querySelector('#nav-btn-gallery span').innerText = langData.dockGallery;
+
+      updateStoreStatus();
+      refreshPrices();
+    }
+
+    // Theme Toggle (Light / Dark)
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.classList.toggle('dark', isDarkMode);
+      document.documentElement.classList.toggle('light', !isDarkMode);
+      document.getElementById('theme-icon').innerText = isDarkMode ? '🌙' : '☀️';
+    }
+
+    // Initialize on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateStoreStatus();
+      updateCalculator(50);
+      refreshPrices();
+      
+      // Periodically update store status every minute
+      setInterval(updateStoreStatus, 60000);
+    });
   </script>
 </body>
 </html>
