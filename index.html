@@ -2,7 +2,7 @@
 <html lang="ru" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ПРИНТКРАФТ × АРТС&КРАФТИНГ | Beta 1.0v</title>
 
   <!-- Tailwind CSS -->
@@ -15,794 +15,581 @@
           colors: {
             brandNavy: '#1a3560',
             brandTeal: '#127462',
-            navyDark: '#0b1628',
-            tealDark: '#08332b',
           },
           fontFamily: {
-            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'sans-serif'],
-          },
-          boxShadow: {
-            'glass': '0 20px 50px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
-            'glass-light': '0 20px 40px rgba(26, 53, 96, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8)',
-            'glow-teal': '0 0 30px rgba(18, 116, 98, 0.3)',
-            'glow-navy': '0 0 30px rgba(26, 53, 96, 0.4)',
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', 'Inter', 'sans-serif'],
           }
         }
       }
     }
   </script>
 
-  <!-- Google Fonts Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
   <style>
-    /* Custom iOS 28 Animations & Glass Utilities */
     :root {
-      --bg-gradient-1: #1a3560;
-      --bg-gradient-2: #127462;
+      --navy: #1a3560;
+      --teal: #127462;
     }
 
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background-color: #050a14;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
       overflow-x: hidden;
-      transition: background-color 0.6s ease, color 0.6s ease;
+      transition: background-color 0.6s cubic-bezier(0.23, 1, 0.32, 1), color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    /* Vibrant Mesh Dynamic Background */
+    .light body {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* Ambient Mesh Background - No Neon, Just Deep Soft Gradients */
     .mesh-bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       background: 
-        radial-gradient(circle at 15% 15%, rgba(18, 116, 98, 0.45), transparent 45%),
-        radial-gradient(circle at 85% 20%, rgba(26, 53, 96, 0.55), transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(18, 116, 98, 0.35), transparent 55%),
-        radial-gradient(circle at 80% 85%, rgba(26, 53, 96, 0.4), transparent 50%);
-      filter: blur(60px);
+        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.4), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.3), transparent 50%);
+      filter: blur(80px);
+      animation: meshPulse 15s ease-in-out infinite alternate;
       transition: all 0.8s ease;
     }
 
     .light .mesh-bg {
       background: 
-        radial-gradient(circle at 15% 15%, rgba(18, 116, 98, 0.18), transparent 45%),
-        radial-gradient(circle at 85% 20%, rgba(26, 53, 96, 0.22), transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(18, 116, 98, 0.15), transparent 55%),
-        radial-gradient(circle at 80% 85%, rgba(26, 53, 96, 0.18), transparent 50%);
-      filter: blur(50px);
+        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.15), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.1), transparent 50%);
+      filter: blur(60px);
     }
 
-    /* iOS 28 Liquid Glass Cards */
-    .ios-card {
-      background: rgba(15, 23, 42, 0.55);
-      backdrop-filter: blur(30px) saturate(190%);
-      -webkit-backdrop-filter: blur(30px) saturate(190%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+    @keyframes meshPulse {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.1) translate(-2%, 3%); }
     }
 
-    .light .ios-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(30px) saturate(180%);
-      -webkit-backdrop-filter: blur(30px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 10px 30px rgba(26, 53, 96, 0.06);
+    .ios-glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border-radius: 28px;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s;
     }
 
-    /* Spring Hover Effects */
-    .ios-card-interactive {
-      cursor: pointer;
-    }
-    .ios-card-interactive:active {
-      transform: scale(0.98);
+    .light .ios-glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(26, 53, 96, 0.1);
+      box-shadow: 0 20px 40px rgba(26, 53, 96, 0.05);
     }
 
-    /* Bottom Dock Bar Glass */
-    .dock-glass {
-      background: rgba(11, 22, 40, 0.75);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    .ios-glass-card:active {
+      transform: scale(0.97);
     }
 
-    .light .dock-glass {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 20px 40px -10px rgba(26, 53, 96, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-    }
-
-    /* Custom Gram Slider Styling */
-    input[type=range] {
-      -webkit-appearance: none;
-      background: transparent;
-    }
-
-    input[type=range]:focus {
-      outline: none;
-    }
-
-    input[type=range]::-webkit-slider-runnable-track {
-      width: 100%;
-      height: 10px;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 999px;
+    /* Floating Dock */
+    .dock-container {
+      background: rgba(10, 15, 25, 0.6);
+      backdrop-filter: blur(40px) saturate(250%);
+      -webkit-backdrop-filter: blur(40px) saturate(250%);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      padding: 6px;
+      border-radius: 999px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    .light input[type=range]::-webkit-slider-runnable-track {
-      background: rgba(26, 53, 96, 0.1);
+    .light .dock-container {
+      background: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(26, 53, 96, 0.15);
+      box-shadow: 0 20px 50px rgba(26, 53, 96, 0.1);
     }
 
-    input[type=range]::-webkit-slider-thumb {
-      height: 26px;
-      width: 26px;
-      border-radius: 50%;
-      background: #127462;
-      border: 3px solid #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      -webkit-appearance: none;
-      margin-top: -8px;
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
-    }
-
-    input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
-
-    /* Tab Fade Transitions */
     .tab-content {
       display: none;
       opacity: 0;
-      transform: translateY(12px) scale(0.99);
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(20px) scale(0.98);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .tab-content.active {
       display: block;
       opacity: 1;
       transform: translateY(0) scale(1);
+      animation: springFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes springFadeIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Custom Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+      width: 100%;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+    }
+    .light input[type=range]::-webkit-slider-runnable-track {
+      background: rgba(26,53,96,0.1);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 3px solid #fff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    input[type=range]::-webkit-slider-thumb:active {
+      transform: scale(1.2);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen pb-36 pt-6 px-4 sm:px-6">
+<body class="min-h-screen pb-32 pt-6 px-4 sm:px-6 relative">
 
+  <!-- Deep Soft Gradient Mesh -->
   <div class="mesh-bg"></div>
 
-  <!-- Header Section -->
-  <header class="max-w-3xl mx-auto mb-6">
-    <div class="ios-card rounded-3xl p-5 sm:p-6 shadow-glass relative overflow-hidden">
-      <!-- Ambient Card Accents -->
-      <div class="absolute -top-12 -right-12 w-40 h-40 bg-brandTeal/20 rounded-full blur-2xl pointer-events-none"></div>
-      <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-brandNavy/30 rounded-full blur-2xl pointer-events-none"></div>
-
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+  <header class="max-w-2xl mx-auto mb-8">
+    <div class="ios-glass-card p-6 relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         
-        <!-- Brand Title & Subtitle -->
         <div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-xl bg-brandTeal/20 border border-brandTeal/40 text-emerald-400 dark:text-emerald-300 text-[11px] font-bold tracking-wider uppercase shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-1 rounded-full bg-brandNavy/20 border border-brandNavy/30 text-[10px] font-bold text-slate-300 dark:text-slate-300 tracking-wide uppercase">
               Beta 1.0v
             </span>
-            <span id="store-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800/60 dark:bg-slate-900/60 border border-white/10 text-xs font-semibold text-slate-300">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="status-text">Проверка работы...</span>
+            <span id="store-status" class="px-2.5 py-1 rounded-full bg-brandTeal/20 border border-brandTeal/30 text-[10px] font-bold text-slate-300 dark:text-slate-300 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brandTeal animate-pulse"></span>
+              <span id="status-text">Загрузка...</span>
             </span>
           </div>
-
-          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white dark:text-white text-slate-900 mt-2 flex items-center gap-2">
-            ПРИНТКРАФТ <span class="text-brandTeal font-light">×</span> <span class="text-slate-300 dark:text-slate-300 text-slate-700">АРТС&КРАФТИНГ</span>
+          
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white dark:text-white light:text-brandNavy">
+            ПРИНТКРАФТ <span class="text-brandTeal mx-1 font-light">×</span> АРТС&КРАФТИНГ
           </h1>
-          <p class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-600 font-medium mt-0.5">
-            Лаборатория 3D-печати & Кастомный Крафтинг
-          </p>
         </div>
 
-        <!-- Controls: Language & Theme Switchers -->
-        <div class="flex items-center gap-2 self-end sm:self-center">
-          
-          <!-- Language / Currency Switcher Button -->
-          <button onclick="toggleLanguage()" class="px-3.5 py-2 rounded-2xl bg-slate-800/50 hover:bg-slate-700/60 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/10 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm">
-            <span id="lang-flag">🇷🇺</span>
-            <span id="lang-text" class="tracking-wide">RU (₽)</span>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleLanguage()" class="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 dark:bg-white/5 border border-white/10 text-xs font-semibold transition-all active:scale-95 text-slate-200">
+            <span id="lang-text">RU (₽)</span>
           </button>
-
-          <!-- Light/Dark Mode Switcher -->
-          <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-slate-800/50 hover:bg-slate-700/60 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 border border-white/10 text-slate-200 flex items-center justify-center text-base transition-all active:scale-95 shadow-sm">
+          <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-white/5 hover:bg-white/10 dark:bg-white/5 border border-white/10 flex items-center justify-center transition-all active:scale-95 text-slate-200">
             <span id="theme-icon">🌙</span>
           </button>
         </div>
-
       </div>
 
-      <!-- Working Hours Bar -->
-      <div class="mt-4 pt-4 border-t border-white/10 dark:border-white/10 border-slate-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-300 dark:text-slate-300 text-slate-600 font-medium">
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-brandTeal shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <span id="schedule-title" class="font-bold text-slate-200 dark:text-slate-200 text-slate-800">Часы работы PrintCraft:</span>
-        </div>
-        <div id="schedule-hours" class="bg-slate-900/40 dark:bg-slate-900/40 bg-slate-200/60 px-3 py-1 rounded-xl text-[11px] font-mono tracking-tight text-slate-300 dark:text-slate-300 text-slate-700">
-          Пн-Вт: 15:00-20:00 | Ср: 17:00-20:00 | Чт: 15:00-20:00 | Пт: 17:00-20:00
-        </div>
+      <div class="mt-5 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium text-slate-400">
+        <span id="schedule-title" class="text-slate-300 font-semibold">График работы магазина:</span>
+        <span id="schedule-hours" class="bg-white/5 px-3 py-1.5 rounded-xl font-mono">
+          Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00
+        </span>
       </div>
-
     </div>
   </header>
 
-  <!-- Main Container for Tabs -->
-  <main class="max-w-3xl mx-auto relative">
+  <main class="max-w-2xl mx-auto">
 
-    <!-- ================= TAB 1: ГЛАВНАЯ ================= -->
+    <!-- TAB 1: ГЛАВНАЯ -->
     <section id="tab-home" class="tab-content active space-y-5">
-      
-      <!-- Special Discounts Card -->
-      <div class="ios-card rounded-3xl p-6 relative overflow-hidden">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-brandTeal/20 border border-brandTeal/30 text-brandTeal flex items-center justify-center font-bold text-base">
-              %
-            </div>
-            <h2 id="discount-title" class="text-lg font-bold text-slate-100 dark:text-slate-100 text-slate-900">
-              Последние скидки
-            </h2>
-          </div>
-          <span id="discount-tag" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider">
-            Акция
-          </span>
+      <!-- Последние скидки -->
+      <div class="ios-glass-card p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-8 h-8 rounded-full bg-brandNavy/30 flex items-center justify-center text-lg">🏷️</div>
+          <h2 id="home-discounts-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy">Последние скидки</h2>
         </div>
-
-        <!-- Offer Item -->
-        <div class="ios-card rounded-2xl p-4 bg-slate-900/40 dark:bg-slate-900/40 bg-white/50 border border-white/5 flex items-center justify-between">
-          <div class="space-y-1">
-            <div id="discount-item-name" class="font-semibold text-sm text-slate-200 dark:text-slate-200 text-slate-800">
-              Набор деталей из PLA пластика (90 грамм)
-            </div>
-            <div id="discount-desc" class="text-xs text-slate-400 dark:text-slate-400 text-slate-500">
-              Скидка на распечатанную массу от 90г для первых заказов
-            </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <div id="home-discount-item" class="font-semibold text-sm text-slate-200">Печать деталей (90 грамм)</div>
+            <div id="home-discount-desc" class="text-xs text-slate-400 mt-1">Специальная скидка на этот объём</div>
           </div>
-          <div class="text-right pl-3 shrink-0">
-            <div id="discount-old-price" class="text-xs text-slate-500 line-through">100 ₽</div>
-            <div id="discount-new-price" class="text-base font-extrabold text-emerald-400">60 - 80 ₽</div>
+          <div class="text-right shrink-0">
+            <div id="home-old-price" class="text-xs text-slate-500 line-through">100 ₽</div>
+            <div id="home-new-price" class="text-base font-black text-brandTeal">60 - 80 ₽</div>
           </div>
         </div>
       </div>
 
-      <!-- Price Overview Teaser -->
-      <div class="ios-card rounded-3xl p-6 space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-brandNavy/30 border border-brandNavy/50 text-slate-300 flex items-center justify-center font-bold text-sm">
-              ⚖️
-            </div>
-            <h2 id="pricing-teaser-title" class="text-lg font-bold text-slate-100 dark:text-slate-100 text-slate-900">
-              Последние предложения по граммам
-            </h2>
-          </div>
-          <button onclick="switchTab('calculator')" class="text-xs font-semibold text-brandTeal hover:underline flex items-center gap-1">
-            <span id="btn-calc-more">Калькулятор</span> →
-          </button>
+      <!-- Последние предложения -->
+      <div class="ios-glass-card p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-8 h-8 rounded-full bg-brandTeal/20 flex items-center justify-center text-lg">💡</div>
+          <h2 id="home-offers-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy">Последние предложения</h2>
         </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
-            <div class="text-xs text-slate-400 font-medium">10 грамм</div>
-            <div class="text-sm font-bold text-slate-100 dark:text-slate-100 text-slate-800 mt-1 price-10g">15 ₽</div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+            <div class="text-xs text-slate-400 mb-1">10 грамм</div>
+            <div class="font-bold text-sm text-slate-200 price-10g">15 ₽</div>
           </div>
-          <div class="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 text-center relative overflow-hidden">
-            <span class="absolute top-0 right-0 bg-brandTeal text-white text-[8px] px-1.5 py-0.5 rounded-bl font-bold">-30₽</span>
-            <div class="text-xs text-slate-400 font-medium">30 грамм</div>
-            <div class="text-sm font-bold text-emerald-400 mt-1 price-30g">45 ₽</div>
-          </div>
-          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
-            <div class="text-xs text-slate-400 font-medium">100 грамм</div>
-            <div class="text-sm font-bold text-slate-100 dark:text-slate-100 text-slate-800 mt-1 price-100g">150 ₽</div>
-          </div>
-          <div class="p-3.5 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-white/40 border border-white/5 text-center">
-            <div class="text-xs text-slate-400 font-medium">1 кг (1000g)</div>
-            <div class="text-sm font-bold text-brandTeal mt-1 price-1kg">1390 ₽</div>
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-brandTeal text-[9px] px-1.5 py-0.5 font-bold rounded-bl-lg text-white">-30₽</div>
+            <div class="text-xs text-slate-400 mb-1">30 грамм</div>
+            <div class="font-bold text-sm text-slate-200 price-30g">45 ₽</div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Reviews Empty State Card -->
-      <div class="ios-card rounded-3xl p-6 text-center space-y-3">
-        <div class="flex items-center justify-center gap-2">
-          <h2 id="home-reviews-title" class="text-base font-bold text-slate-200 dark:text-slate-200 text-slate-800">
-            Последние отзывы
-          </h2>
-        </div>
-        <div class="py-6 px-4 rounded-2xl bg-slate-900/30 dark:bg-slate-900/30 bg-slate-100/50 border border-dashed border-white/10 dark:border-white/10 border-slate-300">
-          <div class="text-3xl mb-2 opacity-50">⭐</div>
-          <p id="empty-reviews-text" class="text-sm font-medium text-slate-400 dark:text-slate-400 text-slate-500">
-            Их пока нет...
-          </p>
+      <!-- Последние отзывы -->
+      <div class="ios-glass-card p-6">
+        <h2 id="home-reviews-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy mb-4">Последние отзывы</h2>
+        <div class="py-8 bg-white/5 rounded-2xl text-center border border-dashed border-white/10">
+          <span id="home-empty-reviews" class="text-sm font-medium text-slate-500">Их пока нет...</span>
         </div>
       </div>
-
     </section>
 
-    <!-- ================= TAB 2: ОТЗЫВЫ ================= -->
+    <!-- TAB 2: ОТЗЫВЫ -->
     <section id="tab-reviews" class="tab-content space-y-5">
-      <div class="ios-card rounded-3xl p-6 sm:p-8 text-center space-y-5">
-        <div class="w-16 h-16 rounded-3xl bg-brandTeal/20 border border-brandTeal/30 text-emerald-400 flex items-center justify-center mx-auto text-2xl shadow-glow-teal">
-          ⭐
+      <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+        <div class="w-16 h-16 rounded-full bg-brandNavy/30 flex items-center justify-center mb-4">
+          <!-- Star Icon -->
+          <svg class="w-8 h-8 text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         </div>
-
-        <div>
-          <h2 id="tab-reviews-heading" class="text-xl font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
-            Отзывы о ПринтКрафт
-          </h2>
-          <p id="tab-reviews-sub" class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-500 mt-1 max-w-sm mx-auto">
-            Здесь будет выводиться честное мнение наших клиентов о качестве 3D-печати и скорости изготовления.
-          </p>
-        </div>
-
-        <!-- Empty State UI Box -->
-        <div class="py-12 px-6 rounded-2xl bg-slate-900/40 dark:bg-slate-900/40 bg-slate-100/80 border border-dashed border-white/10 dark:border-white/10 border-slate-300 max-w-md mx-auto">
-          <p id="reviews-no-items" class="text-base font-semibold text-slate-400 dark:text-slate-400 text-slate-600">
-            Их пока нет...
-          </p>
-          <p id="reviews-no-items-desc" class="text-xs text-slate-500 dark:text-slate-500 text-slate-400 mt-1">
-            Будьте первыми, кто оставит свой отзыв после первого заказа!
-          </p>
-        </div>
+        <h2 id="reviews-page-title" class="text-xl font-bold text-white dark:text-white mb-2">Отзывы</h2>
+        <p id="reviews-page-empty" class="text-sm text-slate-400">Их пока нет...</p>
       </div>
     </section>
 
-    <!-- ================= TAB 3: ГРАММЫ В РУБЛИ (УСЛУГИ) ================= -->
-    <section id="tab-calculator" class="tab-content space-y-5">
-      
-      <!-- Interactive Gram-to-Currency Calculator -->
-      <div class="ios-card rounded-3xl p-6 space-y-6 relative overflow-hidden">
+    <!-- TAB 3: ГРАММЫ В РУБЛИ -->
+    <section id="tab-calc" class="tab-content space-y-5">
+      <div class="ios-glass-card p-6">
         
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <!-- Icon: Filament Spool + Coin -->
-            <div class="w-10 h-10 rounded-2xl bg-brandTeal/20 border border-brandTeal/40 text-brandTeal flex items-center justify-center text-lg shadow-sm">
-              🧵
-            </div>
-            <div>
-              <h2 id="calc-title" class="text-lg font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
-                Калькулятор: Граммы в <span id="calc-currency-name">Рубли</span>
-              </h2>
-              <p id="calc-subtitle" class="text-xs text-slate-400 dark:text-slate-400 text-slate-500">
-                Рассчитайте примерную стоимость 3D-печати по весу модели
-              </p>
-            </div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-full bg-brandTeal/20 flex items-center justify-center text-brandTeal">
+            <!-- Custom Spool + Coin SVG -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 5h10v2H4z M4 17h10v2H4z M5 7h8v10H5z"/>
+              <line x1="7" y1="7" x2="7" y2="17" stroke-dasharray="2 2"/>
+              <line x1="11" y1="7" x2="11" y2="17" stroke-dasharray="2 2"/>
+              <circle cx="18" cy="18" r="4.5" stroke-width="1.5"/>
+              <text x="18" y="19.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
+            </svg>
           </div>
+          <h2 id="calc-title" class="text-xl font-bold text-white dark:text-white">Граммы в Рубли</h2>
         </div>
 
-        <!-- Calculator Control Box -->
-        <div class="p-5 rounded-2xl bg-slate-900/50 dark:bg-slate-900/50 bg-slate-100/80 border border-white/10 dark:border-white/10 border-slate-300 space-y-4">
+        <!-- Slider Calc -->
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
+          <div class="flex justify-between items-center mb-4">
+            <span id="calc-mass-label" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Масса (грамм):</span>
+            <span id="calc-mass-display" class="text-lg font-black text-brandTeal">50 г</span>
+          </div>
+          <input type="range" id="massSlider" min="10" max="1000" step="5" value="50" oninput="updatePrice(this.value)">
+          <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-mono">
+            <span>10</span>
+            <span>250</span>
+            <span>500</span>
+            <span>1000</span>
+          </div>
           
-          <div class="flex items-center justify-between">
-            <span id="slider-label" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Масса модели:</span>
-            <span id="slider-gram-display" class="text-lg font-black text-brandTeal">50 грамм</span>
+          <div class="mt-5 pt-4 border-t border-white/10 flex justify-between items-center">
+            <span id="calc-total-label" class="text-sm font-medium text-slate-300">Примерная стоимость:</span>
+            <span id="calc-price-display" class="text-2xl font-black text-white">75 ₽</span>
           </div>
-
-          <!-- Range Input Slider -->
-          <input type="range" id="gramSlider" min="10" max="1000" step="5" value="50" oninput="updateCalculator(this.value)" class="w-full">
-
-          <div class="flex justify-between text-[10px] text-slate-500 font-mono">
-            <span>10g</span>
-            <span>250g</span>
-            <span>500g</span>
-            <span>1000g (1 kg)</span>
-          </div>
-
-          <!-- Result Display Pill -->
-          <div class="pt-2 border-t border-white/10 dark:border-white/10 border-slate-200 flex items-center justify-between">
-            <span id="calc-cost-label" class="text-xs text-slate-300 dark:text-slate-300 text-slate-700 font-semibold">Итоговая стоимость:</span>
-            <div id="calc-total-display" class="text-2xl font-black text-emerald-400">
-              75 ₽
-            </div>
-          </div>
-
-          <!-- Discount Info Box inside Calc -->
-          <div class="p-3 rounded-xl bg-brandTeal/15 border border-brandTeal/30 text-[11px] text-emerald-300 dark:text-emerald-300 text-emerald-800 flex items-center gap-2">
-            <span>💡</span>
-            <span id="calc-discount-note">
-              На заказы от 30 грамм действует скидка минус 30 рублей!
-            </span>
-          </div>
-
         </div>
 
-        <!-- Tariff Table -->
-        <div class="space-y-3">
-          <h3 id="tariff-table-title" class="text-sm font-bold text-slate-200 dark:text-slate-200 text-slate-800">
-            Официальный сетчатый тариф:
-          </h3>
-
-          <div class="divide-y divide-white/5 dark:divide-white/5 divide-slate-200 text-xs">
-            <div class="py-2.5 flex justify-between items-center">
-              <span class="text-slate-400">10 грамм</span>
-              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-10g">15 ₽</span>
-            </div>
-            <div class="py-2.5 flex justify-between items-center text-emerald-400 font-medium">
-              <span class="flex items-center gap-1">30 грамм <span class="text-[9px] bg-emerald-500/20 border border-emerald-500/30 px-1 rounded">-30₽ скидка</span></span>
-              <span class="font-bold price-30g">45 ₽</span>
-            </div>
-            <div class="py-2.5 flex justify-between items-center">
-              <span class="text-slate-400">50 грамм</span>
-              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-50g">75 ₽</span>
-            </div>
-            <div class="py-2.5 flex justify-between items-center">
-              <span class="text-slate-400">100 грамм</span>
-              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-100g">150 ₽</span>
-            </div>
-            <div class="py-2.5 flex justify-between items-center">
-              <span class="text-slate-400">500 грамм</span>
-              <span class="font-bold text-slate-200 dark:text-slate-200 text-slate-800 price-500g">720 ₽</span>
-            </div>
-            <div class="py-2.5 flex justify-between items-center font-bold text-brandTeal text-sm">
-              <span>1 кг (1000 грамм)</span>
-              <span class="price-1kg">1390 ₽</span>
-            </div>
+        <!-- Price Table -->
+        <div class="space-y-1">
+          <div class="flex justify-between py-2 text-sm border-b border-white/5">
+            <span class="text-slate-400">10 грамм</span>
+            <span class="font-semibold text-slate-200 price-10g">15 ₽</span>
+          </div>
+          <div class="flex justify-between py-2 text-sm border-b border-white/5 text-brandTeal">
+            <span class="flex items-center gap-2">30 грамм <span class="text-[9px] bg-brandTeal/20 px-1.5 py-0.5 rounded font-bold">-30₽ скидка</span></span>
+            <span class="font-bold price-30g">45 ₽</span>
+          </div>
+          <div class="flex justify-between py-2 text-sm border-b border-white/5">
+            <span class="text-slate-400">100 грамм</span>
+            <span class="font-semibold text-slate-200 price-100g">150 ₽</span>
+          </div>
+          <div class="flex justify-between py-2 text-sm font-bold mt-2">
+            <span class="text-white dark:text-white">1 кг (1000 грамм)</span>
+            <span class="text-brandTeal price-1kg">1390 ₽</span>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- ================= TAB 4: ПРИМЕРНЫЕ ФОТО (УСЛУГИ) ================= -->
+    <!-- TAB 4: ПРИМЕРНЫЕ ФОТО -->
     <section id="tab-gallery" class="tab-content space-y-5">
-      <div class="ios-card rounded-3xl p-6 sm:p-8 text-center space-y-5">
-        
-        <div class="w-16 h-16 rounded-3xl bg-brandNavy/40 border border-brandNavy/60 text-slate-200 flex items-center justify-center mx-auto text-2xl shadow-glow-navy">
-          🔨
+      <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+        <div class="w-16 h-16 rounded-full bg-brandNavy/30 flex items-center justify-center mb-4 text-slate-300">
+          <!-- Custom Spatula + Coin SVG -->
+          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+            <circle cx="19" cy="19" r="4" stroke-width="1.5"/>
+            <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
+          </svg>
         </div>
-
-        <div>
-          <h2 id="tab-gallery-heading" class="text-xl font-extrabold text-slate-100 dark:text-slate-100 text-slate-900">
-            Примеры выполненных работ
-          </h2>
-          <p id="tab-gallery-sub" class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-500 mt-1 max-w-sm mx-auto">
-            Фотографии напечатанных 3D-деталей, брелоков и кастомных сувениров от ПринтКрафт.
-          </p>
-        </div>
-
-        <!-- Empty Gallery State -->
-        <div class="py-12 px-6 rounded-2xl bg-slate-900/40 dark:bg-slate-900/40 bg-slate-100/80 border border-dashed border-white/10 dark:border-white/10 border-slate-300 max-w-md mx-auto">
-          <div class="text-3xl mb-2 opacity-40">🖼️</div>
-          <p id="gallery-no-items" class="text-base font-semibold text-slate-400 dark:text-slate-400 text-slate-600">
-            Их пока нет...
-          </p>
-          <p id="gallery-no-items-desc" class="text-xs text-slate-500 dark:text-slate-500 text-slate-400 mt-1">
-            Мы скоро загрузим фотографии готовых 3D-моделей!
-          </p>
-        </div>
-
+        <h2 id="gallery-page-title" class="text-xl font-bold text-white dark:text-white mb-2">Примерные фото</h2>
+        <p id="gallery-page-empty" class="text-sm text-slate-400">Их пока нет...</p>
       </div>
     </section>
 
   </main>
 
-  <!-- ================= FLOATING BOTTOM NAVIGATION DOCK (iOS 28 STYLE) ================= -->
-  <nav class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md">
-    <div class="dock-glass rounded-full p-2 flex items-center justify-around relative">
+  <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
+    <div class="dock-container">
       
-      <!-- Tab 1: Home (Домик) -->
-      <button onclick="switchTab('home')" id="nav-btn-home" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
-        <div class="icon-badge w-10 h-10 rounded-full bg-white dark:bg-white text-slate-950 flex items-center justify-center transition-all duration-300 shadow-md group-hover:scale-105">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-          </svg>
+      <!-- Home -->
+      <button onclick="switchTab('home')" data-tab="home" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
+          bg-transparent text-slate-400 
+          group-[.active]:bg-white group-[.active]:text-black 
+          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         </div>
-        <span class="text-[10px] font-semibold text-white dark:text-white text-slate-900 mt-1">Главная</span>
       </button>
 
-      <!-- Tab 2: Reviews (Звезда) -->
-      <button onclick="switchTab('reviews')" id="nav-btn-reviews" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
-        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-          </svg>
+      <!-- Reviews -->
+      <button onclick="switchTab('reviews')" data-tab="reviews" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
+          bg-transparent text-slate-400 
+          group-[.active]:bg-white group-[.active]:text-black 
+          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         </div>
-        <span class="text-[10px] font-semibold text-slate-400 mt-1">Отзывы</span>
       </button>
 
-      <!-- Tab 3: Grams to Rubles Calculator (Катушка + Монетка) -->
-      <button onclick="switchTab('calculator')" id="nav-btn-calculator" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
-        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105 relative">
-          <!-- Filament spool + coin icon SVG -->
-          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="10" cy="10" r="7" />
-            <circle cx="10" cy="10" r="2" />
-            <circle cx="17" cy="17" r="4" class="fill-current stroke-none" />
-            <text x="17" y="19" font-size="5" font-weight="bold" text-anchor="middle" fill="#000">₽</text>
+      <!-- Calc (Spool+Coin) -->
+      <button onclick="switchTab('calc')" data-tab="calc" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
+          bg-transparent text-slate-400 
+          group-[.active]:bg-white group-[.active]:text-black 
+          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 5h10v2H4z M4 17h10v2H4z M5 7h8v10H5z"/>
+            <line x1="7" y1="7" x2="7" y2="17" stroke-dasharray="2 2"/>
+            <line x1="11" y1="7" x2="11" y2="17" stroke-dasharray="2 2"/>
+            <circle cx="18" cy="18" r="4.5" stroke-width="1.8"/>
+            <text x="18" y="19.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
           </svg>
         </div>
-        <span class="text-[10px] font-semibold text-slate-400 mt-1">Граммы в ₽</span>
       </button>
 
-      <!-- Tab 4: Sample Photos Gallery (Лопатка/Спатель + Монетка) -->
-      <button onclick="switchTab('gallery')" id="nav-btn-gallery" class="nav-dock-btn relative flex-1 flex flex-col items-center justify-center py-2 px-1 transition-all duration-300 group">
-        <div class="icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-          <!-- Spatula + coin icon SVG -->
-          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M14 4l6 6-8 8-6-6z" />
-            <path d="M4 20l4-4" />
-            <circle cx="18" cy="18" r="3.5" class="fill-current stroke-none" />
+      <!-- Gallery (Spatula+Coin) -->
+      <button onclick="switchTab('gallery')" data-tab="gallery" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
+          bg-transparent text-slate-400 
+          group-[.active]:bg-white group-[.active]:text-black 
+          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+            <circle cx="19" cy="19" r="4.5" stroke-width="1.8"/>
+            <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
           </svg>
         </div>
-        <span class="text-[10px] font-semibold text-slate-400 mt-1">Примеры</span>
       </button>
 
     </div>
   </nav>
 
-  <!-- JavaScript Application Controller -->
   <script>
-    // State variables
-    let currentTab = 'home';
-    let currentLang = 'RU'; // 'RU' or 'EN'
-    let isDarkMode = true;
-    let currentGrams = 50;
-
-    // Exchange Rate (1 USD ~ 90 RUB for conversion)
-    const USD_RATE = 90;
-
-    // Translations Dictionary
-    const translations = {
-      RU: {
-        statusOpen: 'Магазин открыт',
-        statusClosed: 'Магазин закрыт',
-        scheduleTitle: 'Часы работы PrintCraft:',
-        scheduleHours: 'Пн-Вт: 15:00-20:00 | Ср: 17:00-20:00 | Чт: 15:00-20:00 | Пт: 17:00-20:00',
-        discountTitle: 'Последние скидки',
-        discountTag: 'Акция',
-        discountItemName: 'Набор деталей из PLA пластика (90 грамм)',
-        discountDesc: 'Скидка на распечатанную массу от 90г для первых заказов',
-        pricingTeaserTitle: 'Последние предложения по граммам',
-        calcMore: 'Калькулятор',
+    let isDark = true;
+    let isRu = true;
+    
+    const USD_RATE = 90; // 1 USD = 90 RUB
+    
+    // Translation dictionary
+    const t = {
+      ru: {
+        statusOpen: 'Открыто',
+        statusClosed: 'Закрыто',
+        scheduleTitle: 'График работы магазина:',
+        scheduleHours: 'Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00',
+        homeDiscounts: 'Последние скидки',
+        homeDiscItem: 'Печать деталей (90 грамм)',
+        homeDiscDesc: 'Специальная скидка на этот объём',
+        homeOffers: 'Последние предложения',
         homeReviewsTitle: 'Последние отзывы',
-        emptyReviewsText: 'Их пока нет...',
-        tabReviewsHeading: 'Отзывы о ПринтКрафт',
-        tabReviewsSub: 'Здесь будет выводиться честное мнение наших клиентов о качестве 3D-печати и скорости изготовления.',
-        reviewsNoItems: 'Их пока нет...',
-        reviewsNoItemsDesc: 'Будьте первыми, кто оставит свой отзыв после первого заказа!',
-        calcTitle: 'Калькулятор: Граммы в Рубли',
-        calcSubtitle: 'Рассчитайте примерную стоимость 3D-печати по весу модели',
-        calcCurrencyName: 'Рубли',
-        sliderLabel: 'Масса модели:',
-        calcCostLabel: 'Итоговая стоимость:',
-        calcDiscountNote: 'На заказы от 30 грамм действует скидка минус 30 рублей!',
-        tariffTableTitle: 'Официальный сетчатый тариф:',
-        tabGalleryHeading: 'Примеры выполненных работ',
-        tabGallerySub: 'Фотографии напечатанных 3D-деталей, брелоков и кастомных сувениров от ПринтКрафт.',
-        galleryNoItems: 'Их пока нет...',
-        galleryNoItemsDesc: 'Мы скоро загрузим фотографии готовых 3D-моделей!',
-        dockHome: 'Главная',
-        dockReviews: 'Отзывы',
-        dockCalc: 'Граммы в ₽',
-        dockGallery: 'Примеры'
+        emptyReviews: 'Их пока нет...',
+        reviewsPageTitle: 'Отзывы',
+        calcTitle: 'Услуги/Граммы в рубли',
+        calcMassLabel: 'Масса (грамм):',
+        calcTotalLabel: 'Примерная стоимость:',
+        galleryTitle: 'Услуги/Примерные фото',
+        langBtn: 'RU (₽)'
       },
-      EN: {
-        statusOpen: 'Store is Open',
-        statusClosed: 'Store is Closed',
-        scheduleTitle: 'PrintCraft Hours:',
-        scheduleHours: 'Mon-Tue: 15:00-20:00 | Wed: 17:00-20:00 | Thu: 15:00-20:00 | Fri: 17:00-20:00',
-        discountTitle: 'Latest Discounts',
-        discountTag: 'Special',
-        discountItemName: 'PLA Plastic Parts Set (90 grams)',
-        discountDesc: 'Discount on 3D printed mass starting from 90g',
-        pricingTeaserTitle: 'Latest Gram Pricing Offers',
-        calcMore: 'Calculator',
+      en: {
+        statusOpen: 'Open',
+        statusClosed: 'Closed',
+        scheduleTitle: 'Store Schedule:',
+        scheduleHours: 'Mon-Tue 15:00-20:00 | Wed 17:00-20:00 | Thu 15:00-20:00 | Fri 17:00-20:00',
+        homeDiscounts: 'Latest Discounts',
+        homeDiscItem: 'Parts Printing (90 grams)',
+        homeDiscDesc: 'Special discount for this volume',
+        homeOffers: 'Latest Offers',
         homeReviewsTitle: 'Recent Reviews',
-        emptyReviewsText: 'None yet...',
-        tabReviewsHeading: 'PrintCraft Reviews',
-        tabReviewsSub: 'Honest reviews from our clients regarding 3D print quality and production speed.',
-        reviewsNoItems: 'None yet...',
-        reviewsNoItemsDesc: 'Be the first to leave a review after your first order!',
-        calcTitle: 'Calculator: Grams to USD',
-        calcSubtitle: 'Calculate estimated 3D printing cost by model weight',
-        calcCurrencyName: 'Dollars ($)',
-        sliderLabel: 'Model Mass:',
-        calcCostLabel: 'Estimated Total Cost:',
-        calcDiscountNote: 'Orders from 30g get a $0.35 discount!',
-        tariffTableTitle: 'Official Weight Rate Table:',
-        tabGalleryHeading: 'Portfolio & Examples',
-        tabGallerySub: 'Photos of 3D printed parts, keychains, and custom crafts from PrintCraft.',
-        galleryNoItems: 'None yet...',
-        galleryNoItemsDesc: 'We will upload photos of completed 3D models soon!',
-        dockHome: 'Home',
-        dockReviews: 'Reviews',
-        dockCalc: 'Grams to $',
-        dockGallery: 'Examples'
+        emptyReviews: 'None yet...',
+        reviewsPageTitle: 'Reviews',
+        calcTitle: 'Services/Grams to USD',
+        calcMassLabel: 'Mass (grams):',
+        calcTotalLabel: 'Estimated Cost:',
+        galleryTitle: 'Services/Example Photos',
+        langBtn: 'EN ($)'
       }
     };
 
-    // Calculate Store Opening Status based on schedule
-    function updateStoreStatus() {
-      const now = new Date();
-      const day = now.getDay(); // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-      let isOpen = false;
-
-      // Schedule:
-      // Mon (1), Tue (2), Thu (4): 15:00 - 20:00 (900m - 1200m)
-      // Wed (3), Fri (5): 17:00 - 20:00 (1020m - 1200m)
-      if (day === 1 || day === 2 || day === 4) {
-        if (currentMinutes >= 900 && currentMinutes < 1200) isOpen = true;
-      } else if (day === 3 || day === 5) {
-        if (currentMinutes >= 1020 && currentMinutes < 1200) isOpen = true;
-      }
-
-      const statusBadge = document.getElementById('store-status-badge');
-      const statusText = document.getElementById('status-text');
-
-      if (isOpen) {
-        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-xs font-semibold text-emerald-400';
-        statusText.innerText = translations[currentLang].statusOpen;
-      } else {
-        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800/80 border border-white/10 text-xs font-semibold text-slate-400';
-        statusText.innerText = translations[currentLang].statusClosed;
-      }
-    }
-
-    // Tab Switcher with spring animation
+    // Tab Logic with color inversion logic handled via Tailwind classes
     function switchTab(tabId) {
-      currentTab = tabId;
-      
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
 
-      // Show selected tab
-      const activeTabEl = document.getElementById(`tab-${tabId}`);
-      if (activeTabEl) {
-        activeTabEl.classList.add('active');
-      }
-
-      // Update Bottom Navigation Dock Buttons Highlight
-      const navButtons = {
-        home: 'nav-btn-home',
-        reviews: 'nav-btn-reviews',
-        calculator: 'nav-btn-calculator',
-        gallery: 'nav-btn-gallery'
-      };
-
-      Object.keys(navButtons).forEach(key => {
-        const btn = document.getElementById(navButtons[key]);
-        const badge = btn.querySelector('.icon-badge');
-        const label = btn.querySelector('span');
-
-        if (key === tabId) {
-          badge.className = 'icon-badge w-10 h-10 rounded-full bg-white dark:bg-white text-slate-950 flex items-center justify-center transition-all duration-300 shadow-md scale-110';
-          label.className = 'text-[10px] font-bold text-white dark:text-white text-slate-900 mt-1';
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if(btn.dataset.tab === tabId) {
+          btn.classList.add('active');
         } else {
-          badge.className = 'icon-badge w-10 h-10 rounded-full bg-slate-800/60 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center transition-all duration-300 group-hover:scale-105';
-          label.className = 'text-[10px] font-semibold text-slate-400 mt-1';
+          btn.classList.remove('active');
         }
       });
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateThemeClasses();
     }
 
-    // Format Currency Helper
-    function formatPrice(rubles) {
-      if (currentLang === 'RU') {
-        return `${Math.round(rubles)} ₽`;
-      } else {
-        const usd = (rubles / USD_RATE).toFixed(2);
-        return `$${usd}`;
-      }
+    // Adjust active icon colors based on theme
+    function updateThemeClasses() {
+      const activeBtns = document.querySelectorAll('.nav-btn.active .icon-bg');
+      activeBtns.forEach(bg => {
+        if (isDark) {
+          // Dark theme: White bg, Black icon
+          bg.classList.add('bg-white', 'text-black');
+          bg.classList.remove('bg-slate-900', 'text-white');
+        } else {
+          // Light theme: Black bg, White icon
+          bg.classList.add('bg-slate-900', 'text-white');
+          bg.classList.remove('bg-white', 'text-black');
+        }
+      });
     }
 
-    // Calculator Logic
-    function updateCalculator(grams) {
-      currentGrams = grams;
-      document.getElementById('slider-gram-display').innerText = `${grams} ${currentLang === 'RU' ? 'грамм' : 'g'}`;
-
-      // Price calculation formula:
-      // Base: 1.5 Rubles per gram
-      // If grams >= 30, discount 30 Rubles
-      let baseRubles = grams * 1.5;
-      if (grams >= 30) {
-        baseRubles = Math.max(15, baseRubles - 30);
-      }
-
-      document.getElementById('calc-total-display').innerText = formatPrice(baseRubles);
+    // Formatter
+    function formatMoney(rubles) {
+      if(isRu) return `${rubles} ₽`;
+      return `$${(rubles/USD_RATE).toFixed(2)}`;
     }
 
-    // Refresh all static prices across tables
-    function refreshPrices() {
-      document.querySelector('.price-10g').innerText = formatPrice(15);
-      document.querySelector('.price-30g').innerText = formatPrice(45);
-      if (document.querySelector('.price-50g')) document.querySelector('.price-50g').innerText = formatPrice(75);
-      document.querySelector('.price-100g').innerText = formatPrice(150);
-      if (document.querySelector('.price-500g')) document.querySelector('.price-500g').innerText = formatPrice(720);
-      document.querySelector('.price-1kg').innerText = formatPrice(1390);
-
-      document.getElementById('discount-old-price').innerText = formatPrice(100);
-      document.getElementById('discount-new-price').innerText = `${formatPrice(60)} - ${formatPrice(80)}`;
-
-      updateCalculator(currentGrams);
+    // Price Update Logic
+    function updatePrice(grams) {
+      document.getElementById('calc-mass-display').innerText = `${grams} ${isRu ? 'г' : 'g'}`;
+      
+      let base = grams * 1.5;
+      if (grams >= 30) base = Math.max(15, base - 30); // 30 rub discount
+      
+      document.getElementById('calc-price-display').innerText = formatMoney(base);
     }
 
-    // Language Toggle
+    function refreshStaticPrices() {
+      document.querySelectorAll('.price-10g').forEach(el => el.innerText = formatMoney(15));
+      document.querySelectorAll('.price-30g').forEach(el => el.innerText = formatMoney(45));
+      document.querySelectorAll('.price-100g').forEach(el => el.innerText = formatMoney(150));
+      document.querySelectorAll('.price-1kg').forEach(el => el.innerText = formatMoney(1390));
+      
+      document.getElementById('home-old-price').innerText = formatMoney(100);
+      document.getElementById('home-new-price').innerText = `${formatMoney(60)} - ${formatMoney(80)}`;
+      
+      updatePrice(document.getElementById('massSlider').value);
+
+      // Update Custom SVGs currency symbol
+      const currencySymbol = isRu ? '₽' : '$';
+      document.querySelectorAll('text').forEach(text => {
+        if(text.innerHTML === '₽' || text.innerHTML === '$') {
+          text.innerHTML = currencySymbol;
+        }
+      });
+    }
+
+    // Translations
     function toggleLanguage() {
-      currentLang = currentLang === 'RU' ? 'EN' : 'RU';
-      document.getElementById('lang-flag').innerText = currentLang === 'RU' ? '🇷🇺' : '🇺🇸';
-      document.getElementById('lang-text').innerText = `${currentLang} (${currentLang === 'RU' ? '₽' : '$'})`;
+      isRu = !isRu;
+      const lang = isRu ? 'ru' : 'en';
+      const d = t[lang];
 
-      // Translate DOM elements
-      const langData = translations[currentLang];
+      document.getElementById('lang-text').innerText = d.langBtn;
+      document.getElementById('schedule-title').innerText = d.scheduleTitle;
+      document.getElementById('schedule-hours').innerText = d.scheduleHours;
       
-      document.getElementById('schedule-title').innerText = langData.scheduleTitle;
-      document.getElementById('schedule-hours').innerText = langData.scheduleHours;
-      document.getElementById('discount-title').innerText = langData.discountTitle;
-      document.getElementById('discount-tag').innerText = langData.discountTag;
-      document.getElementById('discount-item-name').innerText = langData.discountItemName;
-      document.getElementById('discount-desc').innerText = langData.discountDesc;
-      document.getElementById('pricing-teaser-title').innerText = langData.pricingTeaserTitle;
-      document.getElementById('btn-calc-more').innerText = langData.calcMore;
-      document.getElementById('home-reviews-title').innerText = langData.homeReviewsTitle;
-      document.getElementById('empty-reviews-text').innerText = langData.emptyReviewsText;
+      document.getElementById('home-discounts-title').innerText = d.homeDiscounts;
+      document.getElementById('home-discount-item').innerText = d.homeDiscItem;
+      document.getElementById('home-discount-desc').innerText = d.homeDiscDesc;
+      document.getElementById('home-offers-title').innerText = d.homeOffers;
+      document.getElementById('home-reviews-title').innerText = d.homeReviewsTitle;
       
-      document.getElementById('tab-reviews-heading').innerText = langData.tabReviewsHeading;
-      document.getElementById('tab-reviews-sub').innerText = langData.tabReviewsSub;
-      document.getElementById('reviews-no-items').innerText = langData.reviewsNoItems;
-      document.getElementById('reviews-no-items-desc').innerText = langData.reviewsNoItemsDesc;
+      document.getElementById('home-empty-reviews').innerText = d.emptyReviews;
+      document.getElementById('reviews-page-empty').innerText = d.emptyReviews;
+      document.getElementById('gallery-page-empty').innerText = d.emptyReviews;
+      
+      document.getElementById('reviews-page-title').innerText = d.reviewsPageTitle;
+      document.getElementById('calc-title').innerText = d.calcTitle;
+      document.getElementById('calc-mass-label').innerText = d.calcMassLabel;
+      document.getElementById('calc-total-label').innerText = d.calcTotalLabel;
+      document.getElementById('gallery-page-title').innerText = d.galleryTitle;
 
-      document.getElementById('calc-title').innerText = langData.calcTitle;
-      document.getElementById('calc-subtitle').innerText = langData.calcSubtitle;
-      document.getElementById('calc-currency-name').innerText = langData.calcCurrencyName;
-      document.getElementById('slider-label').innerText = langData.sliderLabel;
-      document.getElementById('calc-cost-label').innerText = langData.calcCostLabel;
-      document.getElementById('calc-discount-note').innerText = langData.calcDiscountNote;
-      document.getElementById('tariff-table-title').innerText = langData.tariffTableTitle;
-
-      document.getElementById('tab-gallery-heading').innerText = langData.tabGalleryHeading;
-      document.getElementById('tab-gallery-sub').innerText = langData.tabGallerySub;
-      document.getElementById('gallery-no-items').innerText = langData.galleryNoItems;
-      document.getElementById('gallery-no-items-desc').innerText = langData.galleryNoItemsDesc;
-
-      // Update Dock Labels
-      document.querySelector('#nav-btn-home span').innerText = langData.dockHome;
-      document.querySelector('#nav-btn-reviews span').innerText = langData.dockReviews;
-      document.querySelector('#nav-btn-calculator span').innerText = langData.dockCalc;
-      document.querySelector('#nav-btn-gallery span').innerText = langData.dockGallery;
-
-      updateStoreStatus();
-      refreshPrices();
+      refreshStaticPrices();
+      checkStatus();
     }
 
-    // Theme Toggle (Light / Dark)
+    // Theme logic
     function toggleTheme() {
-      isDarkMode = !isDarkMode;
-      document.documentElement.classList.toggle('dark', isDarkMode);
-      document.documentElement.classList.toggle('light', !isDarkMode);
-      document.getElementById('theme-icon').innerText = isDarkMode ? '🌙' : '☀️';
+      isDark = !isDark;
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.classList.toggle('light', !isDark);
+      document.getElementById('theme-icon').innerText = isDark ? '🌙' : '☀️';
+      updateThemeClasses();
     }
 
-    // Initialize on Load
-    window.addEventListener('DOMContentLoaded', () => {
-      updateStoreStatus();
-      updateCalculator(50);
-      refreshPrices();
+    // Status Check
+    function checkStatus() {
+      const now = new Date();
+      const d = now.getDay();
+      const m = now.getHours() * 60 + now.getMinutes();
       
-      // Periodically update store status every minute
-      setInterval(updateStoreStatus, 60000);
-    });
+      let open = false;
+      // Mon(1), Tue(2), Thu(4) -> 15:00-20:00 (900-1200)
+      if ([1,2,4].includes(d) && m >= 900 && m < 1200) open = true;
+      // Wed(3), Fri(5) -> 17:00-20:00 (1020-1200)
+      if ([3,5].includes(d) && m >= 1020 && m < 1200) open = true;
+
+      const txt = document.getElementById('status-text');
+      const dot = txt.previousElementSibling;
+      const lang = isRu ? 'ru' : 'en';
+
+      if(open) {
+        txt.innerText = t[lang].statusOpen;
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
+      } else {
+        txt.innerText = t[lang].statusClosed;
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
+      }
+    }
+
+    // Init
+    window.onload = () => {
+      switchTab('home');
+      refreshStaticPrices();
+      checkStatus();
+      setInterval(checkStatus, 60000);
+    }
   </script>
 </body>
 </html>
