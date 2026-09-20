@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="dark">
+<html lang="ru"> <!-- По умолчанию светлая тема (без класса 'dark') -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -33,73 +33,97 @@
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+      scrollbar-width: none; /* Firefox */
+    }
+    *::-webkit-scrollbar {
+      display: none; /* Safari/Chrome */
     }
 
     body {
-      background-color: #050a14;
-      color: #f1f5f9;
+      background-color: #f0f4f8; /* Soft light background */
+      color: #1a3560; /* Deep navy text by default */
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
       overflow-x: hidden;
+      overflow-y: auto;
       transition: background-color 0.6s cubic-bezier(0.23, 1, 0.32, 1), color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    .light body {
-      background-color: #f8fafc;
-      color: #0f172a;
+    .dark body {
+      background-color: #050a14;
+      color: #f1f5f9;
     }
 
-    /* Ambient Mesh Background - No Neon, Just Deep Soft Gradients */
+    /* Soft Mesh Background */
     .mesh-bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       background: 
-        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.4), transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.3), transparent 50%);
-      filter: blur(80px);
-      animation: meshPulse 15s ease-in-out infinite alternate;
+        radial-gradient(circle at 10% 20%, rgba(26, 53, 96, 0.05), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(18, 116, 98, 0.05), transparent 40%);
+      filter: blur(40px);
       transition: all 0.8s ease;
     }
 
-    .light .mesh-bg {
+    .dark .mesh-bg {
       background: 
-        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.15), transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.1), transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.3), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.25), transparent 50%);
       filter: blur(60px);
     }
 
-    @keyframes meshPulse {
-      0% { transform: scale(1) translate(0, 0); }
-      100% { transform: scale(1.1) translate(-2%, 3%); }
-    }
-
+    /* iOS 28 Glass Cards */
     .ios-glass-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(40px) saturate(200%);
-      -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(25px) saturate(150%);
+      -webkit-backdrop-filter: blur(25px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(26, 53, 96, 0.06);
       border-radius: 28px;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s, border-color 0.6s, box-shadow 0.6s;
     }
 
-    .light .ios-glass-card {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(26, 53, 96, 0.1);
-      box-shadow: 0 20px 40px rgba(26, 53, 96, 0.05);
+    .dark .ios-glass-card {
+      background: rgba(26, 53, 96, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
 
-    .ios-glass-card:active {
-      transform: scale(0.97);
+    /* Ribbon Slider Container */
+    .ribbon-container {
+      width: 100%;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+    }
+
+    .ribbon-wrapper {
+      display: flex;
+      width: 400%; /* 4 tabs = 400% */
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      align-items: flex-start;
+    }
+
+    .ribbon-tab {
+      width: 25%; /* 100% / 4 */
+      flex-shrink: 0;
+      padding: 0 1rem;
+      opacity: 0.4;
+      transform: scale(0.95);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ribbon-tab.active {
+      opacity: 1;
+      transform: scale(1);
     }
 
     /* Floating Dock */
     .dock-container {
-      background: rgba(10, 15, 25, 0.6);
-      backdrop-filter: blur(40px) saturate(250%);
-      -webkit-backdrop-filter: blur(40px) saturate(250%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 50px rgba(26, 53, 96, 0.1);
       padding: 6px;
       border-radius: 999px;
       display: flex;
@@ -108,29 +132,10 @@
       transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    .light .dock-container {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(26, 53, 96, 0.15);
-      box-shadow: 0 20px 50px rgba(26, 53, 96, 0.1);
-    }
-
-    .tab-content {
-      display: none;
-      opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .tab-content.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      animation: springFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes springFadeIn {
-      0% { opacity: 0; transform: translateY(20px) scale(0.97); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+    .dark .dock-container {
+      background: rgba(10, 15, 25, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     }
 
     /* Custom Slider */
@@ -142,11 +147,11 @@
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
       height: 8px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(26, 53, 96, 0.1);
       border-radius: 999px;
     }
-    .light input[type=range]::-webkit-slider-runnable-track {
-      background: rgba(26,53,96,0.1);
+    .dark input[type=range]::-webkit-slider-runnable-track {
+      background: rgba(255,255,255,0.1);
     }
     input[type=range]::-webkit-slider-thumb {
       height: 24px;
@@ -157,228 +162,251 @@
       cursor: pointer;
       -webkit-appearance: none;
       margin-top: -8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(18, 116, 98, 0.4);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    input[type=range]::-webkit-slider-thumb:active {
-      transform: scale(1.2);
+    .dark input[type=range]::-webkit-slider-thumb {
+      border-color: #1a3560;
     }
+    input[type=range]::-webkit-slider-thumb:active {
+      transform: scale(1.25);
+    }
+
+    /* Toosh Cookie Toast */
+    .cookie-toast {
+      position: fixed;
+      bottom: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: calc(100% - 2rem);
+      max-w: 400px;
+      transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cookie-toast.show {
+      bottom: 100px; /* Above the dock */
+    }
+
   </style>
 </head>
-<body class="min-h-screen pb-32 pt-6 px-4 sm:px-6 relative">
+<body class="min-h-screen pb-32 pt-6 relative">
 
-  <!-- Deep Soft Gradient Mesh -->
   <div class="mesh-bg"></div>
 
-  <header class="max-w-2xl mx-auto mb-8">
+  <!-- Cookie Toosh Notification -->
+  <div id="cookieToast" class="cookie-toast max-w-sm w-full ios-glass-card p-4 flex items-center justify-between gap-4">
+    <div class="flex-1">
+      <p id="cookie-text" class="text-xs font-medium leading-tight">
+        Мы используем файлы cookie. По всем вопросам о товарах обращайтесь в магазин <span class="font-bold text-brandTeal">«Артс&Крафтинг»</span>.
+      </p>
+    </div>
+    <button onclick="acceptCookies()" class="w-8 h-8 rounded-full bg-brandNavy/10 dark:bg-white/10 flex items-center justify-center shrink-0 active:scale-90 transition-transform">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <header class="max-w-2xl mx-auto mb-6 px-4 sm:px-6">
     <div class="ios-glass-card p-6 relative overflow-hidden">
+      
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        
         <div>
           <div class="flex items-center gap-2 mb-2">
-            <span class="px-2.5 py-1 rounded-full bg-brandNavy/20 border border-brandNavy/30 text-[10px] font-bold text-slate-300 dark:text-slate-300 tracking-wide uppercase">
+            <span class="px-2.5 py-1 rounded-full bg-brandNavy/10 dark:bg-brandNavy/40 border border-brandNavy/20 dark:border-brandNavy/40 text-[10px] font-bold text-brandNavy dark:text-slate-300 tracking-wide uppercase">
               Beta 1.0v
             </span>
-            <span id="store-status" class="px-2.5 py-1 rounded-full bg-brandTeal/20 border border-brandTeal/30 text-[10px] font-bold text-slate-300 dark:text-slate-300 flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-brandTeal animate-pulse"></span>
-              <span id="status-text">Загрузка...</span>
-            </span>
           </div>
-          
-          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white dark:text-white light:text-brandNavy">
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
             ПРИНТКРАФТ <span class="text-brandTeal mx-1 font-light">×</span> АРТС&КРАФТИНГ
           </h1>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button onclick="toggleLanguage()" class="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 dark:bg-white/5 border border-white/10 text-xs font-semibold transition-all active:scale-95 text-slate-200">
-            <span id="lang-text">RU (₽)</span>
-          </button>
-          <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-white/5 hover:bg-white/10 dark:bg-white/5 border border-white/10 flex items-center justify-center transition-all active:scale-95 text-slate-200">
-            <span id="theme-icon">🌙</span>
-          </button>
+        <div class="flex flex-col items-end gap-3">
+          <!-- Utils toggles -->
+          <div class="flex items-center gap-2">
+            <button onclick="toggleLanguage()" class="px-3 py-2 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-semibold transition-all active:scale-95">
+              <span id="lang-text">RU (₽)</span>
+            </button>
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center transition-all active:scale-95">
+              <span id="theme-icon">🌙</span>
+            </button>
+          </div>
+          
+          <!-- Contacts / Social Media Icons -->
+          <div class="flex items-center gap-2">
+            <!-- Mail -->
+            <a href="mailto:kride2161@gmail.com" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform">
+              <img id="mail-icon" src="Gemini_Generated_Image_ome72pome72pome7.jpeg" alt="Mail" class="w-full h-full object-cover">
+            </a>
+            <!-- Max -->
+            <a href="https://max.ru/join/7B12-bH0YU56rg65fpO5907tlOGBWaI2AnvPiT_G1SU" target="_blank" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform">
+              <img id="max-icon" src="Gemini_Generated_Image_ilbgjailbgjailbg.jpeg" alt="Max" class="w-full h-full object-cover">
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="mt-5 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium text-slate-400">
-        <span id="schedule-title" class="text-slate-300 font-semibold">График работы магазина:</span>
-        <span id="schedule-hours" class="bg-white/5 px-3 py-1.5 rounded-xl font-mono">
+      <div class="mt-5 pt-4 border-t border-black/5 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium">
+        <span id="schedule-title" class="opacity-70 font-semibold">График работы магазина:</span>
+        <span id="schedule-hours" class="bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-xl font-mono">
           Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00
         </span>
       </div>
     </div>
   </header>
 
-  <main class="max-w-2xl mx-auto">
+  <main class="max-w-2xl mx-auto ribbon-container">
+    <div id="ribbonWrapper" class="ribbon-wrapper">
 
-    <!-- TAB 1: ГЛАВНАЯ -->
-    <section id="tab-home" class="tab-content active space-y-5">
-      <!-- Последние скидки -->
-      <div class="ios-glass-card p-6">
-        <div class="flex items-center gap-3 mb-5">
-          <div class="w-8 h-8 rounded-full bg-brandNavy/30 flex items-center justify-center text-lg">🏷️</div>
-          <h2 id="home-discounts-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy">Последние скидки</h2>
-        </div>
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div>
-            <div id="home-discount-item" class="font-semibold text-sm text-slate-200">Печать деталей (90 грамм)</div>
-            <div id="home-discount-desc" class="text-xs text-slate-400 mt-1">Специальная скидка на этот объём</div>
+      <!-- BLOCK 1: ГЛАВНАЯ (HOME) -->
+      <section class="ribbon-tab active" data-index="0">
+        <div class="space-y-4">
+          
+          <!-- Последние скидки -->
+          <div class="ios-glass-card p-6">
+            <h2 id="home-discounts-title" class="text-lg font-bold mb-4">Последние скидки</h2>
+            <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <div>
+                <div id="home-discount-item" class="font-semibold text-sm">Печать деталей (90 грамм)</div>
+                <div id="home-discount-desc" class="text-xs opacity-60 mt-1">Специальная скидка на этот объём</div>
+              </div>
+              <div class="text-right shrink-0">
+                <div id="home-old-price" class="text-xs opacity-50 line-through">100 ₽</div>
+                <div id="home-new-price" class="text-base font-black text-brandTeal">60 - 80 ₽</div>
+              </div>
+            </div>
           </div>
-          <div class="text-right shrink-0">
-            <div id="home-old-price" class="text-xs text-slate-500 line-through">100 ₽</div>
-            <div id="home-new-price" class="text-base font-black text-brandTeal">60 - 80 ₽</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Последние предложения -->
-      <div class="ios-glass-card p-6">
-        <div class="flex items-center gap-3 mb-5">
-          <div class="w-8 h-8 rounded-full bg-brandTeal/20 flex items-center justify-center text-lg">💡</div>
-          <h2 id="home-offers-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy">Последние предложения</h2>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-            <div class="text-xs text-slate-400 mb-1">10 грамм</div>
-            <div class="font-bold text-sm text-slate-200 price-10g">15 ₽</div>
+          <!-- Последние предложения -->
+          <div class="ios-glass-card p-6">
+            <h2 id="home-offers-title" class="text-lg font-bold mb-4">Последние предложения</h2>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center">
+                <div class="text-xs opacity-60 mb-1">10 грамм</div>
+                <div class="font-bold text-sm price-10g">15 ₽</div>
+              </div>
+              <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-brandTeal text-[9px] px-1.5 py-0.5 font-bold rounded-bl-lg text-white">-30₽</div>
+                <div class="text-xs opacity-60 mb-1">30 грамм</div>
+                <div class="font-bold text-sm price-30g">45 ₽</div>
+              </div>
+            </div>
           </div>
-          <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center relative overflow-hidden">
-            <div class="absolute top-0 right-0 bg-brandTeal text-[9px] px-1.5 py-0.5 font-bold rounded-bl-lg text-white">-30₽</div>
-            <div class="text-xs text-slate-400 mb-1">30 грамм</div>
-            <div class="font-bold text-sm text-slate-200 price-30g">45 ₽</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Последние отзывы -->
-      <div class="ios-glass-card p-6">
-        <h2 id="home-reviews-title" class="text-lg font-bold text-white dark:text-white light:text-brandNavy mb-4">Последние отзывы</h2>
-        <div class="py-8 bg-white/5 rounded-2xl text-center border border-dashed border-white/10">
-          <span id="home-empty-reviews" class="text-sm font-medium text-slate-500">Их пока нет...</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: ОТЗЫВЫ -->
-    <section id="tab-reviews" class="tab-content space-y-5">
-      <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
-        <div class="w-16 h-16 rounded-full bg-brandNavy/30 flex items-center justify-center mb-4">
-          <!-- Star Icon -->
-          <svg class="w-8 h-8 text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-        </div>
-        <h2 id="reviews-page-title" class="text-xl font-bold text-white dark:text-white mb-2">Отзывы</h2>
-        <p id="reviews-page-empty" class="text-sm text-slate-400">Их пока нет...</p>
-      </div>
-    </section>
-
-    <!-- TAB 3: ГРАММЫ В РУБЛИ -->
-    <section id="tab-calc" class="tab-content space-y-5">
-      <div class="ios-glass-card p-6">
-        
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-10 h-10 rounded-full bg-brandTeal/20 flex items-center justify-center text-brandTeal">
-            <!-- Custom Spool + Coin SVG -->
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 5h10v2H4z M4 17h10v2H4z M5 7h8v10H5z"/>
-              <line x1="7" y1="7" x2="7" y2="17" stroke-dasharray="2 2"/>
-              <line x1="11" y1="7" x2="11" y2="17" stroke-dasharray="2 2"/>
-              <circle cx="18" cy="18" r="4.5" stroke-width="1.5"/>
-              <text x="18" y="19.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
-            </svg>
-          </div>
-          <h2 id="calc-title" class="text-xl font-bold text-white dark:text-white">Граммы в Рубли</h2>
-        </div>
-
-        <!-- Slider Calc -->
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
-          <div class="flex justify-between items-center mb-4">
-            <span id="calc-mass-label" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Масса (грамм):</span>
-            <span id="calc-mass-display" class="text-lg font-black text-brandTeal">50 г</span>
-          </div>
-          <input type="range" id="massSlider" min="10" max="1000" step="5" value="50" oninput="updatePrice(this.value)">
-          <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-mono">
-            <span>10</span>
-            <span>250</span>
-            <span>500</span>
-            <span>1000</span>
+          <!-- Последние отзывы -->
+          <div class="ios-glass-card p-6">
+            <h2 id="home-reviews-title" class="text-lg font-bold mb-4">Последние отзывы</h2>
+            <div class="py-6 bg-black/5 dark:bg-white/5 rounded-2xl text-center border border-dashed border-black/10 dark:border-white/10">
+              <span id="home-empty-reviews" class="text-sm font-medium opacity-60">Их пока нет...</span>
+            </div>
           </div>
           
-          <div class="mt-5 pt-4 border-t border-white/10 flex justify-between items-center">
-            <span id="calc-total-label" class="text-sm font-medium text-slate-300">Примерная стоимость:</span>
-            <span id="calc-price-display" class="text-2xl font-black text-white">75 ₽</span>
+        </div>
+      </section>
+
+      <!-- BLOCK 2: ОТЗЫВЫ (REVIEWS) -->
+      <section class="ribbon-tab" data-index="1">
+        <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+          <div class="w-16 h-16 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center mb-4 text-brandNavy dark:text-slate-300">
+            <!-- Star Icon -->
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </div>
+          <h2 id="reviews-page-title" class="text-xl font-bold mb-2">Отзывы</h2>
+          <p id="reviews-page-empty" class="text-sm opacity-60">Их пока нет...</p>
+        </div>
+      </section>
+
+      <!-- BLOCK 3: КАЛЬКУЛЯТОР (CALCULATOR) -->
+      <section class="ribbon-tab" data-index="2">
+        <div class="ios-glass-card p-6">
+          <div class="flex items-center gap-3 mb-6">
+            <h2 id="calc-title" class="text-xl font-bold">Услуги/Граммы в рубли</h2>
+          </div>
+
+          <!-- Slider Calc -->
+          <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-5 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <span id="calc-mass-label" class="text-xs font-bold uppercase tracking-wider opacity-70">Масса (грамм):</span>
+              <span id="calc-mass-display" class="text-lg font-black text-brandTeal">1 г</span>
+            </div>
+            <!-- Слайдер с шагом 1 грамм -->
+            <input type="range" id="massSlider" min="1" max="1000" step="1" value="1" oninput="updatePrice(this.value)">
+            <div class="flex justify-between text-[10px] opacity-50 mt-2 font-mono">
+              <span>1</span>
+              <span>250</span>
+              <span>500</span>
+              <span>1000</span>
+            </div>
+            
+            <div class="mt-5 pt-4 border-t border-black/10 dark:border-white/10 flex justify-between items-center">
+              <span id="calc-total-label" class="text-sm font-medium opacity-80">Примерная стоимость:</span>
+              <span id="calc-price-display" class="text-2xl font-black">2 ₽</span>
+            </div>
+          </div>
+
+          <!-- Price Table Info -->
+          <div class="space-y-1">
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5">
+              <span class="opacity-70">10 грамм</span>
+              <span class="font-semibold price-10g">15 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5 text-brandTeal">
+              <span class="flex items-center gap-2">30 грамм <span class="text-[9px] bg-brandTeal/10 dark:bg-brandTeal/20 px-1.5 py-0.5 rounded font-bold">-30₽ скидка</span></span>
+              <span class="font-bold price-30g">45 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5">
+              <span class="opacity-70">100 грамм</span>
+              <span class="font-semibold price-100g">150 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm font-bold mt-2">
+              <span>1 кг (1000 грамм)</span>
+              <span class="text-brandTeal price-1kg">1390 ₽</span>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- Price Table -->
-        <div class="space-y-1">
-          <div class="flex justify-between py-2 text-sm border-b border-white/5">
-            <span class="text-slate-400">10 грамм</span>
-            <span class="font-semibold text-slate-200 price-10g">15 ₽</span>
+      <!-- BLOCK 4: ПРИМЕРНЫЕ ФОТО (GALLERY) -->
+      <section class="ribbon-tab" data-index="3">
+        <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+          <div class="w-16 h-16 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center mb-4 text-brandNavy dark:text-slate-300">
+            <!-- Custom Spatula + Coin SVG -->
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+              <circle cx="19" cy="19" r="4" stroke-width="1.5"/>
+              <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
+            </svg>
           </div>
-          <div class="flex justify-between py-2 text-sm border-b border-white/5 text-brandTeal">
-            <span class="flex items-center gap-2">30 грамм <span class="text-[9px] bg-brandTeal/20 px-1.5 py-0.5 rounded font-bold">-30₽ скидка</span></span>
-            <span class="font-bold price-30g">45 ₽</span>
-          </div>
-          <div class="flex justify-between py-2 text-sm border-b border-white/5">
-            <span class="text-slate-400">100 грамм</span>
-            <span class="font-semibold text-slate-200 price-100g">150 ₽</span>
-          </div>
-          <div class="flex justify-between py-2 text-sm font-bold mt-2">
-            <span class="text-white dark:text-white">1 кг (1000 грамм)</span>
-            <span class="text-brandTeal price-1kg">1390 ₽</span>
-          </div>
+          <h2 id="gallery-page-title" class="text-xl font-bold mb-2">Услуги/Примерные фото</h2>
+          <p id="gallery-page-empty" class="text-sm opacity-60">Их пока нет...</p>
         </div>
+      </section>
 
-      </div>
-    </section>
-
-    <!-- TAB 4: ПРИМЕРНЫЕ ФОТО -->
-    <section id="tab-gallery" class="tab-content space-y-5">
-      <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
-        <div class="w-16 h-16 rounded-full bg-brandNavy/30 flex items-center justify-center mb-4 text-slate-300">
-          <!-- Custom Spatula + Coin SVG -->
-          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
-            <circle cx="19" cy="19" r="4" stroke-width="1.5"/>
-            <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
-          </svg>
-        </div>
-        <h2 id="gallery-page-title" class="text-xl font-bold text-white dark:text-white mb-2">Примерные фото</h2>
-        <p id="gallery-page-empty" class="text-sm text-slate-400">Их пока нет...</p>
-      </div>
-    </section>
-
+    </div>
   </main>
 
   <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
     <div class="dock-container">
       
       <!-- Home -->
-      <button onclick="switchTab('home')" data-tab="home" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
-        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
-          bg-transparent text-slate-400 
-          group-[.active]:bg-white group-[.active]:text-black 
-          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+      <button onclick="switchTab(0)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform active" data-index="0">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 
+          bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         </div>
       </button>
 
       <!-- Reviews -->
-      <button onclick="switchTab('reviews')" data-tab="reviews" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
-        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
-          bg-transparent text-slate-400 
-          group-[.active]:bg-white group-[.active]:text-black 
-          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+      <button onclick="switchTab(1)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="1">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 
+          bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         </div>
       </button>
 
       <!-- Calc (Spool+Coin) -->
-      <button onclick="switchTab('calc')" data-tab="calc" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
-        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
-          bg-transparent text-slate-400 
-          group-[.active]:bg-white group-[.active]:text-black 
-          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+      <button onclick="switchTab(2)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="2">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 
+          bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M4 5h10v2H4z M4 17h10v2H4z M5 7h8v10H5z"/>
             <line x1="7" y1="7" x2="7" y2="17" stroke-dasharray="2 2"/>
@@ -390,11 +418,9 @@
       </button>
 
       <!-- Gallery (Spatula+Coin) -->
-      <button onclick="switchTab('gallery')" data-tab="gallery" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform">
-        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-400 
-          bg-transparent text-slate-400 
-          group-[.active]:bg-white group-[.active]:text-black 
-          dark:group-[.active]:bg-white dark:group-[.active]:text-black">
+      <button onclick="switchTab(3)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="3">
+        <div class="icon-bg w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 
+          bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
             <circle cx="19" cy="19" r="4.5" stroke-width="1.8"/>
@@ -407,16 +433,22 @@
   </nav>
 
   <script>
-    let isDark = true;
+    // Заводская тема теперь СВЕТЛАЯ (false)
+    let isDark = false; 
     let isRu = true;
     
-    const USD_RATE = 90; // 1 USD = 90 RUB
+    const USD_RATE = 90;
     
-    // Translation dictionary
+    // Имена файлов иконок (Строго по заданию)
+    const icons = {
+      mailLight: 'Gemini_Generated_Image_ome72pome72pome7.jpeg',
+      mailDark: 'Gemini_Generated_Image_whztzlwhztzlwhzt.jpeg',
+      maxLight: 'Gemini_Generated_Image_ilbgjailbgjailbg.jpeg',
+      maxDark: 'file_000000002c7482109485c990cd3b27f2.png'
+    };
+
     const t = {
       ru: {
-        statusOpen: 'Открыто',
-        statusClosed: 'Закрыто',
         scheduleTitle: 'График работы магазина:',
         scheduleHours: 'Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00',
         homeDiscounts: 'Последние скидки',
@@ -430,11 +462,10 @@
         calcMassLabel: 'Масса (грамм):',
         calcTotalLabel: 'Примерная стоимость:',
         galleryTitle: 'Услуги/Примерные фото',
-        langBtn: 'RU (₽)'
+        langBtn: 'RU (₽)',
+        cookieText: 'Мы используем файлы cookie. По всем вопросам о товарах обращайтесь в магазин <span class="font-bold text-brandTeal">«Артс&Крафтинг»</span>.'
       },
       en: {
-        statusOpen: 'Open',
-        statusClosed: 'Closed',
         scheduleTitle: 'Store Schedule:',
         scheduleHours: 'Mon-Tue 15:00-20:00 | Wed 17:00-20:00 | Thu 15:00-20:00 | Fri 17:00-20:00',
         homeDiscounts: 'Latest Discounts',
@@ -448,54 +479,79 @@
         calcMassLabel: 'Mass (grams):',
         calcTotalLabel: 'Estimated Cost:',
         galleryTitle: 'Services/Example Photos',
-        langBtn: 'EN ($)'
+        langBtn: 'EN ($)',
+        cookieText: 'We use cookies. For product inquiries, please contact <span class="font-bold text-brandTeal">Arts&Crafting</span> store.'
       }
     };
 
-    // Tab Logic with color inversion logic handled via Tailwind classes
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.getElementById(`tab-${tabId}`).classList.add('active');
+    // Ribbon (Лента) переключение вкладок
+    function switchTab(index) {
+      const wrapper = document.getElementById('ribbonWrapper');
+      
+      // Сдвигаем всю ленту на нужное количество процентов (0%, -25%, -50%, -75%)
+      wrapper.style.transform = `translateX(-${index * 25}%)`;
 
+      // Обновляем визуальные классы табов
+      document.querySelectorAll('.ribbon-tab').forEach((tab, i) => {
+        if(i === index) tab.classList.add('active');
+        else tab.classList.remove('active');
+      });
+
+      // Обновляем Док-панель
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        if(btn.dataset.tab === tabId) {
+        if(parseInt(btn.dataset.index) === index) {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
         }
       });
+      
       updateThemeClasses();
     }
 
-    // Adjust active icon colors based on theme
+    // Правильные цвета активной кнопки для Светлой и Тёмной темы
     function updateThemeClasses() {
       const activeBtns = document.querySelectorAll('.nav-btn.active .icon-bg');
+      const allBtns = document.querySelectorAll('.nav-btn .icon-bg');
+
+      // Сброс классов у всех
+      allBtns.forEach(bg => {
+        bg.classList.remove('bg-black', 'text-white', 'bg-white', 'text-black');
+      });
+
+      // Применение только к активной
       activeBtns.forEach(bg => {
         if (isDark) {
-          // Dark theme: White bg, Black icon
+          // Тёмная тема: белый фон, чёрная иконка
           bg.classList.add('bg-white', 'text-black');
-          bg.classList.remove('bg-slate-900', 'text-white');
         } else {
-          // Light theme: Black bg, White icon
-          bg.classList.add('bg-slate-900', 'text-white');
-          bg.classList.remove('bg-white', 'text-black');
+          // Светлая тема: чёрный фон, белая иконка
+          bg.classList.add('bg-black', 'text-white');
         }
       });
+
+      // Обновляем иконки контактов (светлые/тёмные фото)
+      document.getElementById('mail-icon').src = isDark ? icons.mailDark : icons.mailLight;
+      document.getElementById('max-icon').src = isDark ? icons.maxDark : icons.maxLight;
     }
 
-    // Formatter
-    function formatMoney(rubles) {
-      if(isRu) return `${rubles} ₽`;
-      return `$${(rubles/USD_RATE).toFixed(2)}`;
+    // Округление и валюта без копеек
+    function formatMoney(amount) {
+      // Исключаем дробные с помощью Math.round()
+      const rounded = Math.round(amount);
+      if(isRu) return `${rounded} ₽`;
+      return `$${Math.round(rounded / USD_RATE)}`;
     }
 
-    // Price Update Logic
+    // Калькулятор с шагом в 1 грамм
     function updatePrice(grams) {
       document.getElementById('calc-mass-display').innerText = `${grams} ${isRu ? 'г' : 'g'}`;
       
       let base = grams * 1.5;
-      if (grams >= 30) base = Math.max(15, base - 30); // 30 rub discount
-      
+      if (grams >= 30) base = Math.max(15, base - 30); // Скидка 30 руб
+      if (grams == 1000) base = 1390; // Жесткая логика 1кг = 1390
+
+      // Полностью без копеек
       document.getElementById('calc-price-display').innerText = formatMoney(base);
     }
 
@@ -510,7 +566,7 @@
       
       updatePrice(document.getElementById('massSlider').value);
 
-      // Update Custom SVGs currency symbol
+      // Обновляем символы внутри SVG
       const currencySymbol = isRu ? '₽' : '$';
       document.querySelectorAll('text').forEach(text => {
         if(text.innerHTML === '₽' || text.innerHTML === '$') {
@@ -519,7 +575,6 @@
       });
     }
 
-    // Translations
     function toggleLanguage() {
       isRu = !isRu;
       const lang = isRu ? 'ru' : 'en';
@@ -528,67 +583,51 @@
       document.getElementById('lang-text').innerText = d.langBtn;
       document.getElementById('schedule-title').innerText = d.scheduleTitle;
       document.getElementById('schedule-hours').innerText = d.scheduleHours;
-      
       document.getElementById('home-discounts-title').innerText = d.homeDiscounts;
       document.getElementById('home-discount-item').innerText = d.homeDiscItem;
       document.getElementById('home-discount-desc').innerText = d.homeDiscDesc;
       document.getElementById('home-offers-title').innerText = d.homeOffers;
       document.getElementById('home-reviews-title').innerText = d.homeReviewsTitle;
-      
       document.getElementById('home-empty-reviews').innerText = d.emptyReviews;
       document.getElementById('reviews-page-empty').innerText = d.emptyReviews;
       document.getElementById('gallery-page-empty').innerText = d.emptyReviews;
-      
       document.getElementById('reviews-page-title').innerText = d.reviewsPageTitle;
       document.getElementById('calc-title').innerText = d.calcTitle;
       document.getElementById('calc-mass-label').innerText = d.calcMassLabel;
       document.getElementById('calc-total-label').innerText = d.calcTotalLabel;
       document.getElementById('gallery-page-title').innerText = d.galleryTitle;
+      document.getElementById('cookie-text').innerHTML = d.cookieText;
 
       refreshStaticPrices();
-      checkStatus();
     }
 
-    // Theme logic
     function toggleTheme() {
       isDark = !isDark;
       document.documentElement.classList.toggle('dark', isDark);
-      document.documentElement.classList.toggle('light', !isDark);
-      document.getElementById('theme-icon').innerText = isDark ? '🌙' : '☀️';
+      document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
       updateThemeClasses();
     }
 
-    // Status Check
-    function checkStatus() {
-      const now = new Date();
-      const d = now.getDay();
-      const m = now.getHours() * 60 + now.getMinutes();
-      
-      let open = false;
-      // Mon(1), Tue(2), Thu(4) -> 15:00-20:00 (900-1200)
-      if ([1,2,4].includes(d) && m >= 900 && m < 1200) open = true;
-      // Wed(3), Fri(5) -> 17:00-20:00 (1020-1200)
-      if ([3,5].includes(d) && m >= 1020 && m < 1200) open = true;
-
-      const txt = document.getElementById('status-text');
-      const dot = txt.previousElementSibling;
-      const lang = isRu ? 'ru' : 'en';
-
-      if(open) {
-        txt.innerText = t[lang].statusOpen;
-        dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
-      } else {
-        txt.innerText = t[lang].statusClosed;
-        dot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
+    // Cookie Логика
+    function checkCookies() {
+      if(!localStorage.getItem('cookieAccepted')) {
+        setTimeout(() => {
+          document.getElementById('cookieToast').classList.add('show');
+        }, 800);
       }
     }
 
-    // Init
+    function acceptCookies() {
+      localStorage.setItem('cookieAccepted', 'true');
+      document.getElementById('cookieToast').classList.remove('show');
+    }
+
+    // Инициализация
     window.onload = () => {
-      switchTab('home');
+      switchTab(0);
       refreshStaticPrices();
-      checkStatus();
-      setInterval(checkStatus, 60000);
+      checkCookies();
+      updateThemeClasses(); // Применить цвета кнопок для светлой темы
     }
   </script>
 </body>
