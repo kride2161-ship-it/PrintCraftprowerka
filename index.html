@@ -522,10 +522,39 @@
         <h2 class="text-xl font-black text-brandNavy dark:text-white">Панель Администратора</h2>
       </div>
 
-      <p class="text-xs opacity-75 mb-4">Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для быстрой непрерывной изменения баланса пользователя (1 рубль).</p>
+      <!-- Admin Tab Navigation -->
+      <div class="flex gap-2 mb-4 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10">
+        <button id="adminTabUsersBtn" onclick="switchAdminTab('users')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white">Пользователи</button>
+        <button id="adminTabChatBtn" onclick="switchAdminTab('chat')" class="flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all">Чат Модерация</button>
+      </div>
 
-      <div id="adminUsersList" class="space-y-2 overflow-y-auto flex-1 pr-1">
-        <!-- Список пользователей в админке -->
+      <!-- Users Tab Content -->
+      <div id="adminUsersTab" class="flex-1 flex flex-col min-h-0">
+        <p class="text-xs opacity-75 mb-4">Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для быстрой непрерывной изменения баланса пользователя (1 рубль).</p>
+        <div id="adminUsersList" class="space-y-2 overflow-y-auto flex-1 pr-1">
+          <!-- Список пользователей в админке -->
+        </div>
+      </div>
+
+      <!-- Admin Chat Tab Content -->
+      <div id="adminChatTab" class="flex-1 flex flex-col min-h-0 hidden">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold opacity-75">Модерация сообщений</span>
+          <button onclick="clearAdminChat()" class="px-2.5 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all active:scale-95">
+            Очистить весь чат
+          </button>
+        </div>
+        
+        <div id="adminChatMessages" class="space-y-2 overflow-y-auto flex-1 pr-1 mb-3 bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-black/5 dark:border-white/10 max-h-[260px]">
+          <!-- Список сообщений для модерации -->
+        </div>
+
+        <div class="flex gap-2">
+          <input type="text" id="adminChatInput" placeholder="Объявление от Администратора..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendAdminChatMessage()">
+          <button onclick="sendAdminChatMessage()" class="px-3 py-2 bg-amber-500 text-black font-bold rounded-xl text-xs active:scale-95 transition-transform flex items-center gap-1 shrink-0">
+            👑 Отправить
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -869,10 +898,96 @@
     // Admin Panel Logic
     function openAdminModal() {
       renderAdminUsers();
+      renderAdminChat();
+      switchAdminTab('users');
       document.getElementById('adminModal').classList.add('active');
     }
     function closeAdminModal() {
       document.getElementById('adminModal').classList.remove('active');
+    }
+
+    function switchAdminTab(tabName) {
+      const usersTab = document.getElementById('adminUsersTab');
+      const chatTab = document.getElementById('adminChatTab');
+      const usersBtn = document.getElementById('adminTabUsersBtn');
+      const chatBtn = document.getElementById('adminTabChatBtn');
+
+      if (tabName === 'users') {
+        usersTab.classList.remove('hidden');
+        chatTab.classList.add('hidden');
+        usersBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white opacity-100";
+        chatBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all";
+      } else {
+        usersTab.classList.add('hidden');
+        chatTab.classList.remove('hidden');
+        chatBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white opacity-100";
+        usersBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all";
+        renderAdminChat();
+      }
+    }
+
+    function renderAdminChat() {
+      const container = document.getElementById('adminChatMessages');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (chatMessagesData.length === 0) {
+        container.innerHTML = '<div class="text-xs opacity-60 text-center py-4">История чата пуста</div>';
+        return;
+      }
+
+      chatMessagesData.forEach(m => {
+        const item = document.createElement('div');
+        item.className = 'bg-white/60 dark:bg-black/30 border border-black/5 dark:border-white/10 rounded-xl p-2.5 flex items-start justify-between gap-2 text-xs';
+        item.innerHTML = `
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 mb-1">
+              <span class="font-bold text-[11px] ${m.isAdmin ? 'text-amber-500 font-black' : ''}">${m.isAdmin ? '👑 ' : ''}${m.username}</span>
+              <span class="text-[9px] opacity-40">${m.time}</span>
+            </div>
+            <p class="text-[11px] opacity-80 break-words">${m.text}</p>
+          </div>
+          <button onclick="deleteChatMessage('${m.id}')" class="w-6 h-6 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center text-xs transition-colors shrink-0" title="Удалить сообщение">
+            ✕
+          </button>
+        `;
+        container.appendChild(item);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function deleteChatMessage(msgId) {
+      chatMessagesData = chatMessagesData.filter(m => m.id !== msgId);
+      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      renderAdminChat();
+      renderChatMessages();
+    }
+
+    function clearAdminChat() {
+      chatMessagesData = [];
+      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      renderAdminChat();
+      renderChatMessages();
+    }
+
+    function sendAdminChatMessage() {
+      const input = document.getElementById('adminChatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msg = {
+        id: 'c_' + Date.now(),
+        username: 'Админ',
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        isAdmin: true
+      };
+
+      chatMessagesData.push(msg);
+      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      input.value = '';
+      renderAdminChat();
+      renderChatMessages();
     }
 
     // Continuous Press-and-Hold Logic for Balance Adjustment
