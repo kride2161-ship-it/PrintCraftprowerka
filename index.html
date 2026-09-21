@@ -139,7 +139,7 @@
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     }
 
-    /* Custom Slider */
+    /* Custom Range Slider */
     input[type=range] {
       -webkit-appearance: none;
       background: transparent;
@@ -192,7 +192,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(12px);
       z-index: 200;
       display: flex;
@@ -240,16 +240,21 @@
       
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
         <div>
-          <div class="flex items-center gap-2 mb-2">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brandNavy/10 dark:bg-white/10 border border-brandNavy/15 dark:border-white/15 text-[11px] font-bold text-brandNavy dark:text-slate-200 tracking-wide uppercase shadow-sm">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Beta 2.0v
             </span>
-            <!-- User Status Badge -->
-            <div id="userHeaderBadge" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-brandTeal/15 border border-brandTeal/30 text-[11px] font-bold text-brandTeal">
+
+            <!-- User Status Badge with Balance + Button -->
+            <div id="userHeaderBadge" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-brandTeal/15 border border-brandTeal/30 text-[11px] font-bold text-brandTeal">
               <span id="userNameHeader">Пользователь</span>
               <span class="opacity-40">|</span>
               <span id="userBalanceHeader" class="font-mono">0 ₽</span>
+              <!-- Plus button for top-up request -->
+              <button onclick="openTopupModal()" title="Пополнить баланс" class="w-5 h-5 rounded-full bg-brandTeal text-white flex items-center justify-center text-xs font-black shadow hover:scale-110 active:scale-95 transition-transform ml-0.5">
+                +
+              </button>
             </div>
           </div>
 
@@ -373,36 +378,70 @@
         </div>
       </section>
 
-      <!-- TAB 2: ЧАТ (CHAT) - NEW IN BETA 2.0v -->
+      <!-- TAB 2: ЧАТ И P2P (CHAT & DIRECT MESSAGES) -->
       <section class="ribbon-tab" data-index="2">
-        <div class="ios-glass-card p-6 min-h-[450px] flex flex-col justify-between">
+        <div class="ios-glass-card p-6 min-h-[480px] flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <!-- Header with Chat Mode Switcher -->
+            <div class="flex flex-col gap-3 mb-4 pb-3 border-b border-black/5 dark:border-white/10">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                  </div>
+                  <div>
+                    <h2 class="text-lg font-bold">Сетевой Чат & P2P</h2>
+                    <p class="text-[10px] opacity-60">Общий чат и личные сообщения</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 class="text-lg font-bold">Сетевой Чат</h2>
-                  <p class="text-[10px] opacity-60">Общение в реальном времени</p>
-                </div>
+                <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold">
+                  ● Онлайн
+                </span>
               </div>
-              <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold">
-                ● Онлайн
-              </span>
+
+              <!-- Segmented Control for Public / P2P Direct Chat -->
+              <div class="flex bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs font-bold">
+                <button id="chatModeGlobalBtn" onclick="switchChatMode('global')" class="flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all">
+                  🌐 Общий чат
+                </button>
+                <button id="chatModeP2pBtn" onclick="switchChatMode('p2p')" class="flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
+                  💬 Личные (P2P)
+                </button>
+              </div>
             </div>
 
-            <!-- Messages Stream -->
-            <div id="chatMessages" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-              <!-- Сообщения чата будут здесь -->
+            <!-- Global Chat Section -->
+            <div id="globalChatContainer">
+              <div id="chatMessages" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                <!-- Сообщения чата будут здесь -->
+              </div>
+            </div>
+
+            <!-- Direct P2P Section -->
+            <div id="p2pChatContainer" class="hidden">
+              <div class="mb-3">
+                <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Выберите собеседника:</label>
+                <div id="p2pUserSelector" class="flex gap-2 overflow-x-auto pb-2">
+                  <!-- Список пользователей для выбора P2P -->
+                </div>
+              </div>
+
+              <div id="p2pActiveUserHeader" class="text-xs font-bold text-brandTeal mb-2 flex items-center gap-1.5 hidden">
+                <span>💬 Диалог с:</span>
+                <span id="p2pActiveUserName" class="underline">...</span>
+              </div>
+
+              <div id="p2pChatMessages" class="space-y-3 max-h-[220px] overflow-y-auto pr-1 min-h-[140px] bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-black/5 dark:border-white/10">
+                <div class="text-center text-xs opacity-50 py-6">Выберите пользователя выше, чтобы начать личный диалог</div>
+              </div>
             </div>
           </div>
 
-          <!-- Chat Input -->
+          <!-- Chat Input Bar -->
           <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex gap-2">
-            <input type="text" id="chatInput" placeholder="Напишите сообщение..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendChatMessage()">
-            <button onclick="sendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform">
-              Отправить
+            <input type="text" id="chatInput" placeholder="Напишите сообщение..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') handleSendChatMessage()">
+            <button onclick="handleSendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1">
+              <span>Отправить</span>
             </button>
           </div>
         </div>
@@ -482,6 +521,54 @@
     </div>
   </main>
 
+  <!-- Topup Balance Modal (+) -->
+  <div id="topupModal" class="modal-backdrop">
+    <div class="ios-glass-card max-w-md w-full mx-4 p-6 relative">
+      <button onclick="closeTopupModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-full bg-brandTeal text-white flex items-center justify-center font-bold text-lg">+</div>
+        <h2 class="text-lg font-bold">Заявка на пополнение баланса</h2>
+      </div>
+
+      <p class="text-xs opacity-70 mb-4">
+        Вы можете отправить готовое письмо администратору на почту <b class="text-brandTeal">kride2161@gmail.com</b> для начисления баланса.
+      </p>
+
+      <!-- Amount Selector -->
+      <div class="mb-4">
+        <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1.5 block">Сумма пополнения:</label>
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <button onclick="selectTopupAmount(100)" class="topup-amount-btn py-2 rounded-xl bg-brandNavy/10 dark:bg-white/10 font-bold text-xs hover:bg-brandTeal hover:text-white transition-colors active:scale-95">100 ₽</button>
+          <button onclick="selectTopupAmount(500)" class="topup-amount-btn py-2 rounded-xl bg-brandNavy/10 dark:bg-white/10 font-bold text-xs hover:bg-brandTeal hover:text-white transition-colors active:scale-95">500 ₽</button>
+          <button onclick="selectTopupAmount(1000)" class="topup-amount-btn py-2 rounded-xl bg-brandTeal text-white font-bold text-xs hover:bg-brandTeal transition-colors active:scale-95">1000 ₽</button>
+        </div>
+        <input type="number" id="customTopupAmount" placeholder="Или введите другую сумму..." value="1000" oninput="updateTopupMessage()" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
+      </div>
+
+      <!-- Generated Message Preview -->
+      <div class="mb-4">
+        <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Готовый текст обращения:</label>
+        <div id="topupPreviewText" class="p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-xs opacity-90 font-mono leading-relaxed break-words select-all">
+          Здравствуйте, я хочу/купил у вас услугу, начислите мне на баланс...
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2">
+        <a id="sendMailLink" href="#" target="_blank" class="w-full py-2.5 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-md flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          Перейти в почту для отправки
+        </a>
+        <button onclick="copyTopupText()" class="w-full py-2 bg-black/5 dark:bg-white/10 font-bold rounded-xl text-xs active:scale-95 transition-transform flex items-center justify-center gap-1.5">
+          📋 Скопировать текст в буфер
+        </button>
+      </div>
+
+      <p id="copyToast" class="text-[11px] font-bold text-emerald-500 text-center mt-2 hidden">✓ Текст скопирован!</p>
+    </div>
+  </div>
+
   <!-- Auth Modal -->
   <div id="authModal" class="modal-backdrop">
     <div class="ios-glass-card max-w-sm w-full mx-4 p-6 relative">
@@ -495,7 +582,7 @@
           <input type="text" id="authUsernameInput" placeholder="Иван" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
         </div>
         <div>
-          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Пароль</label>
+          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Пароль (первая цифра сохранится для идентификации)</label>
           <input type="password" id="authPasswordInput" placeholder="••••••••" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
         </div>
 
@@ -530,7 +617,10 @@
 
       <!-- Users Tab Content -->
       <div id="adminUsersTab" class="flex-1 flex flex-col min-h-0">
-        <p class="text-xs opacity-75 mb-4">Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для быстрой непрерывной изменения баланса пользователя (1 рубль).</p>
+        <p class="text-xs opacity-75 mb-3">
+          Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для непрерывного изменения баланса (1 рубль).
+          Возле пользователя отображается первая цифра его пароля для сверки оплат с почты.
+        </p>
         <div id="adminUsersList" class="space-y-2 overflow-y-auto flex-1 pr-1">
           <!-- Список пользователей в админке -->
         </div>
@@ -640,7 +730,6 @@
     window.appId = appId;
     window.firebaseAuth = auth;
 
-    // Async init Auth
     async function initAuth() {
       if (!auth) return;
       try {
@@ -661,15 +750,17 @@
     let isRu = true;
     const USD_RATE = 90;
     
-    // In-memory fallback state synced with localStorage / Firestore
+    // In-memory fallback state synced with localStorage
     let currentUser = JSON.parse(localStorage.getItem('pc_user')) || null;
     let selectedRating = 5;
+    let currentChatMode = 'global'; // 'global' or 'p2p'
+    let selectedP2pUser = null; // target user ID for P2P messaging
 
-    // Default users store
+    // Default users store with first character of password stored
     let allUsers = JSON.parse(localStorage.getItem('pc_all_users')) || [
-      { id: 'usr_1', username: 'Ксения', balance: 150 },
-      { id: 'usr_2', username: 'Александр', balance: 0 },
-      { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500 }
+      { id: 'usr_1', username: 'Ксения', balance: 150, firstPassChar: '7' },
+      { id: 'usr_2', username: 'Александр', balance: 0, firstPassChar: '1' },
+      { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500, firstPassChar: '9' }
     ];
 
     // Reviews store
@@ -677,9 +768,15 @@
       { id: 'r1', username: 'Ксения', rating: 5, text: 'Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.' }
     ];
 
-    // Chat store
+    // Global Chat store
     let chatMessagesData = JSON.parse(localStorage.getItem('pc_chat')) || [
       { id: 'c1', username: 'Админ', text: 'Добро пожаловать в чат ПРИНТКРАФТ × АРТС&КРАФТИНГ (Beta 2.0v)!', isAdmin: true, time: '12:00' }
+    ];
+
+    // Direct P2P Chats store: object mapping user keys or array of messages
+    let p2pChatsData = JSON.parse(localStorage.getItem('pc_p2p_chats')) || [
+      { id: 'p2p_1', senderId: 'usr_1', senderName: 'Ксения', targetId: 'usr_3', targetName: 'ПринтКрафт_Дево', text: 'Здравствуйте! Можно ли заказать деталь по моему чертежу?', time: '12:10' },
+      { id: 'p2p_2', senderId: 'usr_3', senderName: 'ПринтКрафт_Дево', targetId: 'usr_1', targetName: 'Ксения', text: 'Добрый день! Да, конечно. Напишите нам в почту или сообщения!', time: '12:12' }
     ];
 
     const icons = {
@@ -718,7 +815,6 @@
       }
     };
 
-    // Ribbon Slider Switch (5 tabs = 20% steps)
     function switchTab(index) {
       const wrapper = document.getElementById('ribbonWrapper');
       wrapper.style.transform = `translateX(-${index * 20}%)`;
@@ -831,6 +927,58 @@
       }
     }
 
+    // Top-up Mail Balance Generator (+)
+    function openTopupModal() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      document.getElementById('topupModal').classList.add('active');
+      updateTopupMessage();
+    }
+
+    function closeTopupModal() {
+      document.getElementById('topupModal').classList.remove('active');
+    }
+
+    function selectTopupAmount(amt) {
+      document.getElementById('customTopupAmount').value = amt;
+      updateTopupMessage();
+    }
+
+    function getTopupMessageText() {
+      const amt = document.getElementById('customTopupAmount').value || '1000';
+      const uname = currentUser ? currentUser.username : 'Пользователь';
+      const passChar = currentUser ? (currentUser.firstPassChar || 'X') : 'X';
+
+      return `Здравствуйте, я хочу/купил у вас услугу, начислите мне на баланс [${uname}, первая цифра пароля: ${passChar}] "${amt}" рублей, сколько я вам заплатил(-а).`;
+    }
+
+    function updateTopupMessage() {
+      const msgText = getTopupMessageText();
+      document.getElementById('topupPreviewText').innerText = msgText;
+
+      const mailSubject = encodeURIComponent("Заявка на пополнение баланса ПРИНТКРАФТ");
+      const mailBody = encodeURIComponent(msgText);
+      document.getElementById('sendMailLink').href = `mailto:kride2161@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+    }
+
+    function copyTopupText() {
+      const textToCopy = getTopupMessageText();
+
+      // Reliable clipboard copy using fallback textarea for browser iframe compatibility
+      const tempArea = document.createElement('textarea');
+      tempArea.value = textToCopy;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempArea);
+
+      const toast = document.getElementById('copyToast');
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
     // User Auth Modal Logic
     function openAuthModal() {
       document.getElementById('authModal').classList.add('active');
@@ -841,7 +989,9 @@
 
     function performAuth() {
       const username = document.getElementById('authUsernameInput').value.trim();
+      const password = document.getElementById('authPasswordInput').value.trim();
       const errEl = document.getElementById('authError');
+      
       if (!username) {
         errEl.innerText = "Пожалуйста, введите имя!";
         errEl.classList.remove('hidden');
@@ -849,11 +999,16 @@
       }
       errEl.classList.add('hidden');
 
+      const firstChar = password ? password.charAt(0) : '1';
+
       // Check existing user or create
       let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
       if (!existing) {
-        existing = { id: 'usr_' + Date.now(), username: username, balance: 0 };
+        existing = { id: 'usr_' + Date.now(), username: username, balance: 0, firstPassChar: firstChar };
         allUsers.push(existing);
+        saveAllUsers();
+      } else if (password) {
+        existing.firstPassChar = firstChar;
         saveAllUsers();
       }
 
@@ -862,6 +1017,7 @@
       updateUserUI();
       closeAuthModal();
       renderAdminUsers();
+      renderP2pUserSelector();
     }
 
     function performLogout() {
@@ -869,6 +1025,7 @@
       localStorage.removeItem('pc_user');
       updateUserUI();
       closeAuthModal();
+      renderP2pUserSelector();
     }
 
     function updateUserUI() {
@@ -879,7 +1036,10 @@
       if (currentUser) {
         // Sync user balance from store
         const fresh = allUsers.find(u => u.id === currentUser.id);
-        if (fresh) currentUser.balance = fresh.balance;
+        if (fresh) {
+          currentUser.balance = fresh.balance;
+          if (fresh.firstPassChar) currentUser.firstPassChar = fresh.firstPassChar;
+        }
 
         userBadge.classList.remove('hidden');
         userBadge.classList.add('flex');
@@ -990,7 +1150,7 @@
       renderChatMessages();
     }
 
-    // Continuous Press-and-Hold Logic for Balance Adjustment
+    // Press-and-Hold Logic for Balance Adjustment
     let holdTimer = null;
     let holdInterval = null;
 
@@ -999,7 +1159,7 @@
       holdTimer = setTimeout(() => {
         holdInterval = setInterval(() => {
           changeUserBalance(userId, delta);
-        }, 80); // Rapid increment/decrement every 80ms
+        }, 80);
       }, 300);
     }
 
@@ -1040,6 +1200,7 @@
           <div class="flex flex-col">
             <span class="font-bold text-xs flex items-center gap-1">
               ${u.username}
+              <span class="text-[10px] opacity-60 font-mono" title="Первая цифра пароля">(Код: ${u.firstPassChar || '1'})</span>
               ${currentUser && currentUser.id === u.id ? '<span class="text-[9px] bg-brandTeal/20 text-brandTeal px-1.5 py-0.5 rounded-full">(Вы)</span>' : ''}
             </span>
             <span class="text-[11px] font-mono text-brandTeal font-bold">${formatMoney(u.balance)}</span>
@@ -1131,7 +1292,39 @@
       }
     }
 
-    // Network Chat System
+    // Chat Mode Switch (Global Chat vs P2P Direct Chat)
+    function switchChatMode(mode) {
+      currentChatMode = mode;
+      const globalBtn = document.getElementById('chatModeGlobalBtn');
+      const p2pBtn = document.getElementById('chatModeP2pBtn');
+      const globalContainer = document.getElementById('globalChatContainer');
+      const p2pContainer = document.getElementById('p2pChatContainer');
+
+      if (mode === 'global') {
+        globalContainer.classList.remove('hidden');
+        p2pContainer.classList.add('hidden');
+        globalBtn.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all";
+        p2pBtn.className = "flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1";
+        renderChatMessages();
+      } else {
+        globalContainer.classList.add('hidden');
+        p2pContainer.classList.remove('hidden');
+        p2pBtn.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1";
+        globalBtn.className = "flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all";
+        renderP2pUserSelector();
+        renderP2pChatMessages();
+      }
+    }
+
+    function handleSendChatMessage() {
+      if (currentChatMode === 'global') {
+        sendChatMessage();
+      } else {
+        sendP2pChatMessage();
+      }
+    }
+
+    // Global Chat System
     function sendChatMessage() {
       if (!currentUser) {
         openAuthModal();
@@ -1186,6 +1379,124 @@
       container.scrollTop = container.scrollHeight;
     }
 
+    // Direct P2P Chat Logic
+    function renderP2pUserSelector() {
+      const selector = document.getElementById('p2pUserSelector');
+      if (!selector) return;
+      selector.innerHTML = '';
+
+      // Filter other users
+      const otherUsers = allUsers.filter(u => !currentUser || u.id !== currentUser.id);
+
+      if (otherUsers.length === 0) {
+        selector.innerHTML = '<div class="text-xs opacity-50">Нет других доступных пользователей</div>';
+        return;
+      }
+
+      otherUsers.forEach(u => {
+        const btn = document.createElement('button');
+        const isSelected = selectedP2pUser && selectedP2pUser.id === u.id;
+        btn.className = `px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shrink-0 active:scale-95 flex items-center gap-1.5 ${
+          isSelected 
+            ? 'bg-brandTeal text-white border-brandTeal shadow-sm' 
+            : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 opacity-80 hover:opacity-100'
+        }`;
+        btn.innerHTML = `
+          <span class="w-2 h-2 rounded-full ${isSelected ? 'bg-white' : 'bg-brandTeal'}"></span>
+          <span>${u.username}</span>
+        `;
+        btn.onclick = () => selectP2pTargetUser(u);
+        selector.appendChild(btn);
+      });
+    }
+
+    function selectP2pTargetUser(u) {
+      selectedP2pUser = u;
+      document.getElementById('p2pActiveUserHeader').classList.remove('hidden');
+      document.getElementById('p2pActiveUserName').innerText = u.username;
+      renderP2pUserSelector();
+      renderP2pChatMessages();
+    }
+
+    function sendP2pChatMessage() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      if (!selectedP2pUser) {
+        document.getElementById('p2pChatMessages').innerHTML = '<div class="text-center text-xs text-red-500 font-bold py-4">Сначала выберите собеседника выше!</div>';
+        return;
+      }
+
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const p2pMsg = {
+        id: 'p2p_' + Date.now(),
+        senderId: currentUser.id,
+        senderName: currentUser.username,
+        targetId: selectedP2pUser.id,
+        targetName: selectedP2pUser.username,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      p2pChatsData.push(p2pMsg);
+      localStorage.setItem('pc_p2p_chats', JSON.stringify(p2pChatsData));
+      input.value = '';
+      renderP2pChatMessages();
+    }
+
+    function renderP2pChatMessages() {
+      const container = document.getElementById('p2pChatMessages');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!selectedP2pUser) {
+        container.innerHTML = '<div class="text-center text-xs opacity-50 py-6">Выберите пользователя выше, чтобы вести личную беседу</div>';
+        return;
+      }
+
+      if (!currentUser) {
+        container.innerHTML = '<div class="text-center text-xs opacity-60 py-6">Войдите в аккаунт, чтобы просматривать личные сообщения</div>';
+        return;
+      }
+
+      // Filter messages between currentUser and selectedP2pUser
+      const filtered = p2pChatsData.filter(m => 
+        (m.senderId === currentUser.id && m.targetId === selectedP2pUser.id) ||
+        (m.senderId === selectedP2pUser.id && m.targetId === currentUser.id)
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center text-xs opacity-50 py-6">У вас пока нет личных сообщений с <b>${selectedP2pUser.username}</b>. Напишите первое!</div>`;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const isMe = m.senderId === currentUser.id;
+        const msgEl = document.createElement('div');
+        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+        msgEl.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold opacity-60">${m.senderName}</span>
+            <span class="text-[9px] opacity-40">${m.time}</span>
+          </div>
+          <div class="px-3 py-2 rounded-2xl text-xs max-w-[80%] ${
+            isMe 
+              ? 'bg-brandTeal text-white rounded-tr-none' 
+              : 'bg-black/10 dark:bg-white/10 rounded-tl-none font-medium'
+          }">
+            ${m.text}
+          </div>
+        `;
+        container.appendChild(msgEl);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
     // Cookie Toast Logic
     function checkCookies() {
       if(!localStorage.getItem('cookieAccepted')) {
@@ -1209,6 +1520,7 @@
       updateUserUI();
       renderReviews();
       renderChatMessages();
+      renderP2pUserSelector();
       setReviewRating(5);
     };
   </script>
