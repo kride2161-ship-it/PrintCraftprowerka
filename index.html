@@ -266,8 +266,8 @@
 
         <!-- Utility Toolbar -->
         <div class="flex items-center gap-2 bg-black/5 dark:bg-white/5 p-1.5 rounded-2xl border border-black/5 dark:border-white/10 shadow-inner">
-          <button id="authBtn" onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl bg-brandTeal text-white text-xs font-bold transition-all active:scale-95 shadow-sm flex items-center gap-1">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <button id="authBtn" onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl bg-brandTeal text-white text-xs font-bold transition-all active:scale-95 shadow-sm flex items-center gap-1.5">
+            <span id="authBtnAvatar" class="text-sm">👤</span>
             <span id="authBtnText">Войти</span>
           </button>
 
@@ -369,78 +369,78 @@
             <textarea id="reviewTextInput" placeholder="Напишите ваш отзыв..." class="w-full bg-white/80 dark:bg-black/30 border border-black/10 dark:border-white/10 rounded-xl p-3 text-xs focus:outline-none resize-none h-20 mb-2"></textarea>
             <button onclick="submitReview()" class="w-full py-2 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform">
               Отправить отзыв
-            </button>
-          </div>
-          
-          <div id="reviewsList" class="space-y-3 w-full">
-            <!-- Отзывы из базы -->
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: ЧАТ И P2P (CHAT & DIRECT MESSAGES) -->
+      <!-- TAB 2: ЧАТ И ПОМОЩНИК (CHAT & ASSISTANT) -->
       <section class="ribbon-tab" data-index="2">
-        <div class="ios-glass-card p-6 min-h-[480px] flex flex-col justify-between">
+        <div class="ios-glass-card p-6 min-h-[500px] flex flex-col justify-between">
           <div>
             <!-- Header with Chat Mode Switcher -->
             <div class="flex flex-col gap-3 mb-4 pb-3 border-b border-black/5 dark:border-white/10">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                  <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0 text-xl" id="chatHeaderIcon">
+                    🤖
                   </div>
                   <div>
-                    <h2 class="text-lg font-bold">Сетевой Чат & P2P</h2>
-                    <p class="text-[10px] opacity-60">Общий чат и личные сообщения</p>
+                    <h2 class="text-lg font-bold" id="chatHeaderTitle">Помощник (Админ)</h2>
+                    <p class="text-[10px] opacity-60" id="chatHeaderSubtitle">Интерактивный консультант и техподдержка</p>
                   </div>
                 </div>
-                <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold">
-                  ● Онлайн
+                <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Онлайн
                 </span>
               </div>
 
-              <!-- Segmented Control for Public / P2P Direct Chat -->
-              <div class="flex bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs font-bold">
-                <button id="chatModeGlobalBtn" onclick="switchChatMode('global')" class="flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all">
-                  🌐 Общий чат
+              <!-- Segmented Control for Chat Modes -->
+              <div class="grid grid-cols-3 gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-[11px] font-bold">
+                <button id="chatModeBotBtn" onclick="switchChatMode('bot')" class="py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1">
+                  🤖 Помощник
                 </button>
-                <button id="chatModeP2pBtn" onclick="switchChatMode('p2p')" class="flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
-                  💬 Личные (P2P)
+                <button id="chatModeTicketBtn" onclick="switchChatMode('ticket')" class="py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
+                  📩 Админу
+                </button>
+                <button id="chatModeGlobalBtn" onclick="switchChatMode('global')" class="py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
+                  🌐 Общий
                 </button>
               </div>
             </div>
 
-            <!-- Global Chat Section -->
-            <div id="globalChatContainer">
+            <!-- MODE 1: Bot / Assistant Container -->
+            <div id="botChatContainer" class="space-y-3">
+              <!-- Quick Question Chips -->
+              <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-none text-[10px] font-semibold">
+                <button onclick="sendQuickQuestion('Сколько стоит 3D печать?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">💰 Стоимость</button>
+                <button onclick="sendQuickQuestion('Какой график работы?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">⏰ График</button>
+                <button onclick="sendQuickQuestion('Какие виды пластика есть?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">🧵 Пластик</button>
+                <button onclick="sendQuickQuestion('Как оформить индивидуальный заказ?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">📂 Свой чертеж</button>
+              </div>
+
+              <div id="botChatMessages" class="space-y-3 max-h-[260px] overflow-y-auto pr-1">
+                <!-- Bot Messages -->
+              </div>
+            </div>
+
+            <!-- MODE 2: Direct Ticket to Admin Container -->
+            <div id="ticketChatContainer" class="hidden space-y-3">
+              <div class="p-3 bg-brandTeal/10 border border-brandTeal/20 rounded-2xl text-xs opacity-90 leading-relaxed">
+                ℹ️ <b>Прямой диалог с Администратором:</b> Ваши сообщения сохраняются в защищенную облачную базу. Администратор ответит вам лично в ближайшее время.
+              </div>
+              <div id="ticketChatMessages" class="space-y-3 max-h-[240px] overflow-y-auto pr-1">
+                <!-- Ticket Messages -->
+              </div>
+            </div>
+
+            <!-- MODE 3: Global Public Chat Container -->
+            <div id="globalChatContainer" class="hidden space-y-3">
               <div id="chatMessages" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-                <!-- Сообщения чата будут здесь -->
-              </div>
-            </div>
-
-            <!-- Direct P2P Section -->
-            <div id="p2pChatContainer" class="hidden">
-              <div class="mb-3">
-                <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Выберите собеседника:</label>
-                <div id="p2pUserSelector" class="flex gap-2 overflow-x-auto pb-2">
-                  <!-- Список пользователей для выбора P2P -->
-                </div>
-              </div>
-
-              <div id="p2pActiveUserHeader" class="text-xs font-bold text-brandTeal mb-2 flex items-center gap-1.5 hidden">
-                <span>💬 Диалог с:</span>
-                <span id="p2pActiveUserName" class="underline">...</span>
-              </div>
-
-              <div id="p2pChatMessages" class="space-y-3 max-h-[220px] overflow-y-auto pr-1 min-h-[140px] bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-black/5 dark:border-white/10">
-                <div class="text-center text-xs opacity-50 py-6">Выберите пользователя выше, чтобы начать личный диалог</div>
+                <!-- Global Chat Messages -->
               </div>
             </div>
           </div>
 
           <!-- Chat Input Bar -->
           <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex gap-2">
-            <input type="text" id="chatInput" placeholder="Напишите сообщение..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') handleSendChatMessage()">
-            <button onclick="handleSendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1">
+            <input type="text" id="chatInput" placeholder="Задайте вопрос Помощнику..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') handleSendChatMessage()">
+            <button onclick="handleSendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1 shadow-md">
               <span>Отправить</span>
             </button>
           </div>
@@ -510,89 +510,89 @@
             <h2 id="gallery-page-title" class="text-xl font-bold">Услуги/Примерные фото</h2>
           </div>
           
-          <div class="grid grid-cols-2 gap-3 w-full">
-            <img src="handy_1789971277818.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 1">
-            <img src="handy_1789971265971.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 2">
-            <img src="handy_1789971235248.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 3">
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- Topup Balance Modal (+) -->
-  <div id="topupModal" class="modal-backdrop">
-    <div class="ios-glass-card max-w-md w-full mx-4 p-6 relative">
-      <button onclick="closeTopupModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
-      
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-8 h-8 rounded-full bg-brandTeal text-white flex items-center justify-center font-bold text-lg">+</div>
-        <h2 class="text-lg font-bold">Заявка на пополнение баланса</h2>
-      </div>
-
-      <p class="text-xs opacity-70 mb-4">
-        Вы можете отправить готовое письмо администратору на почту <b class="text-brandTeal">kride2161@gmail.com</b> для начисления баланса.
-      </p>
-
-      <!-- Amount Selector -->
-      <div class="mb-4">
-        <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1.5 block">Сумма пополнения:</label>
-        <div class="grid grid-cols-3 gap-2 mb-2">
-          <button onclick="selectTopupAmount(100)" class="topup-amount-btn py-2 rounded-xl bg-brandNavy/10 dark:bg-white/10 font-bold text-xs hover:bg-brandTeal hover:text-white transition-colors active:scale-95">100 ₽</button>
-          <button onclick="selectTopupAmount(500)" class="topup-amount-btn py-2 rounded-xl bg-brandNavy/10 dark:bg-white/10 font-bold text-xs hover:bg-brandTeal hover:text-white transition-colors active:scale-95">500 ₽</button>
-          <button onclick="selectTopupAmount(1000)" class="topup-amount-btn py-2 rounded-xl bg-brandTeal text-white font-bold text-xs hover:bg-brandTeal transition-colors active:scale-95">1000 ₽</button>
-        </div>
-        <input type="number" id="customTopupAmount" placeholder="Или введите другую сумму..." value="1000" oninput="updateTopupMessage()" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
-      </div>
-
-      <!-- Generated Message Preview -->
-      <div class="mb-4">
-        <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Готовый текст обращения:</label>
-        <div id="topupPreviewText" class="p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-xs opacity-90 font-mono leading-relaxed break-words select-all">
-          Здравствуйте, я хочу/купил у вас услугу, начислите мне на баланс...
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="space-y-2">
-        <a id="sendMailLink" href="#" target="_blank" class="w-full py-2.5 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-md flex items-center justify-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-          Перейти в почту для отправки
-        </a>
-        <button onclick="copyTopupText()" class="w-full py-2 bg-black/5 dark:bg-white/10 font-bold rounded-xl text-xs active:scale-95 transition-transform flex items-center justify-center gap-1.5">
-          📋 Скопировать текст в буфер
-        </button>
-      </div>
-
-      <p id="copyToast" class="text-[11px] font-bold text-emerald-500 text-center mt-2 hidden">✓ Текст скопирован!</p>
-    </div>
-  </div>
-
-  <!-- Auth Modal -->
+  <!-- Auth & Account Profile Modal -->
   <div id="authModal" class="modal-backdrop">
-    <div class="ios-glass-card max-w-sm w-full mx-4 p-6 relative">
+    <div class="ios-glass-card max-w-md w-full mx-4 p-6 relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
       
-      <h2 id="authModalTitle" class="text-xl font-bold mb-4 text-center">Регистрация / Вход</h2>
-      
-      <div class="space-y-3">
-        <div>
-          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Имя пользователя</label>
-          <input type="text" id="authUsernameInput" placeholder="Иван" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
-        </div>
-        <div>
-          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Пароль (первая цифра сохранится для идентификации)</label>
-          <input type="password" id="authPasswordInput" placeholder="••••••••" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
-        </div>
-
-        <p id="authError" class="text-red-500 text-[11px] font-semibold text-center hidden"></p>
-
-        <button onclick="performAuth()" class="w-full py-2.5 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-md mt-2">
-          Войти или Зарегистрироваться
-        </button>
+      <!-- LOGGED OUT VIEW -->
+      <div id="authLoggedOutView">
+        <h2 class="text-xl font-bold mb-1 text-center">Вход / Регистрация</h2>
+        <p class="text-xs opacity-60 text-center mb-5">Создайте профиль для доступа к личному балансу и чату</p>
         
-        <button id="logoutBtn" onclick="performLogout()" class="w-full py-2 bg-red-500/10 text-red-500 font-bold rounded-xl text-xs active:scale-95 transition-transform hidden">
+        <div class="space-y-4">
+          <div>
+            <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Выберите Аватар</label>
+            <div id="avatarPicker" class="flex gap-2 justify-center py-2">
+              <button onclick="selectAvatar('⚡')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-brandTeal active:scale-90">⚡</button>
+              <button onclick="selectAvatar('🎨')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90">🎨</button>
+              <button onclick="selectAvatar('🛠️')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90">🛠️</button>
+              <button onclick="selectAvatar('👑')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90">👑</button>
+              <button onclick="selectAvatar('🚀')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90">🚀</button>
+              <button onclick="selectAvatar('💎')" class="avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90">💎</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Имя пользователя</label>
+            <input type="text" id="authUsernameInput" placeholder="Например: Иван_3D" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Пин-код или пароль (первая цифра для сверки чеков)</label>
+            <input type="password" id="authPasswordInput" placeholder="••••••••" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none">
+          </div>
+
+          <p id="authError" class="text-red-500 text-[11px] font-semibold text-center hidden"></p>
+
+          <button onclick="performAuth()" class="w-full py-3 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-md mt-2">
+            Создать аккаунт / Войти
+          </button>
+        </div>
+      </div>
+
+      <!-- LOGGED IN VIEW (PROPERTIES & HISTORY) -->
+      <div id="authLoggedInView" class="hidden">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-black/5 dark:border-white/10">
+          <div id="profileAvatarDisplay" class="w-14 h-14 rounded-2xl bg-brandTeal/20 text-brandTeal text-3xl flex items-center justify-center border border-brandTeal/30 shrink-0">
+            ⚡
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <h3 id="profileNameDisplay" class="font-black text-lg truncate">Имя Пользователя</h3>
+              <span id="profileRoleBadge" class="px-2 py-0.5 rounded-full bg-brandTeal/15 text-brandTeal text-[10px] font-bold">Клиент</span>
+            </div>
+            <p id="profileIdDisplay" class="text-[10px] font-mono opacity-50 truncate">ID: usr_12345</p>
+          </div>
+        </div>
+
+        <!-- Account Metrics Grid -->
+        <div class="grid grid-cols-2 gap-3 mb-5">
+          <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-3">
+            <span class="text-[10px] uppercase font-bold opacity-60 block mb-1">Баланс аккаунта</span>
+            <span id="profileBalanceDisplay" class="text-xl font-black text-brandTeal font-mono">0 ₽</span>
+          </div>
+          <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-3">
+            <span class="text-[10px] uppercase font-bold opacity-60 block mb-1">Код подтверждения</span>
+            <span id="profilePassCharDisplay" class="text-xl font-black font-mono opacity-80">1</span>
+          </div>
+        </div>
+
+        <!-- Action Shortcuts -->
+        <div class="space-y-2 mb-5">
+          <button onclick="closeAuthModal(); openTopupModal();" class="w-full py-2.5 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-sm flex items-center justify-center gap-2">
+            <span>+ Пополнить баланс</span>
+          </button>
+        </div>
+
+        <!-- History Log -->
+        <div class="mb-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider opacity-60 mb-2">История операций</h4>
+          <div id="profileHistoryList" class="space-y-2 max-h-[140px] overflow-y-auto pr-1">
+            <div class="text-[11px] opacity-50 text-center py-3 bg-black/5 dark:bg-white/5 rounded-xl">История пока пуста</div>
+          </div>
+        </div>
+
+        <button onclick="performLogout()" class="w-full py-2.5 bg-red-500/10 text-red-500 font-bold rounded-xl text-xs active:scale-95 transition-transform hover:bg-red-500 hover:text-white transition-colors">
           Выйти из аккаунта
         </button>
       </div>
@@ -704,8 +704,8 @@
   <!-- Firebase Integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'printcraft-app';
     const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
@@ -730,19 +730,48 @@
     window.appId = appId;
     window.firebaseAuth = auth;
 
-    async function initAuth() {
-      if (!auth) return;
+    async function initAuthAndListeners() {
+      if (!auth || !db) return;
       try {
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           await signInWithCustomToken(auth, __initial_auth_token);
         } else {
           await signInAnonymously(auth);
         }
+
+        // Setup Firestore live sync for public chat
+        const globalChatCol = collection(db, 'artifacts', appId, 'public', 'data', 'global_chat');
+        onSnapshot(globalChatCol, (snapshot) => {
+          const cloudMsgs = [];
+          snapshot.forEach(docSnap => {
+            cloudMsgs.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          if (cloudMsgs.length > 0) {
+            cloudMsgs.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            window.chatMessagesData = cloudMsgs;
+            if (window.renderChatMessages) window.renderChatMessages();
+          }
+        }, (error) => console.log("Global chat listener error:", error));
+
+        // Setup Firestore live sync for tickets
+        const ticketCol = collection(db, 'artifacts', appId, 'public', 'data', 'admin_tickets');
+        onSnapshot(ticketCol, (snapshot) => {
+          const cloudTickets = [];
+          snapshot.forEach(docSnap => {
+            cloudTickets.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          if (cloudTickets.length > 0) {
+            cloudTickets.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            window.ticketChatsData = cloudTickets;
+            if (window.renderTicketMessages) window.renderTicketMessages();
+          }
+        }, (error) => console.log("Ticket listener error:", error));
+
       } catch(e) {
-        console.log("Auth step:", e);
+        console.log("Auth & setup error:", e);
       }
     }
-    initAuth();
+    initAuthAndListeners();
   </script>
 
   <script>
@@ -753,30 +782,35 @@
     // In-memory fallback state synced with localStorage
     let currentUser = JSON.parse(localStorage.getItem('pc_user')) || null;
     let selectedRating = 5;
-    let currentChatMode = 'global'; // 'global' or 'p2p'
-    let selectedP2pUser = null; // target user ID for P2P messaging
+    let selectedAvatar = '⚡';
+    let currentChatMode = 'bot'; // 'bot', 'ticket', or 'global'
 
-    // Default users store with first character of password stored
+    // Default users store
     let allUsers = JSON.parse(localStorage.getItem('pc_all_users')) || [
-      { id: 'usr_1', username: 'Ксения', balance: 150, firstPassChar: '7' },
-      { id: 'usr_2', username: 'Александр', balance: 0, firstPassChar: '1' },
-      { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500, firstPassChar: '9' }
+      { id: 'usr_1', username: 'Ксения', balance: 150, firstPassChar: '7', avatar: '🎨', role: 'Клиент' },
+      { id: 'usr_2', username: 'Александр', balance: 0, firstPassChar: '1', avatar: '🛠️', role: 'Мастер 3D' },
+      { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500, firstPassChar: '9', avatar: '👑', role: 'VIP' }
+    ];
+
+    // Bot Assistant default messages
+    let botChatMessages = JSON.parse(localStorage.getItem('pc_bot_chat')) || [
+      { id: 'b1', sender: 'bot', text: 'Здравствуйте! Я интерактивный Помощник магазина «ПРИНТКРАФТ × АРТС&КРАФТИНГ». Чем могу помочь вам по 3D-печати или заказу?', time: '12:00' }
+    ];
+
+    // Global Chat store
+    window.chatMessagesData = JSON.parse(localStorage.getItem('pc_chat')) || [
+      { id: 'c1', username: 'Админ', text: 'Добро пожаловать в общий чат ПРИНТКРАФТ! Задавайте вопросы и делитесь впечатлениями.', isAdmin: true, time: '12:00' }
+    ];
+
+    // Admin Direct Tickets store
+    window.ticketChatsData = JSON.parse(localStorage.getItem('pc_tickets')) || [
+      { id: 't1', username: 'Ксения', text: 'Здравствуйте! Можно ли распечатать деталь по макету STL?', time: '12:10', userId: 'usr_1' },
+      { id: 't2', username: 'Админ', text: 'Добрый день! Да, присылайте ваш файл на kride2161@gmail.com, мы рассчитаем точно.', time: '12:12', isAdmin: true, targetUserId: 'usr_1' }
     ];
 
     // Reviews store
     let reviewsData = JSON.parse(localStorage.getItem('pc_reviews')) || [
       { id: 'r1', username: 'Ксения', rating: 5, text: 'Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.' }
-    ];
-
-    // Global Chat store
-    let chatMessagesData = JSON.parse(localStorage.getItem('pc_chat')) || [
-      { id: 'c1', username: 'Админ', text: 'Добро пожаловать в чат ПРИНТКРАФТ × АРТС&КРАФТИНГ (Beta 2.0v)!', isAdmin: true, time: '12:00' }
-    ];
-
-    // Direct P2P Chats store: object mapping user keys or array of messages
-    let p2pChatsData = JSON.parse(localStorage.getItem('pc_p2p_chats')) || [
-      { id: 'p2p_1', senderId: 'usr_1', senderName: 'Ксения', targetId: 'usr_3', targetName: 'ПринтКрафт_Дево', text: 'Здравствуйте! Можно ли заказать деталь по моему чертежу?', time: '12:10' },
-      { id: 'p2p_2', senderId: 'usr_3', senderName: 'ПринтКрафт_Дево', targetId: 'usr_1', targetName: 'Ксения', text: 'Добрый день! Да, конечно. Напишите нам в почту или сообщения!', time: '12:12' }
     ];
 
     const icons = {
@@ -966,7 +1000,6 @@
     function copyTopupText() {
       const textToCopy = getTopupMessageText();
 
-      // Reliable clipboard copy using fallback textarea for browser iframe compatibility
       const tempArea = document.createElement('textarea');
       tempArea.value = textToCopy;
       document.body.appendChild(tempArea);
@@ -979,9 +1012,20 @@
       setTimeout(() => toast.classList.add('hidden'), 2500);
     }
 
-    // User Auth Modal Logic
+    function selectAvatar(emoji) {
+      selectedAvatar = emoji;
+      document.querySelectorAll('.avatar-opt').forEach(btn => {
+        if(btn.innerText === emoji) {
+          btn.className = "avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-brandTeal active:scale-90";
+        } else {
+          btn.className = "avatar-opt w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/10 text-xl flex items-center justify-center border-2 border-transparent active:scale-90";
+        }
+      });
+    }
+
     function openAuthModal() {
       document.getElementById('authModal').classList.add('active');
+      updateUserUI();
     }
     function closeAuthModal() {
       document.getElementById('authModal').classList.remove('active');
@@ -1004,11 +1048,20 @@
       // Check existing user or create
       let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
       if (!existing) {
-        existing = { id: 'usr_' + Date.now(), username: username, balance: 0, firstPassChar: firstChar };
+        existing = { 
+          id: 'usr_' + Date.now().toString().slice(-6), 
+          username: username, 
+          balance: 0, 
+          firstPassChar: firstChar,
+          avatar: selectedAvatar,
+          role: 'Клиент',
+          createdAt: new Date().toLocaleDateString()
+        };
         allUsers.push(existing);
         saveAllUsers();
       } else if (password) {
         existing.firstPassChar = firstChar;
+        if(selectedAvatar) existing.avatar = selectedAvatar;
         saveAllUsers();
       }
 
@@ -1017,7 +1070,6 @@
       updateUserUI();
       closeAuthModal();
       renderAdminUsers();
-      renderP2pUserSelector();
     }
 
     function performLogout() {
@@ -1025,13 +1077,14 @@
       localStorage.removeItem('pc_user');
       updateUserUI();
       closeAuthModal();
-      renderP2pUserSelector();
     }
 
     function updateUserUI() {
       const userBadge = document.getElementById('userHeaderBadge');
       const authBtnText = document.getElementById('authBtnText');
-      const logoutBtn = document.getElementById('logoutBtn');
+      const authBtnAvatar = document.getElementById('authBtnAvatar');
+      const loggedOutView = document.getElementById('authLoggedOutView');
+      const loggedInView = document.getElementById('authLoggedInView');
 
       if (currentUser) {
         // Sync user balance from store
@@ -1039,21 +1092,321 @@
         if (fresh) {
           currentUser.balance = fresh.balance;
           if (fresh.firstPassChar) currentUser.firstPassChar = fresh.firstPassChar;
+          if (fresh.avatar) currentUser.avatar = fresh.avatar;
         }
 
         userBadge.classList.remove('hidden');
         userBadge.classList.add('flex');
         document.getElementById('userNameHeader').innerText = currentUser.username;
         document.getElementById('userBalanceHeader').innerText = formatMoney(currentUser.balance);
-        authBtnText.innerText = "Профиль";
-        logoutBtn.classList.remove('hidden');
+        authBtnText.innerText = currentUser.username;
+        authBtnAvatar.innerText = currentUser.avatar || '⚡';
+
+        // Modal Views Switch
+        loggedOutView.classList.add('hidden');
+        loggedInView.classList.remove('hidden');
+
+        document.getElementById('profileAvatarDisplay').innerText = currentUser.avatar || '⚡';
+        document.getElementById('profileNameDisplay').innerText = currentUser.username;
+        document.getElementById('profileIdDisplay').innerText = `ID: ${currentUser.id}`;
+        document.getElementById('profileRoleBadge').innerText = currentUser.role || 'Клиент';
+        document.getElementById('profileBalanceDisplay').innerText = formatMoney(currentUser.balance);
+        document.getElementById('profilePassCharDisplay').innerText = currentUser.firstPassChar || '1';
       } else {
         userBadge.classList.add('hidden');
         userBadge.classList.remove('flex');
         authBtnText.innerText = "Войти";
-        logoutBtn.classList.add('hidden');
+        authBtnAvatar.innerText = "👤";
+
+        loggedOutView.classList.remove('hidden');
+        loggedInView.classList.add('hidden');
       }
     }
+
+    function switchChatMode(mode) {
+      currentChatMode = mode;
+      const botBtn = document.getElementById('chatModeBotBtn');
+      const ticketBtn = document.getElementById('chatModeTicketBtn');
+      const globalBtn = document.getElementById('chatModeGlobalBtn');
+
+      const botContainer = document.getElementById('botChatContainer');
+      const ticketContainer = document.getElementById('ticketChatContainer');
+      const globalContainer = document.getElementById('globalChatContainer');
+
+      const headerIcon = document.getElementById('chatHeaderIcon');
+      const headerTitle = document.getElementById('chatHeaderTitle');
+      const headerSubtitle = document.getElementById('chatHeaderSubtitle');
+      const chatInput = document.getElementById('chatInput');
+
+      [botBtn, ticketBtn, globalBtn].forEach(b => b.className = "py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1");
+      [botContainer, ticketContainer, globalContainer].forEach(c => c.classList.add('hidden'));
+
+      if (mode === 'bot') {
+        botBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
+        botContainer.classList.remove('hidden');
+        headerIcon.innerText = "🤖";
+        headerTitle.innerText = "Помощник (Админ)";
+        headerSubtitle.innerText = "Автоматические ответы 24/7";
+        chatInput.placeholder = "Задайте вопрос Помощнику...";
+        renderBotMessages();
+      } else if (mode === 'ticket') {
+        ticketBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
+        ticketContainer.classList.remove('hidden');
+        headerIcon.innerText = "📩";
+        headerTitle.innerText = "Запрос Админу";
+        headerSubtitle.innerText = "Прямая поддержка в облачную базу";
+        chatInput.placeholder = "Напишите личное обращение Админу...";
+        renderTicketMessages();
+      } else {
+        globalBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
+        globalContainer.classList.remove('hidden');
+        headerIcon.innerText = "🌐";
+        headerTitle.innerText = "Общий Чат";
+        headerSubtitle.innerText = "Живое общение участников";
+        chatInput.placeholder = "Сообщение для всех участников...";
+        renderChatMessages();
+      }
+    }
+
+    function sendQuickQuestion(questionText) {
+      document.getElementById('chatInput').value = questionText;
+      handleSendChatMessage();
+    }
+
+    function handleSendChatMessage() {
+      if (currentChatMode === 'bot') {
+        sendBotChatMessage();
+      } else if (currentChatMode === 'ticket') {
+        sendTicketChatMessage();
+      } else {
+        sendChatMessage();
+      }
+    }
+
+    // Bot Assistant System
+    function sendBotChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const userMsg = {
+        id: 'b_' + Date.now(),
+        sender: 'user',
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      botChatMessages.push(userMsg);
+      input.value = '';
+      renderBotMessages();
+
+      // Bot Smart AI Responder
+      setTimeout(() => {
+        const reply = generateBotReply(text);
+        botChatMessages.push({
+          id: 'b_' + Date.now(),
+          sender: 'bot',
+          text: reply,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        localStorage.setItem('pc_bot_chat', JSON.stringify(botChatMessages));
+        renderBotMessages();
+      }, 600);
+    }
+
+    function generateBotReply(query) {
+      const q = query.toLowerCase();
+      if (q.includes('стоим') || q.includes('цена') || q.includes('грамм') || q.includes('сколько') || q.includes('расчет')) {
+        return "💰 **Расценки 3D-печати:**\n• 10 грамм — 15 ₽\n• 30 грамм — 45 ₽\n• 100 грамм — 150 ₽\n• 1 кг (1000г) — 1390 ₽\n\nВы можете рассчитать точный вес во вкладке «Калькулятор»!";
+      }
+      if (q.includes('график') || q.includes('время') || q.includes('часы') || q.includes('открыт')) {
+        return "⏰ **График работы магазина:**\nПн-Вт: 15:00 - 20:00\nСр: 17:00 - 20:00\nЧт: 15:00 - 20:00\nПт: 17:00 - 20:00";
+      }
+      if (q.includes('пластик') || q.includes('материал') || q.includes('petg') || q.includes('pla') || q.includes('abs')) {
+        return "🧵 Мы печатаем прочными пластиками: **PLA, PETG, ABS, TPU**. Выбор материала зависит от условий эксплуатации вашей детали!";
+      }
+      if (q.includes('чертеж') || q.includes('свой') || q.includes('заказ') || q.includes('модель') || q.includes('stl')) {
+        return "📂 Для выполнения индивидуального заказа отправьте ваш файл макета (.stl, .obj, .3mf) или эскиз на нашу электронную почту: **kride2161@gmail.com**";
+      }
+      if (q.includes('баланс') || q.includes('пополн') || q.includes('счет')) {
+        return "💳 Пополнить баланс можно нажатием на знак **«+»** возле баланса в шапке сайта. Отправьте заявку на почту, и Админ зачислит вам средства!";
+      }
+      return "🤖 Спасибо за вопрос! Я зафиксировал ваше обращение. Вы также можете переключиться на режим **«📩 Админу»**, чтобы отправить персональное сообщение владельцу!";
+    }
+
+    function renderBotMessages() {
+      const container = document.getElementById('botChatMessages');
+      if (!container) return;
+      container.innerHTML = '';
+
+      botChatMessages.forEach(m => {
+        const isUser = m.sender === 'user';
+        const msgEl = document.createElement('div');
+        msgEl.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'}`;
+        msgEl.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold opacity-60">${isUser ? (currentUser ? currentUser.username : 'Вы') : '🤖 Помощник (Админ)'}</span>
+            <span class="text-[9px] opacity-40">${m.time}</span>
+          </div>
+          <div class="px-3.5 py-2.5 rounded-2xl text-xs max-w-[85%] whitespace-pre-line ${
+            isUser 
+              ? 'bg-brandTeal text-white rounded-tr-none' 
+              : 'bg-black/5 dark:bg-white/10 rounded-tl-none font-medium text-brandNavy dark:text-slate-100 border border-black/5 dark:border-white/5'
+          }">
+            ${m.text}
+          </div>
+        `;
+        container.appendChild(msgEl);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Direct Ticket Channel Logic
+    async function sendTicketChatMessage() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const ticketMsg = {
+        username: currentUser.username,
+        avatar: currentUser.avatar || '⚡',
+        userId: currentUser.id,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: Date.now()
+      };
+
+      // Save locally & Firestore
+      window.ticketChatsData.push(ticketMsg);
+      localStorage.setItem('pc_tickets', JSON.stringify(window.ticketChatsData));
+
+      if (window.firebaseDB && window.appId) {
+        try {
+          const col = collection(window.firebaseDB, 'artifacts', window.appId, 'public', 'data', 'admin_tickets');
+          await addDoc(col, ticketMsg);
+        } catch(e) { console.log("Firestore ticket error:", e); }
+      }
+
+      input.value = '';
+      renderTicketMessages();
+    }
+
+    function renderTicketMessages() {
+      const container = document.getElementById('ticketChatMessages');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!currentUser) {
+        container.innerHTML = '<div class="text-center text-xs opacity-60 py-6">Войдите в аккаунт, чтобы отправлять запросы Администратору</div>';
+        return;
+      }
+
+      // Filter user tickets or admin replies
+      const myTickets = window.ticketChatsData.filter(m => m.userId === currentUser.id || m.targetUserId === currentUser.id || m.isAdmin);
+
+      if (myTickets.length === 0) {
+        container.innerHTML = '<div class="text-center text-xs opacity-50 py-6">У вас пока нет обращений. Напишите сообщение Администратору ниже!</div>';
+        return;
+      }
+
+      myTickets.forEach(m => {
+        const isMe = m.userId === currentUser.id;
+        const msgEl = document.createElement('div');
+        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+        msgEl.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold ${m.isAdmin ? 'text-amber-500 font-black' : 'opacity-60'}">
+              ${m.isAdmin ? '👑 Администратор' : (m.avatar || '⚡') + ' ' + m.username}
+            </span>
+            <span class="text-[9px] opacity-40">${m.time}</span>
+          </div>
+          <div class="px-3.5 py-2 rounded-2xl text-xs max-w-[85%] ${
+            isMe 
+              ? 'bg-brandTeal text-white rounded-tr-none' 
+              : m.isAdmin
+              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-tl-none font-medium'
+              : 'bg-black/5 dark:bg-white/10 rounded-tl-none'
+          }">
+            ${m.text}
+          </div>
+        `;
+        container.appendChild(msgEl);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Global Chat System (Firestore synced)
+    async function sendChatMessage() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msg = {
+        username: currentUser.username,
+        avatar: currentUser.avatar || '⚡',
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: Date.now(),
+        isAdmin: currentUser.username.toLowerCase() === 'админ'
+      };
+
+      window.chatMessagesData.push(msg);
+      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
+
+      if (window.firebaseDB && window.appId) {
+        try {
+          const col = collection(window.firebaseDB, 'artifacts', window.appId, 'public', 'data', 'global_chat');
+          await addDoc(col, msg);
+        } catch(e) { console.log("Firestore chat error:", e); }
+      }
+
+      input.value = '';
+      renderChatMessages();
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chatMessages');
+      if(!container) return;
+      container.innerHTML = '';
+
+      window.chatMessagesData.forEach(m => {
+        const isMe = currentUser && currentUser.username === m.username;
+        const msgEl = document.createElement('div');
+        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+        msgEl.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold ${m.isAdmin ? 'text-amber-500 font-black' : 'opacity-60'}">
+              ${m.isAdmin ? '👑 ' : (m.avatar || '⚡') + ' '}${m.username}
+            </span>
+            <span class="text-[9px] opacity-40">${m.time}</span>
+          </div>
+          <div class="px-3.5 py-2 rounded-2xl text-xs max-w-[85%] ${
+            isMe 
+              ? 'bg-brandTeal text-white rounded-tr-none' 
+              : m.isAdmin
+              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-tl-none font-medium'
+              : 'bg-black/5 dark:bg-white/10 rounded-tl-none'
+          }">
+            ${m.text}
+          </div>
+        `;
+        container.appendChild(msgEl);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Make renderers available globally for Firestore triggers
+    window.renderChatMessages = renderChatMessages;
+    window.renderTicketMessages = renderTicketMessages;
 
     // Admin Panel Logic
     function openAdminModal() {
@@ -1091,12 +1444,12 @@
       if (!container) return;
       container.innerHTML = '';
 
-      if (chatMessagesData.length === 0) {
+      if (window.chatMessagesData.length === 0) {
         container.innerHTML = '<div class="text-xs opacity-60 text-center py-4">История чата пуста</div>';
         return;
       }
 
-      chatMessagesData.forEach(m => {
+      window.chatMessagesData.forEach(m => {
         const item = document.createElement('div');
         item.className = 'bg-white/60 dark:bg-black/30 border border-black/5 dark:border-white/10 rounded-xl p-2.5 flex items-start justify-between gap-2 text-xs';
         item.innerHTML = `
@@ -1117,15 +1470,15 @@
     }
 
     function deleteChatMessage(msgId) {
-      chatMessagesData = chatMessagesData.filter(m => m.id !== msgId);
-      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      window.chatMessagesData = window.chatMessagesData.filter(m => m.id !== msgId);
+      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
       renderAdminChat();
       renderChatMessages();
     }
 
     function clearAdminChat() {
-      chatMessagesData = [];
-      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      window.chatMessagesData = [];
+      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
       renderAdminChat();
       renderChatMessages();
     }
@@ -1138,13 +1491,15 @@
       const msg = {
         id: 'c_' + Date.now(),
         username: 'Админ',
+        avatar: '👑',
         text: text,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: Date.now(),
         isAdmin: true
       };
 
-      chatMessagesData.push(msg);
-      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      window.chatMessagesData.push(msg);
+      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
       input.value = '';
       renderAdminChat();
       renderChatMessages();
@@ -1199,7 +1554,7 @@
         item.innerHTML = `
           <div class="flex flex-col">
             <span class="font-bold text-xs flex items-center gap-1">
-              ${u.username}
+              <span>${u.avatar || '⚡'}</span> ${u.username}
               <span class="text-[10px] opacity-60 font-mono" title="Первая цифра пароля">(Код: ${u.firstPassChar || '1'})</span>
               ${currentUser && currentUser.id === u.id ? '<span class="text-[9px] bg-brandTeal/20 text-brandTeal px-1.5 py-0.5 rounded-full">(Вы)</span>' : ''}
             </span>
@@ -1292,211 +1647,6 @@
       }
     }
 
-    // Chat Mode Switch (Global Chat vs P2P Direct Chat)
-    function switchChatMode(mode) {
-      currentChatMode = mode;
-      const globalBtn = document.getElementById('chatModeGlobalBtn');
-      const p2pBtn = document.getElementById('chatModeP2pBtn');
-      const globalContainer = document.getElementById('globalChatContainer');
-      const p2pContainer = document.getElementById('p2pChatContainer');
-
-      if (mode === 'global') {
-        globalContainer.classList.remove('hidden');
-        p2pContainer.classList.add('hidden');
-        globalBtn.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all";
-        p2pBtn.className = "flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1";
-        renderChatMessages();
-      } else {
-        globalContainer.classList.add('hidden');
-        p2pContainer.classList.remove('hidden');
-        p2pBtn.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1";
-        globalBtn.className = "flex-1 py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all";
-        renderP2pUserSelector();
-        renderP2pChatMessages();
-      }
-    }
-
-    function handleSendChatMessage() {
-      if (currentChatMode === 'global') {
-        sendChatMessage();
-      } else {
-        sendP2pChatMessage();
-      }
-    }
-
-    // Global Chat System
-    function sendChatMessage() {
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const msg = {
-        id: 'c_' + Date.now(),
-        username: currentUser.username,
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isAdmin: currentUser.username.toLowerCase() === 'админ'
-      };
-
-      chatMessagesData.push(msg);
-      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
-      input.value = '';
-      renderChatMessages();
-    }
-
-    function renderChatMessages() {
-      const container = document.getElementById('chatMessages');
-      container.innerHTML = '';
-
-      chatMessagesData.forEach(m => {
-        const isMe = currentUser && currentUser.username === m.username;
-        const msgEl = document.createElement('div');
-        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
-        msgEl.innerHTML = `
-          <div class="flex items-center gap-1.5 mb-1">
-            <span class="text-[10px] font-bold ${m.isAdmin ? 'text-amber-500 font-black' : 'opacity-60'}">
-              ${m.isAdmin ? '👑 ' : ''}${m.username}
-            </span>
-            <span class="text-[9px] opacity-40">${m.time}</span>
-          </div>
-          <div class="px-3 py-2 rounded-2xl text-xs max-w-[80%] ${
-            isMe 
-              ? 'bg-brandTeal text-white rounded-tr-none' 
-              : m.isAdmin
-              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-tl-none font-medium'
-              : 'bg-black/5 dark:bg-white/10 rounded-tl-none'
-          }">
-            ${m.text}
-          </div>
-        `;
-        container.appendChild(msgEl);
-      });
-
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // Direct P2P Chat Logic
-    function renderP2pUserSelector() {
-      const selector = document.getElementById('p2pUserSelector');
-      if (!selector) return;
-      selector.innerHTML = '';
-
-      // Filter other users
-      const otherUsers = allUsers.filter(u => !currentUser || u.id !== currentUser.id);
-
-      if (otherUsers.length === 0) {
-        selector.innerHTML = '<div class="text-xs opacity-50">Нет других доступных пользователей</div>';
-        return;
-      }
-
-      otherUsers.forEach(u => {
-        const btn = document.createElement('button');
-        const isSelected = selectedP2pUser && selectedP2pUser.id === u.id;
-        btn.className = `px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shrink-0 active:scale-95 flex items-center gap-1.5 ${
-          isSelected 
-            ? 'bg-brandTeal text-white border-brandTeal shadow-sm' 
-            : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 opacity-80 hover:opacity-100'
-        }`;
-        btn.innerHTML = `
-          <span class="w-2 h-2 rounded-full ${isSelected ? 'bg-white' : 'bg-brandTeal'}"></span>
-          <span>${u.username}</span>
-        `;
-        btn.onclick = () => selectP2pTargetUser(u);
-        selector.appendChild(btn);
-      });
-    }
-
-    function selectP2pTargetUser(u) {
-      selectedP2pUser = u;
-      document.getElementById('p2pActiveUserHeader').classList.remove('hidden');
-      document.getElementById('p2pActiveUserName').innerText = u.username;
-      renderP2pUserSelector();
-      renderP2pChatMessages();
-    }
-
-    function sendP2pChatMessage() {
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-      if (!selectedP2pUser) {
-        document.getElementById('p2pChatMessages').innerHTML = '<div class="text-center text-xs text-red-500 font-bold py-4">Сначала выберите собеседника выше!</div>';
-        return;
-      }
-
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const p2pMsg = {
-        id: 'p2p_' + Date.now(),
-        senderId: currentUser.id,
-        senderName: currentUser.username,
-        targetId: selectedP2pUser.id,
-        targetName: selectedP2pUser.username,
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      p2pChatsData.push(p2pMsg);
-      localStorage.setItem('pc_p2p_chats', JSON.stringify(p2pChatsData));
-      input.value = '';
-      renderP2pChatMessages();
-    }
-
-    function renderP2pChatMessages() {
-      const container = document.getElementById('p2pChatMessages');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (!selectedP2pUser) {
-        container.innerHTML = '<div class="text-center text-xs opacity-50 py-6">Выберите пользователя выше, чтобы вести личную беседу</div>';
-        return;
-      }
-
-      if (!currentUser) {
-        container.innerHTML = '<div class="text-center text-xs opacity-60 py-6">Войдите в аккаунт, чтобы просматривать личные сообщения</div>';
-        return;
-      }
-
-      // Filter messages between currentUser and selectedP2pUser
-      const filtered = p2pChatsData.filter(m => 
-        (m.senderId === currentUser.id && m.targetId === selectedP2pUser.id) ||
-        (m.senderId === selectedP2pUser.id && m.targetId === currentUser.id)
-      );
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="text-center text-xs opacity-50 py-6">У вас пока нет личных сообщений с <b>${selectedP2pUser.username}</b>. Напишите первое!</div>`;
-        return;
-      }
-
-      filtered.forEach(m => {
-        const isMe = m.senderId === currentUser.id;
-        const msgEl = document.createElement('div');
-        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
-        msgEl.innerHTML = `
-          <div class="flex items-center gap-1.5 mb-1">
-            <span class="text-[10px] font-bold opacity-60">${m.senderName}</span>
-            <span class="text-[9px] opacity-40">${m.time}</span>
-          </div>
-          <div class="px-3 py-2 rounded-2xl text-xs max-w-[80%] ${
-            isMe 
-              ? 'bg-brandTeal text-white rounded-tr-none' 
-              : 'bg-black/10 dark:bg-white/10 rounded-tl-none font-medium'
-          }">
-            ${m.text}
-          </div>
-        `;
-        container.appendChild(msgEl);
-      });
-
-      container.scrollTop = container.scrollHeight;
-    }
-
     // Cookie Toast Logic
     function checkCookies() {
       if(!localStorage.getItem('cookieAccepted')) {
@@ -1519,8 +1669,7 @@
       updateThemeClasses();
       updateUserUI();
       renderReviews();
-      renderChatMessages();
-      renderP2pUserSelector();
+      switchChatMode('bot');
       setReviewRating(5);
     };
   </script>
