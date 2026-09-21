@@ -229,16 +229,11 @@
             <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center transition-all active:scale-95">
               <span id="theme-icon">🌙</span>
             </button>
-          </div>
-          
-          <!-- Contacts / Social Media Icons -->
-          <div class="flex items-center gap-2">
-            <!-- Mail -->
-            <a href="mailto:kride2161@gmail.com" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform">
+            
+            <a href="mailto:kride2161@gmail.com" class="w-8 h-8 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform ml-1">
               <img id="mail-icon" src="Gemini_Generated_Image_ome72pome72pome7.jpeg" alt="Mail" class="w-full h-full object-cover">
             </a>
-            <!-- Max -->
-            <a href="https://max.ru/join/7B12-bH0YU56rg65fpO5907tlOGBWaI2AnvPiT_G1SU" target="_blank" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform">
+            <a href="https://max.ru/join/7B12-bH0YU56rg65fpO5907tlOGBWaI2AnvPiT_G1SU" target="_blank" class="w-8 h-8 rounded-full overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform">
               <img id="max-icon" src="Gemini_Generated_Image_ilbgjailbgjailbg.jpeg" alt="Max" class="w-full h-full object-cover">
             </a>
           </div>
@@ -261,21 +256,6 @@
       <section class="ribbon-tab active" data-index="0">
         <div class="space-y-4">
           
-          <!-- Последние скидки -->
-          <div class="ios-glass-card p-6">
-            <h2 id="home-discounts-title" class="text-lg font-bold mb-4">Последние скидки</h2>
-            <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-              <div>
-                <div id="home-discount-item" class="font-semibold text-sm">Печать деталей (90 грамм)</div>
-                <div id="home-discount-desc" class="text-xs opacity-60 mt-1">Специальная скидка на этот объём</div>
-              </div>
-              <div class="text-right shrink-0">
-                <div id="home-old-price" class="text-xs opacity-50 line-through">100 ₽</div>
-                <div id="home-new-price" class="text-base font-black text-brandTeal">60 - 80 ₽</div>
-              </div>
-            </div>
-          </div>
-
           <!-- Последние предложения -->
           <div class="ios-glass-card p-6">
             <h2 id="home-offers-title" class="text-lg font-bold mb-4">Последние предложения</h2>
@@ -285,7 +265,6 @@
                 <div class="font-bold text-sm price-10g">15 ₽</div>
               </div>
               <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-brandTeal text-[9px] px-1.5 py-0.5 font-bold rounded-bl-lg text-white">-30₽</div>
                 <div class="text-xs opacity-60 mb-1">30 грамм</div>
                 <div class="font-bold text-sm price-30g">45 ₽</div>
               </div>
@@ -295,8 +274,14 @@
           <!-- Последние отзывы -->
           <div class="ios-glass-card p-6">
             <h2 id="home-reviews-title" class="text-lg font-bold mb-4">Последние отзывы</h2>
-            <div class="py-6 bg-black/5 dark:bg-white/5 rounded-2xl text-center border border-dashed border-black/10 dark:border-white/10">
-              <span id="home-empty-reviews" class="text-sm font-medium opacity-60">Их пока нет...</span>
+            <div class="bg-black/5 dark:bg-white/5 rounded-2xl p-4 text-left border border-black/5 dark:border-white/10">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-sm">Ксения</span>
+                <span class="text-brandTeal text-xs tracking-widest">★★★★★</span>
+              </div>
+              <p class="text-xs opacity-80 leading-relaxed">
+                «Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.»
+              </p>
             </div>
           </div>
           
@@ -305,13 +290,29 @@
 
       <!-- BLOCK 2: ОТЗЫВЫ (REVIEWS) -->
       <section class="ribbon-tab" data-index="1">
-        <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
-          <div class="w-16 h-16 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center mb-4 text-brandNavy dark:text-slate-300">
-            <!-- Star Icon -->
-            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <div class="ios-glass-card p-6 min-h-[400px] flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center text-brandNavy dark:text-slate-300 shrink-0">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <h2 id="reviews-page-title" class="text-xl font-bold">Отзывы</h2>
           </div>
-          <h2 id="reviews-page-title" class="text-xl font-bold mb-2">Отзывы</h2>
-          <p id="reviews-page-empty" class="text-sm opacity-60">Их пока нет...</p>
+          
+          <div class="space-y-3 w-full">
+            <!-- Отзыв 1 -->
+            <div class="bg-black/5 dark:bg-white/5 rounded-2xl p-5 border border-black/5 dark:border-white/10 text-left">
+              <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-brandTeal/20 text-brandTeal flex items-center justify-center font-bold text-sm">К</div>
+                  <span class="font-bold text-sm">Ксения</span>
+                </div>
+                <span class="text-brandTeal text-xs tracking-widest">★★★★★</span>
+              </div>
+              <p class="text-sm opacity-80 leading-relaxed">
+                «Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.»
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -350,7 +351,7 @@
               <span class="font-semibold price-10g">15 ₽</span>
             </div>
             <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5 text-brandTeal">
-              <span class="flex items-center gap-2">30 грамм <span class="text-[9px] bg-brandTeal/10 dark:bg-brandTeal/20 px-1.5 py-0.5 rounded font-bold">-30₽ скидка</span></span>
+              <span class="flex items-center gap-2">30 грамм</span>
               <span class="font-bold price-30g">45 ₽</span>
             </div>
             <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5">
@@ -367,17 +368,24 @@
 
       <!-- BLOCK 4: ПРИМЕРНЫЕ ФОТО (GALLERY) -->
       <section class="ribbon-tab" data-index="3">
-        <div class="ios-glass-card p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
-          <div class="w-16 h-16 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center mb-4 text-brandNavy dark:text-slate-300">
-            <!-- Custom Spatula + Coin SVG -->
-            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
-              <circle cx="19" cy="19" r="4" stroke-width="1.5"/>
-              <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-weight="bold">₽</text>
-            </svg>
+        <div class="ios-glass-card p-6 min-h-[400px] flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center text-brandNavy dark:text-slate-300 shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+                <circle cx="19" cy="19" r="4.5" stroke-width="1.8"/>
+                <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
+              </svg>
+            </div>
+            <h2 id="gallery-page-title" class="text-xl font-bold">Услуги/Примерные фото</h2>
           </div>
-          <h2 id="gallery-page-title" class="text-xl font-bold mb-2">Услуги/Примерные фото</h2>
-          <p id="gallery-page-empty" class="text-sm opacity-60">Их пока нет...</p>
+          
+          <div class="grid grid-cols-2 gap-3 w-full">
+            <img src="https://placehold.co/400x400/127462/ffffff?text=Пример+1" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ">
+            <img src="https://placehold.co/400x400/1a3560/ffffff?text=Пример+2" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ">
+            <img src="https://placehold.co/400x400/1a3560/ffffff?text=Пример+3" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ">
+            <img src="https://placehold.co/400x400/127462/ffffff?text=Пример+4" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ">
+          </div>
         </div>
       </section>
 
@@ -451,12 +459,8 @@
       ru: {
         scheduleTitle: 'График работы магазина:',
         scheduleHours: 'Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00',
-        homeDiscounts: 'Последние скидки',
-        homeDiscItem: 'Печать деталей (90 грамм)',
-        homeDiscDesc: 'Специальная скидка на этот объём',
         homeOffers: 'Последние предложения',
         homeReviewsTitle: 'Последние отзывы',
-        emptyReviews: 'Их пока нет...',
         reviewsPageTitle: 'Отзывы',
         calcTitle: 'Услуги/Граммы в рубли',
         calcMassLabel: 'Масса (грамм):',
@@ -468,12 +472,8 @@
       en: {
         scheduleTitle: 'Store Schedule:',
         scheduleHours: 'Mon-Tue 15:00-20:00 | Wed 17:00-20:00 | Thu 15:00-20:00 | Fri 17:00-20:00',
-        homeDiscounts: 'Latest Discounts',
-        homeDiscItem: 'Parts Printing (90 grams)',
-        homeDiscDesc: 'Special discount for this volume',
         homeOffers: 'Latest Offers',
         homeReviewsTitle: 'Recent Reviews',
-        emptyReviews: 'None yet...',
         reviewsPageTitle: 'Reviews',
         calcTitle: 'Services/Grams to USD',
         calcMassLabel: 'Mass (grams):',
@@ -547,9 +547,16 @@
     function updatePrice(grams) {
       document.getElementById('calc-mass-display').innerText = `${grams} ${isRu ? 'г' : 'g'}`;
       
-      let base = grams * 1.5;
-      if (grams >= 30) base = Math.max(15, base - 30); // Скидка 30 руб
-      if (grams == 1000) base = 1390; // Жесткая логика 1кг = 1390
+      // Плавный расчет стоимости без резких скачков. 
+      // От 1.5 руб/г плавно снижается до 1.39 руб/г к 1000 граммам.
+      let rate = 1.5 - (0.11 * (grams / 1000));
+      let base = Math.round(grams * rate);
+      
+      // Жестко фиксируем ключевые значения для полного совпадения с прайсом
+      if (grams == 10) base = 15;
+      if (grams == 30) base = 45;
+      if (grams == 100) base = 150;
+      if (grams == 1000) base = 1390;
 
       // Полностью без копеек
       document.getElementById('calc-price-display').innerText = formatMoney(base);
@@ -560,9 +567,6 @@
       document.querySelectorAll('.price-30g').forEach(el => el.innerText = formatMoney(45));
       document.querySelectorAll('.price-100g').forEach(el => el.innerText = formatMoney(150));
       document.querySelectorAll('.price-1kg').forEach(el => el.innerText = formatMoney(1390));
-      
-      document.getElementById('home-old-price').innerText = formatMoney(100);
-      document.getElementById('home-new-price').innerText = `${formatMoney(60)} - ${formatMoney(80)}`;
       
       updatePrice(document.getElementById('massSlider').value);
 
@@ -583,14 +587,8 @@
       document.getElementById('lang-text').innerText = d.langBtn;
       document.getElementById('schedule-title').innerText = d.scheduleTitle;
       document.getElementById('schedule-hours').innerText = d.scheduleHours;
-      document.getElementById('home-discounts-title').innerText = d.homeDiscounts;
-      document.getElementById('home-discount-item').innerText = d.homeDiscItem;
-      document.getElementById('home-discount-desc').innerText = d.homeDiscDesc;
       document.getElementById('home-offers-title').innerText = d.homeOffers;
       document.getElementById('home-reviews-title').innerText = d.homeReviewsTitle;
-      document.getElementById('home-empty-reviews').innerText = d.emptyReviews;
-      document.getElementById('reviews-page-empty').innerText = d.emptyReviews;
-      document.getElementById('gallery-page-empty').innerText = d.emptyReviews;
       document.getElementById('reviews-page-title').innerText = d.reviewsPageTitle;
       document.getElementById('calc-title').innerText = d.calcTitle;
       document.getElementById('calc-mass-label').innerText = d.calcMassLabel;
