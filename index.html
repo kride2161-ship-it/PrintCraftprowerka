@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru"> <!-- По умолчанию светлая тема -->
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -99,13 +99,13 @@
 
     .ribbon-wrapper {
       display: flex;
-      width: 500%; /* 5 tabs = 500% */
+      width: 500%;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       align-items: flex-start;
     }
 
     .ribbon-tab {
-      width: 20%; /* 100% / 5 */
+      width: 20%;
       flex-shrink: 0;
       padding: 0 1rem;
       opacity: 0.35;
@@ -139,7 +139,7 @@
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     }
 
-    /* Custom Range Slider */
+    /* Range Slider */
     input[type=range] {
       -webkit-appearance: none;
       background: transparent;
@@ -246,19 +246,18 @@
               Beta 2.0v
             </span>
 
-            <!-- User Status Badge with Balance + Button -->
+            <!-- User Balance Badge with + Button -->
             <div id="userHeaderBadge" class="hidden items-center gap-2 px-3 py-1 rounded-full bg-brandTeal/15 border border-brandTeal/30 text-[11px] font-bold text-brandTeal">
               <span id="userNameHeader">Пользователь</span>
               <span class="opacity-40">|</span>
               <span id="userBalanceHeader" class="font-mono">0 ₽</span>
-              <!-- Plus button for top-up request -->
               <button onclick="openTopupModal()" title="Пополнить баланс" class="w-5 h-5 rounded-full bg-brandTeal text-white flex items-center justify-center text-xs font-black shadow hover:scale-110 active:scale-95 transition-transform ml-0.5">
                 +
               </button>
             </div>
           </div>
 
-          <!-- Multi-click Title Trigger for Secret Admin Panel -->
+          <!-- Multi-click Title Trigger for Admin Panel (5 clicks) -->
           <h1 onclick="handleTitleClick()" class="text-2xl sm:text-3xl font-black tracking-tight text-brandNavy dark:text-white flex items-center gap-2 cursor-pointer active:scale-98 transition-transform select-none" title="Нажмите 5 раз для входа в Админ-панель">
             ПРИНТКРАФТ <span class="text-brandTeal font-light">×</span> АРТС&КРАФТИНГ
           </h1>
@@ -369,78 +368,45 @@
             <textarea id="reviewTextInput" placeholder="Напишите ваш отзыв..." class="w-full bg-white/80 dark:bg-black/30 border border-black/10 dark:border-white/10 rounded-xl p-3 text-xs focus:outline-none resize-none h-20 mb-2"></textarea>
             <button onclick="submitReview()" class="w-full py-2 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform">
               Отправить отзыв
-      <!-- TAB 2: ЧАТ И ПОМОЩНИК (CHAT & ASSISTANT) -->
+            </button>
+          </div>
+
+          <!-- Reviews List -->
+          <div id="reviewsList" class="space-y-3 flex-1 overflow-y-auto max-h-[350px]">
+            <!-- Reviews Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ЧАТ (SIMPLE DIRECT CHAT) -->
       <section class="ribbon-tab" data-index="2">
-        <div class="ios-glass-card p-6 min-h-[500px] flex flex-col justify-between">
+        <div class="ios-glass-card p-6 min-h-[450px] flex flex-col justify-between">
           <div>
-            <!-- Header with Chat Mode Switcher -->
-            <div class="flex flex-col gap-3 mb-4 pb-3 border-b border-black/5 dark:border-white/10">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0 text-xl" id="chatHeaderIcon">
-                    🤖
-                  </div>
-                  <div>
-                    <h2 class="text-lg font-bold" id="chatHeaderTitle">Помощник (Админ)</h2>
-                    <p class="text-[10px] opacity-60" id="chatHeaderSubtitle">Интерактивный консультант и техподдержка</p>
-                  </div>
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0 text-xl">
+                  💬
                 </div>
-                <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Онлайн
-                </span>
+                <div>
+                  <h2 class="text-lg font-bold">Общий Чат и Связь</h2>
+                  <p class="text-[10px] opacity-60">Сообщения участников и Администрации</p>
+                </div>
               </div>
-
-              <!-- Segmented Control for Chat Modes -->
-              <div class="grid grid-cols-3 gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-[11px] font-bold">
-                <button id="chatModeBotBtn" onclick="switchChatMode('bot')" class="py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1">
-                  🤖 Помощник
-                </button>
-                <button id="chatModeTicketBtn" onclick="switchChatMode('ticket')" class="py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
-                  📩 Админу
-                </button>
-                <button id="chatModeGlobalBtn" onclick="switchChatMode('global')" class="py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1">
-                  🌐 Общий
-                </button>
-              </div>
+              <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Онлайн
+              </span>
             </div>
 
-            <!-- MODE 1: Bot / Assistant Container -->
-            <div id="botChatContainer" class="space-y-3">
-              <!-- Quick Question Chips -->
-              <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-none text-[10px] font-semibold">
-                <button onclick="sendQuickQuestion('Сколько стоит 3D печать?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">💰 Стоимость</button>
-                <button onclick="sendQuickQuestion('Какой график работы?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">⏰ График</button>
-                <button onclick="sendQuickQuestion('Какие виды пластика есть?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">🧵 Пластик</button>
-                <button onclick="sendQuickQuestion('Как оформить индивидуальный заказ?')" class="px-2.5 py-1 rounded-full bg-brandTeal/10 text-brandTeal border border-brandTeal/20 hover:bg-brandTeal hover:text-white transition-colors shrink-0">📂 Свой чертеж</button>
-              </div>
-
-              <div id="botChatMessages" class="space-y-3 max-h-[260px] overflow-y-auto pr-1">
-                <!-- Bot Messages -->
-              </div>
-            </div>
-
-            <!-- MODE 2: Direct Ticket to Admin Container -->
-            <div id="ticketChatContainer" class="hidden space-y-3">
-              <div class="p-3 bg-brandTeal/10 border border-brandTeal/20 rounded-2xl text-xs opacity-90 leading-relaxed">
-                ℹ️ <b>Прямой диалог с Администратором:</b> Ваши сообщения сохраняются в защищенную облачную базу. Администратор ответит вам лично в ближайшее время.
-              </div>
-              <div id="ticketChatMessages" class="space-y-3 max-h-[240px] overflow-y-auto pr-1">
-                <!-- Ticket Messages -->
-              </div>
-            </div>
-
-            <!-- MODE 3: Global Public Chat Container -->
-            <div id="globalChatContainer" class="hidden space-y-3">
-              <div id="chatMessages" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-                <!-- Global Chat Messages -->
-              </div>
+            <!-- Simple Messages Container -->
+            <div id="chatMessages" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+              <!-- Messages Rendered Dynamically -->
             </div>
           </div>
 
           <!-- Chat Input Bar -->
           <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex gap-2">
-            <input type="text" id="chatInput" placeholder="Задайте вопрос Помощнику..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') handleSendChatMessage()">
-            <button onclick="handleSendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1 shadow-md">
+            <input type="text" id="chatInput" placeholder="Напишите сообщение..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1 shadow-md">
               <span>Отправить</span>
             </button>
           </div>
@@ -510,6 +476,24 @@
             <h2 id="gallery-page-title" class="text-xl font-bold">Услуги/Примерные фото</h2>
           </div>
           
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center">
+              <div class="text-2xl mb-2">⚙️</div>
+              <div class="font-bold text-xs mb-1">Детали и Запчасти</div>
+              <div class="text-[10px] opacity-60">Точная печать по чертежам</div>
+            </div>
+            <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center">
+              <div class="text-2xl mb-2">🎨</div>
+              <div class="font-bold text-xs mb-1">Фигурки и Сувениры</div>
+              <div class="text-[10px] opacity-60">Арт-объекты и подставки</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
   <!-- Auth & Account Profile Modal -->
   <div id="authModal" class="modal-backdrop">
     <div class="ios-glass-card max-w-md w-full mx-4 p-6 relative max-h-[90vh] overflow-y-auto">
@@ -518,7 +502,7 @@
       <!-- LOGGED OUT VIEW -->
       <div id="authLoggedOutView">
         <h2 class="text-xl font-bold mb-1 text-center">Вход / Регистрация</h2>
-        <p class="text-xs opacity-60 text-center mb-5">Создайте профиль для доступа к личному балансу и чату</p>
+        <p class="text-xs opacity-60 text-center mb-5">Создайте профиль для доступа к личному балансу</p>
         
         <div class="space-y-4">
           <div>
@@ -550,7 +534,7 @@
         </div>
       </div>
 
-      <!-- LOGGED IN VIEW (PROPERTIES & HISTORY) -->
+      <!-- LOGGED IN VIEW (PROPERTIES & BALANCE) -->
       <div id="authLoggedInView" class="hidden">
         <div class="flex items-center gap-3 mb-5 pb-4 border-b border-black/5 dark:border-white/10">
           <div id="profileAvatarDisplay" class="w-14 h-14 rounded-2xl bg-brandTeal/20 text-brandTeal text-3xl flex items-center justify-center border border-brandTeal/30 shrink-0">
@@ -584,18 +568,56 @@
           </button>
         </div>
 
-        <!-- History Log -->
-        <div class="mb-4">
-          <h4 class="text-xs font-bold uppercase tracking-wider opacity-60 mb-2">История операций</h4>
-          <div id="profileHistoryList" class="space-y-2 max-h-[140px] overflow-y-auto pr-1">
-            <div class="text-[11px] opacity-50 text-center py-3 bg-black/5 dark:bg-white/5 rounded-xl">История пока пуста</div>
-          </div>
-        </div>
-
         <button onclick="performLogout()" class="w-full py-2.5 bg-red-500/10 text-red-500 font-bold rounded-xl text-xs active:scale-95 transition-transform hover:bg-red-500 hover:text-white transition-colors">
           Выйти из аккаунта
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Top-up Balance Modal (+) -->
+  <div id="topupModal" class="modal-backdrop">
+    <div class="ios-glass-card max-w-md w-full mx-4 p-6 relative">
+      <button onclick="closeTopupModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-full bg-brandTeal text-white flex items-center justify-center font-black text-lg">
+          +
+        </div>
+        <h2 class="text-lg font-bold">Пополнение баланса</h2>
+      </div>
+
+      <p class="text-xs opacity-75 mb-4 leading-relaxed">
+        Выберите сумму и отправьте заявку в службу поддержки магазина. Баланс зачисляется администратором после сверки.
+      </p>
+
+      <div class="space-y-3 mb-5">
+        <div>
+          <label class="text-[10px] uppercase font-bold opacity-60 mb-1 block">Сумма пополнения (руб):</label>
+          <div class="grid grid-cols-3 gap-2 mb-2">
+            <button onclick="selectTopupAmount(500)" class="py-2 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-bold active:scale-95">500 ₽</button>
+            <button onclick="selectTopupAmount(1000)" class="py-2 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-bold active:scale-95">1000 ₽</button>
+            <button onclick="selectTopupAmount(2000)" class="py-2 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-bold active:scale-95">2000 ₽</button>
+          </div>
+          <input type="number" id="customTopupAmount" value="1000" oninput="updateTopupMessage()" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs font-mono font-bold focus:outline-none">
+        </div>
+
+        <div class="p-3 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl">
+          <span class="text-[10px] uppercase font-bold opacity-60 block mb-1">Текст заявки:</span>
+          <p id="topupPreviewText" class="text-xs font-mono opacity-90 break-words leading-tight"></p>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="copyTopupText()" class="flex-1 py-2.5 bg-black/5 dark:bg-white/10 font-bold rounded-xl text-xs active:scale-95 transition-transform">
+          📋 Скопировать
+        </button>
+        <a id="sendMailLink" href="#" target="_blank" class="flex-1 py-2.5 bg-brandTeal text-white text-center font-bold rounded-xl text-xs active:scale-95 transition-transform flex items-center justify-center gap-1 shadow-md">
+          <span>✉️ Отправить E-mail</span>
+        </a>
+      </div>
+
+      <p id="copyToast" class="text-emerald-500 text-[10px] font-bold text-center mt-2 hidden">✓ Текст скопирован!</p>
     </div>
   </div>
 
@@ -609,41 +631,12 @@
         <h2 class="text-xl font-black text-brandNavy dark:text-white">Панель Администратора</h2>
       </div>
 
-      <!-- Admin Tab Navigation -->
-      <div class="flex gap-2 mb-4 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10">
-        <button id="adminTabUsersBtn" onclick="switchAdminTab('users')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white">Пользователи</button>
-        <button id="adminTabChatBtn" onclick="switchAdminTab('chat')" class="flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all">Чат Модерация</button>
-      </div>
-
-      <!-- Users Tab Content -->
       <div id="adminUsersTab" class="flex-1 flex flex-col min-h-0">
         <p class="text-xs opacity-75 mb-3">
-          Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для непрерывного изменения баланса (1 рубль).
-          Возле пользователя отображается первая цифра его пароля для сверки оплат с почты.
+          Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для изменений баланса. Возле пользователя отображается первая цифра его пароля для сверки оплат с почты.
         </p>
         <div id="adminUsersList" class="space-y-2 overflow-y-auto flex-1 pr-1">
-          <!-- Список пользователей в админке -->
-        </div>
-      </div>
-
-      <!-- Admin Chat Tab Content -->
-      <div id="adminChatTab" class="flex-1 flex flex-col min-h-0 hidden">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs font-bold opacity-75">Модерация сообщений</span>
-          <button onclick="clearAdminChat()" class="px-2.5 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all active:scale-95">
-            Очистить весь чат
-          </button>
-        </div>
-        
-        <div id="adminChatMessages" class="space-y-2 overflow-y-auto flex-1 pr-1 mb-3 bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-black/5 dark:border-white/10 max-h-[260px]">
-          <!-- Список сообщений для модерации -->
-        </div>
-
-        <div class="flex gap-2">
-          <input type="text" id="adminChatInput" placeholder="Объявление от Администратора..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendAdminChatMessage()">
-          <button onclick="sendAdminChatMessage()" class="px-3 py-2 bg-amber-500 text-black font-bold rounded-xl text-xs active:scale-95 transition-transform flex items-center gap-1 shrink-0">
-            👑 Отправить
-          </button>
+          <!-- User list dynamically rendered -->
         </div>
       </div>
     </div>
@@ -701,114 +694,25 @@
     </div>
   </nav>
 
-  <!-- Firebase Integration -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'printcraft-app';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-      apiKey: "demo",
-      authDomain: "demo.firebaseapp.com",
-      projectId: "demo",
-      storageBucket: "demo.appspot.com",
-      messagingSenderId: "123456",
-      appId: "1:123456:web:demo"
-    };
-
-    let app, auth, db;
-    try {
-      app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-    } catch(e) {
-      console.log("Firebase init fallback:", e);
-    }
-
-    window.firebaseDB = db;
-    window.appId = appId;
-    window.firebaseAuth = auth;
-
-    async function initAuthAndListeners() {
-      if (!auth || !db) return;
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-
-        // Setup Firestore live sync for public chat
-        const globalChatCol = collection(db, 'artifacts', appId, 'public', 'data', 'global_chat');
-        onSnapshot(globalChatCol, (snapshot) => {
-          const cloudMsgs = [];
-          snapshot.forEach(docSnap => {
-            cloudMsgs.push({ id: docSnap.id, ...docSnap.data() });
-          });
-          if (cloudMsgs.length > 0) {
-            cloudMsgs.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-            window.chatMessagesData = cloudMsgs;
-            if (window.renderChatMessages) window.renderChatMessages();
-          }
-        }, (error) => console.log("Global chat listener error:", error));
-
-        // Setup Firestore live sync for tickets
-        const ticketCol = collection(db, 'artifacts', appId, 'public', 'data', 'admin_tickets');
-        onSnapshot(ticketCol, (snapshot) => {
-          const cloudTickets = [];
-          snapshot.forEach(docSnap => {
-            cloudTickets.push({ id: docSnap.id, ...docSnap.data() });
-          });
-          if (cloudTickets.length > 0) {
-            cloudTickets.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-            window.ticketChatsData = cloudTickets;
-            if (window.renderTicketMessages) window.renderTicketMessages();
-          }
-        }, (error) => console.log("Ticket listener error:", error));
-
-      } catch(e) {
-        console.log("Auth & setup error:", e);
-      }
-    }
-    initAuthAndListeners();
-  </script>
-
   <script>
     let isDark = false; 
     let isRu = true;
     const USD_RATE = 90;
     
-    // In-memory fallback state synced with localStorage
     let currentUser = JSON.parse(localStorage.getItem('pc_user')) || null;
     let selectedRating = 5;
     let selectedAvatar = '⚡';
-    let currentChatMode = 'bot'; // 'bot', 'ticket', or 'global'
 
-    // Default users store
     let allUsers = JSON.parse(localStorage.getItem('pc_all_users')) || [
       { id: 'usr_1', username: 'Ксения', balance: 150, firstPassChar: '7', avatar: '🎨', role: 'Клиент' },
       { id: 'usr_2', username: 'Александр', balance: 0, firstPassChar: '1', avatar: '🛠️', role: 'Мастер 3D' },
       { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500, firstPassChar: '9', avatar: '👑', role: 'VIP' }
     ];
 
-    // Bot Assistant default messages
-    let botChatMessages = JSON.parse(localStorage.getItem('pc_bot_chat')) || [
-      { id: 'b1', sender: 'bot', text: 'Здравствуйте! Я интерактивный Помощник магазина «ПРИНТКРАФТ × АРТС&КРАФТИНГ». Чем могу помочь вам по 3D-печати или заказу?', time: '12:00' }
-    ];
-
-    // Global Chat store
     window.chatMessagesData = JSON.parse(localStorage.getItem('pc_chat')) || [
-      { id: 'c1', username: 'Админ', text: 'Добро пожаловать в общий чат ПРИНТКРАФТ! Задавайте вопросы и делитесь впечатлениями.', isAdmin: true, time: '12:00' }
+      { id: 'c1', username: 'Админ', text: 'Добро пожаловать в чат ПРИНТКРАФТ! Задавайте вопросы по заказам.', isAdmin: true, time: '12:00' }
     ];
 
-    // Admin Direct Tickets store
-    window.ticketChatsData = JSON.parse(localStorage.getItem('pc_tickets')) || [
-      { id: 't1', username: 'Ксения', text: 'Здравствуйте! Можно ли распечатать деталь по макету STL?', time: '12:10', userId: 'usr_1' },
-      { id: 't2', username: 'Админ', text: 'Добрый день! Да, присылайте ваш файл на kride2161@gmail.com, мы рассчитаем точно.', time: '12:12', isAdmin: true, targetUserId: 'usr_1' }
-    ];
-
-    // Reviews store
     let reviewsData = JSON.parse(localStorage.getItem('pc_reviews')) || [
       { id: 'r1', username: 'Ксения', rating: 5, text: 'Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.' }
     ];
@@ -910,13 +814,6 @@
       document.querySelectorAll('.price-100g').forEach(el => el.innerText = formatMoney(150));
       document.querySelectorAll('.price-1kg').forEach(el => el.innerText = formatMoney(1390));
       updatePrice(document.getElementById('massSlider').value);
-
-      const currencySymbol = isRu ? '₽' : '$';
-      document.querySelectorAll('text').forEach(text => {
-        if(text.innerHTML === '₽' || text.innerHTML === '$') {
-          text.innerHTML = currencySymbol;
-        }
-      });
       updateUserUI();
     }
 
@@ -947,7 +844,7 @@
       updateThemeClasses();
     }
 
-    // Multi-click Title Trigger (5 clicks = Admin Panel)
+    // Secret Admin Panel Trigger (5 clicks)
     let titleClicks = 0;
     let titleClickTimer = null;
     function handleTitleClick() {
@@ -961,7 +858,7 @@
       }
     }
 
-    // Top-up Mail Balance Generator (+)
+    // Top-up Modal (+)
     function openTopupModal() {
       if (!currentUser) {
         openAuthModal();
@@ -1045,7 +942,6 @@
 
       const firstChar = password ? password.charAt(0) : '1';
 
-      // Check existing user or create
       let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
       if (!existing) {
         existing = { 
@@ -1054,8 +950,7 @@
           balance: 0, 
           firstPassChar: firstChar,
           avatar: selectedAvatar,
-          role: 'Клиент',
-          createdAt: new Date().toLocaleDateString()
+          role: 'Клиент'
         };
         allUsers.push(existing);
         saveAllUsers();
@@ -1087,7 +982,6 @@
       const loggedInView = document.getElementById('authLoggedInView');
 
       if (currentUser) {
-        // Sync user balance from store
         const fresh = allUsers.find(u => u.id === currentUser.id);
         if (fresh) {
           currentUser.balance = fresh.balance;
@@ -1102,7 +996,6 @@
         authBtnText.innerText = currentUser.username;
         authBtnAvatar.innerText = currentUser.avatar || '⚡';
 
-        // Modal Views Switch
         loggedOutView.classList.add('hidden');
         loggedInView.classList.remove('hidden');
 
@@ -1123,224 +1016,7 @@
       }
     }
 
-    function switchChatMode(mode) {
-      currentChatMode = mode;
-      const botBtn = document.getElementById('chatModeBotBtn');
-      const ticketBtn = document.getElementById('chatModeTicketBtn');
-      const globalBtn = document.getElementById('chatModeGlobalBtn');
-
-      const botContainer = document.getElementById('botChatContainer');
-      const ticketContainer = document.getElementById('ticketChatContainer');
-      const globalContainer = document.getElementById('globalChatContainer');
-
-      const headerIcon = document.getElementById('chatHeaderIcon');
-      const headerTitle = document.getElementById('chatHeaderTitle');
-      const headerSubtitle = document.getElementById('chatHeaderSubtitle');
-      const chatInput = document.getElementById('chatInput');
-
-      [botBtn, ticketBtn, globalBtn].forEach(b => b.className = "py-1.5 rounded-lg opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-1");
-      [botContainer, ticketContainer, globalContainer].forEach(c => c.classList.add('hidden'));
-
-      if (mode === 'bot') {
-        botBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
-        botContainer.classList.remove('hidden');
-        headerIcon.innerText = "🤖";
-        headerTitle.innerText = "Помощник (Админ)";
-        headerSubtitle.innerText = "Автоматические ответы 24/7";
-        chatInput.placeholder = "Задайте вопрос Помощнику...";
-        renderBotMessages();
-      } else if (mode === 'ticket') {
-        ticketBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
-        ticketContainer.classList.remove('hidden');
-        headerIcon.innerText = "📩";
-        headerTitle.innerText = "Запрос Админу";
-        headerSubtitle.innerText = "Прямая поддержка в облачную базу";
-        chatInput.placeholder = "Напишите личное обращение Админу...";
-        renderTicketMessages();
-      } else {
-        globalBtn.className = "py-1.5 rounded-lg bg-white dark:bg-white/10 shadow-sm text-brandNavy dark:text-white transition-all flex items-center justify-center gap-1 font-bold";
-        globalContainer.classList.remove('hidden');
-        headerIcon.innerText = "🌐";
-        headerTitle.innerText = "Общий Чат";
-        headerSubtitle.innerText = "Живое общение участников";
-        chatInput.placeholder = "Сообщение для всех участников...";
-        renderChatMessages();
-      }
-    }
-
-    function sendQuickQuestion(questionText) {
-      document.getElementById('chatInput').value = questionText;
-      handleSendChatMessage();
-    }
-
-    function handleSendChatMessage() {
-      if (currentChatMode === 'bot') {
-        sendBotChatMessage();
-      } else if (currentChatMode === 'ticket') {
-        sendTicketChatMessage();
-      } else {
-        sendChatMessage();
-      }
-    }
-
-    // Bot Assistant System
-    function sendBotChatMessage() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const userMsg = {
-        id: 'b_' + Date.now(),
-        sender: 'user',
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      botChatMessages.push(userMsg);
-      input.value = '';
-      renderBotMessages();
-
-      // Bot Smart AI Responder
-      setTimeout(() => {
-        const reply = generateBotReply(text);
-        botChatMessages.push({
-          id: 'b_' + Date.now(),
-          sender: 'bot',
-          text: reply,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        });
-        localStorage.setItem('pc_bot_chat', JSON.stringify(botChatMessages));
-        renderBotMessages();
-      }, 600);
-    }
-
-    function generateBotReply(query) {
-      const q = query.toLowerCase();
-      if (q.includes('стоим') || q.includes('цена') || q.includes('грамм') || q.includes('сколько') || q.includes('расчет')) {
-        return "💰 **Расценки 3D-печати:**\n• 10 грамм — 15 ₽\n• 30 грамм — 45 ₽\n• 100 грамм — 150 ₽\n• 1 кг (1000г) — 1390 ₽\n\nВы можете рассчитать точный вес во вкладке «Калькулятор»!";
-      }
-      if (q.includes('график') || q.includes('время') || q.includes('часы') || q.includes('открыт')) {
-        return "⏰ **График работы магазина:**\nПн-Вт: 15:00 - 20:00\nСр: 17:00 - 20:00\nЧт: 15:00 - 20:00\nПт: 17:00 - 20:00";
-      }
-      if (q.includes('пластик') || q.includes('материал') || q.includes('petg') || q.includes('pla') || q.includes('abs')) {
-        return "🧵 Мы печатаем прочными пластиками: **PLA, PETG, ABS, TPU**. Выбор материала зависит от условий эксплуатации вашей детали!";
-      }
-      if (q.includes('чертеж') || q.includes('свой') || q.includes('заказ') || q.includes('модель') || q.includes('stl')) {
-        return "📂 Для выполнения индивидуального заказа отправьте ваш файл макета (.stl, .obj, .3mf) или эскиз на нашу электронную почту: **kride2161@gmail.com**";
-      }
-      if (q.includes('баланс') || q.includes('пополн') || q.includes('счет')) {
-        return "💳 Пополнить баланс можно нажатием на знак **«+»** возле баланса в шапке сайта. Отправьте заявку на почту, и Админ зачислит вам средства!";
-      }
-      return "🤖 Спасибо за вопрос! Я зафиксировал ваше обращение. Вы также можете переключиться на режим **«📩 Админу»**, чтобы отправить персональное сообщение владельцу!";
-    }
-
-    function renderBotMessages() {
-      const container = document.getElementById('botChatMessages');
-      if (!container) return;
-      container.innerHTML = '';
-
-      botChatMessages.forEach(m => {
-        const isUser = m.sender === 'user';
-        const msgEl = document.createElement('div');
-        msgEl.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'}`;
-        msgEl.innerHTML = `
-          <div class="flex items-center gap-1.5 mb-1">
-            <span class="text-[10px] font-bold opacity-60">${isUser ? (currentUser ? currentUser.username : 'Вы') : '🤖 Помощник (Админ)'}</span>
-            <span class="text-[9px] opacity-40">${m.time}</span>
-          </div>
-          <div class="px-3.5 py-2.5 rounded-2xl text-xs max-w-[85%] whitespace-pre-line ${
-            isUser 
-              ? 'bg-brandTeal text-white rounded-tr-none' 
-              : 'bg-black/5 dark:bg-white/10 rounded-tl-none font-medium text-brandNavy dark:text-slate-100 border border-black/5 dark:border-white/5'
-          }">
-            ${m.text}
-          </div>
-        `;
-        container.appendChild(msgEl);
-      });
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // Direct Ticket Channel Logic
-    async function sendTicketChatMessage() {
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const ticketMsg = {
-        username: currentUser.username,
-        avatar: currentUser.avatar || '⚡',
-        userId: currentUser.id,
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        timestamp: Date.now()
-      };
-
-      // Save locally & Firestore
-      window.ticketChatsData.push(ticketMsg);
-      localStorage.setItem('pc_tickets', JSON.stringify(window.ticketChatsData));
-
-      if (window.firebaseDB && window.appId) {
-        try {
-          const col = collection(window.firebaseDB, 'artifacts', window.appId, 'public', 'data', 'admin_tickets');
-          await addDoc(col, ticketMsg);
-        } catch(e) { console.log("Firestore ticket error:", e); }
-      }
-
-      input.value = '';
-      renderTicketMessages();
-    }
-
-    function renderTicketMessages() {
-      const container = document.getElementById('ticketChatMessages');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (!currentUser) {
-        container.innerHTML = '<div class="text-center text-xs opacity-60 py-6">Войдите в аккаунт, чтобы отправлять запросы Администратору</div>';
-        return;
-      }
-
-      // Filter user tickets or admin replies
-      const myTickets = window.ticketChatsData.filter(m => m.userId === currentUser.id || m.targetUserId === currentUser.id || m.isAdmin);
-
-      if (myTickets.length === 0) {
-        container.innerHTML = '<div class="text-center text-xs opacity-50 py-6">У вас пока нет обращений. Напишите сообщение Администратору ниже!</div>';
-        return;
-      }
-
-      myTickets.forEach(m => {
-        const isMe = m.userId === currentUser.id;
-        const msgEl = document.createElement('div');
-        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
-        msgEl.innerHTML = `
-          <div class="flex items-center gap-1.5 mb-1">
-            <span class="text-[10px] font-bold ${m.isAdmin ? 'text-amber-500 font-black' : 'opacity-60'}">
-              ${m.isAdmin ? '👑 Администратор' : (m.avatar || '⚡') + ' ' + m.username}
-            </span>
-            <span class="text-[9px] opacity-40">${m.time}</span>
-          </div>
-          <div class="px-3.5 py-2 rounded-2xl text-xs max-w-[85%] ${
-            isMe 
-              ? 'bg-brandTeal text-white rounded-tr-none' 
-              : m.isAdmin
-              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-tl-none font-medium'
-              : 'bg-black/5 dark:bg-white/10 rounded-tl-none'
-          }">
-            ${m.text}
-          </div>
-        `;
-        container.appendChild(msgEl);
-      });
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // Global Chat System (Firestore synced)
-    async function sendChatMessage() {
+    function sendChatMessage() {
       if (!currentUser) {
         openAuthModal();
         return;
@@ -1354,19 +1030,11 @@
         avatar: currentUser.avatar || '⚡',
         text: text,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        timestamp: Date.now(),
         isAdmin: currentUser.username.toLowerCase() === 'админ'
       };
 
       window.chatMessagesData.push(msg);
       localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
-
-      if (window.firebaseDB && window.appId) {
-        try {
-          const col = collection(window.firebaseDB, 'artifacts', window.appId, 'public', 'data', 'global_chat');
-          await addDoc(col, msg);
-        } catch(e) { console.log("Firestore chat error:", e); }
-      }
 
       input.value = '';
       renderChatMessages();
@@ -1404,108 +1072,15 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    // Make renderers available globally for Firestore triggers
-    window.renderChatMessages = renderChatMessages;
-    window.renderTicketMessages = renderTicketMessages;
-
     // Admin Panel Logic
     function openAdminModal() {
       renderAdminUsers();
-      renderAdminChat();
-      switchAdminTab('users');
       document.getElementById('adminModal').classList.add('active');
     }
     function closeAdminModal() {
       document.getElementById('adminModal').classList.remove('active');
     }
 
-    function switchAdminTab(tabName) {
-      const usersTab = document.getElementById('adminUsersTab');
-      const chatTab = document.getElementById('adminChatTab');
-      const usersBtn = document.getElementById('adminTabUsersBtn');
-      const chatBtn = document.getElementById('adminTabChatBtn');
-
-      if (tabName === 'users') {
-        usersTab.classList.remove('hidden');
-        chatTab.classList.add('hidden');
-        usersBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white opacity-100";
-        chatBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all";
-      } else {
-        usersTab.classList.add('hidden');
-        chatTab.classList.remove('hidden');
-        chatBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-white/10 shadow-sm transition-all text-brandNavy dark:text-white opacity-100";
-        usersBtn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg opacity-60 hover:opacity-100 transition-all";
-        renderAdminChat();
-      }
-    }
-
-    function renderAdminChat() {
-      const container = document.getElementById('adminChatMessages');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (window.chatMessagesData.length === 0) {
-        container.innerHTML = '<div class="text-xs opacity-60 text-center py-4">История чата пуста</div>';
-        return;
-      }
-
-      window.chatMessagesData.forEach(m => {
-        const item = document.createElement('div');
-        item.className = 'bg-white/60 dark:bg-black/30 border border-black/5 dark:border-white/10 rounded-xl p-2.5 flex items-start justify-between gap-2 text-xs';
-        item.innerHTML = `
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-1.5 mb-1">
-              <span class="font-bold text-[11px] ${m.isAdmin ? 'text-amber-500 font-black' : ''}">${m.isAdmin ? '👑 ' : ''}${m.username}</span>
-              <span class="text-[9px] opacity-40">${m.time}</span>
-            </div>
-            <p class="text-[11px] opacity-80 break-words">${m.text}</p>
-          </div>
-          <button onclick="deleteChatMessage('${m.id}')" class="w-6 h-6 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center text-xs transition-colors shrink-0" title="Удалить сообщение">
-            ✕
-          </button>
-        `;
-        container.appendChild(item);
-      });
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function deleteChatMessage(msgId) {
-      window.chatMessagesData = window.chatMessagesData.filter(m => m.id !== msgId);
-      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
-      renderAdminChat();
-      renderChatMessages();
-    }
-
-    function clearAdminChat() {
-      window.chatMessagesData = [];
-      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
-      renderAdminChat();
-      renderChatMessages();
-    }
-
-    function sendAdminChatMessage() {
-      const input = document.getElementById('adminChatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const msg = {
-        id: 'c_' + Date.now(),
-        username: 'Админ',
-        avatar: '👑',
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        timestamp: Date.now(),
-        isAdmin: true
-      };
-
-      window.chatMessagesData.push(msg);
-      localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
-      input.value = '';
-      renderAdminChat();
-      renderChatMessages();
-    }
-
-    // Press-and-Hold Logic for Balance Adjustment
     let holdTimer = null;
     let holdInterval = null;
 
@@ -1611,6 +1186,7 @@
     function renderReviews() {
       const container = document.getElementById('reviewsList');
       const homeContainer = document.getElementById('homeRecentReviews');
+      if(!container) return;
       container.innerHTML = '';
 
       reviewsData.forEach(r => {
@@ -1632,7 +1208,7 @@
         container.innerHTML += card;
       });
 
-      if (reviewsData.length > 0) {
+      if (reviewsData.length > 0 && homeContainer) {
         const top = reviewsData[0];
         const starsTop = '★'.repeat(top.rating);
         homeContainer.innerHTML = `
@@ -1647,7 +1223,6 @@
       }
     }
 
-    // Cookie Toast Logic
     function checkCookies() {
       if(!localStorage.getItem('cookieAccepted')) {
         setTimeout(() => {
@@ -1661,7 +1236,6 @@
       document.getElementById('cookieToast').classList.remove('show');
     }
 
-    // Global Load Initialization
     window.onload = () => {
       switchTab(0);
       refreshStaticPrices();
@@ -1669,7 +1243,7 @@
       updateThemeClasses();
       updateUserUI();
       renderReviews();
-      switchChatMode('bot');
+      renderChatMessages();
       setReviewRating(5);
     };
   </script>
