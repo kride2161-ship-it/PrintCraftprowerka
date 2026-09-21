@@ -1,48 +1,1101 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"> <!-- По умолчанию светлая тема -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>В разработке</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ПРИНТКРАФТ × АРТС&КРАФТИНГ | Beta 2.0v</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandNavy: '#1a3560',
+            brandTeal: '#127462',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', 'Inter', 'sans-serif'],
+          }
         }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-        .main-text {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --navy: #1a3560;
+      --teal: #127462;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      scrollbar-width: none;
+    }
+    *::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      color: #1a3560;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      transition: background-color 0.6s cubic-bezier(0.23, 1, 0.32, 1), color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .dark body {
+      background-color: #050a14;
+      color: #f1f5f9;
+    }
+
+    /* Soft Mesh Background */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(26, 53, 96, 0.05), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(18, 116, 98, 0.05), transparent 40%);
+      filter: blur(40px);
+      transition: all 0.8s ease;
+    }
+
+    .dark .mesh-bg {
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(26, 53, 96, 0.3), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(18, 116, 98, 0.25), transparent 50%);
+      filter: blur(60px);
+    }
+
+    /* iOS 28 Glass Cards */
+    .ios-glass-card {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(25px) saturate(150%);
+      -webkit-backdrop-filter: blur(25px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(26, 53, 96, 0.06);
+      border-radius: 28px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s, border-color 0.6s, box-shadow 0.6s;
+    }
+
+    .dark .ios-glass-card {
+      background: rgba(26, 53, 96, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Ribbon Slider Container (5 Tabs = 500% Width) */
+    .ribbon-container {
+      width: 100%;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+    }
+
+    .ribbon-wrapper {
+      display: flex;
+      width: 500%; /* 5 tabs = 500% */
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      align-items: flex-start;
+    }
+
+    .ribbon-tab {
+      width: 20%; /* 100% / 5 */
+      flex-shrink: 0;
+      padding: 0 1rem;
+      opacity: 0.35;
+      transform: scale(0.95);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ribbon-tab.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Floating Dock */
+    .dock-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 50px rgba(26, 53, 96, 0.1);
+      padding: 6px;
+      border-radius: 999px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .dark .dock-container {
+      background: rgba(10, 15, 25, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Custom Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+      width: 100%;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(26, 53, 96, 0.1);
+      border-radius: 999px;
+    }
+    .dark input[type=range]::-webkit-slider-runnable-track {
+      background: rgba(255,255,255,0.1);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 3px solid #fff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -8px;
+      box-shadow: 0 4px 10px rgba(18, 116, 98, 0.4);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dark input[type=range]::-webkit-slider-thumb {
+      border-color: #1a3560;
+    }
+    input[type=range]::-webkit-slider-thumb:active {
+      transform: scale(1.25);
+    }
+
+    /* Cookie Toast */
+    .cookie-toast {
+      position: fixed;
+      bottom: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: calc(100% - 2rem);
+      max-width: 400px;
+      transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cookie-toast.show {
+      bottom: 95px;
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Holdable Admin Buttons */
+    .btn-hold {
+      touch-action: manipulation;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+    .btn-hold:active {
+      transform: scale(0.9);
+    }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <img src="Gemini_Generated_Image_cej5jkcej5jkcej5.jpeg" alt="Изображение в разработке">
-        <p class="main-text">Технические работы.</p>
-        <p>Сайт ремонтируют и распечатывают снова, по кусочкам.</p>
+<body class="min-h-screen pb-32 pt-6 relative">
+
+  <div class="mesh-bg"></div>
+
+  <!-- Cookie Toast -->
+  <div id="cookieToast" class="cookie-toast max-w-sm w-full ios-glass-card p-4 flex items-center justify-between gap-4">
+    <div class="flex-1">
+      <p id="cookie-text" class="text-xs font-medium leading-tight">
+        Мы используем файлы cookie. По всем вопросам о товарах обращайтесь в магазин <span class="font-bold text-brandTeal">«Артс&Крафтинг»</span>.
+      </p>
     </div>
+    <button onclick="acceptCookies()" class="w-8 h-8 rounded-full bg-brandNavy/10 dark:bg-white/10 flex items-center justify-center shrink-0 active:scale-90 transition-transform">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <!-- Header Section -->
+  <header class="max-w-2xl mx-auto mb-6 px-4 sm:px-6">
+    <div class="ios-glass-card p-5 sm:p-6 relative overflow-hidden">
+      <div class="absolute -right-10 -top-10 w-32 h-32 bg-brandTeal/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brandNavy/10 dark:bg-white/10 border border-brandNavy/15 dark:border-white/15 text-[11px] font-bold text-brandNavy dark:text-slate-200 tracking-wide uppercase shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Beta 2.0v
+            </span>
+            <!-- User Status Badge -->
+            <div id="userHeaderBadge" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-brandTeal/15 border border-brandTeal/30 text-[11px] font-bold text-brandTeal">
+              <span id="userNameHeader">Пользователь</span>
+              <span class="opacity-40">|</span>
+              <span id="userBalanceHeader" class="font-mono">0 ₽</span>
+            </div>
+          </div>
+
+          <!-- Multi-click Title Trigger for Secret Admin Panel -->
+          <h1 onclick="handleTitleClick()" class="text-2xl sm:text-3xl font-black tracking-tight text-brandNavy dark:text-white flex items-center gap-2 cursor-pointer active:scale-98 transition-transform select-none" title="Нажмите 5 раз для входа в Админ-панель">
+            ПРИНТКРАФТ <span class="text-brandTeal font-light">×</span> АРТС&КРАФТИНГ
+          </h1>
+        </div>
+
+        <!-- Utility Toolbar -->
+        <div class="flex items-center gap-2 bg-black/5 dark:bg-white/5 p-1.5 rounded-2xl border border-black/5 dark:border-white/10 shadow-inner">
+          <button id="authBtn" onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl bg-brandTeal text-white text-xs font-bold transition-all active:scale-95 shadow-sm flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <span id="authBtnText">Войти</span>
+          </button>
+
+          <button onclick="toggleLanguage()" class="px-2.5 py-1.5 rounded-xl bg-white/80 dark:bg-white/10 border border-black/5 dark:border-white/10 text-xs font-bold transition-all active:scale-95 shadow-sm">
+            <span id="lang-text">RU (₽)</span>
+          </button>
+          
+          <button onclick="toggleTheme()" class="w-8 h-8 rounded-xl bg-white/80 dark:bg-white/10 border border-black/5 dark:border-white/10 flex items-center justify-center text-xs transition-all active:scale-95 shadow-sm">
+            <span id="theme-icon">🌙</span>
+          </button>
+          
+          <div class="h-4 w-[1px] bg-black/10 dark:bg-white/10 mx-0.5"></div>
+
+          <a href="mailto:kride2161@gmail.com" title="Email" class="w-8 h-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform shadow-sm">
+            <img id="mail-icon" src="Gemini_Generated_Image_ome72pome72pome7.jpeg" alt="Mail" class="w-full h-full object-cover">
+          </a>
+          <a href="https://max.ru/join/7B12-bH0YU56rg65fpO5907tlOGBWaI2AnvPiT_G1SU" target="_blank" title="MAX Messenger" class="w-8 h-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/20 active:scale-90 transition-transform shadow-sm">
+            <img id="max-icon" src="Gemini_Generated_Image_ilbgjailbgjailbg.jpeg" alt="Max" class="w-full h-full object-cover">
+          </a>
+        </div>
+      </div>
+
+      <!-- Schedule Banner -->
+      <div class="mt-4 pt-4 border-t border-black/5 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium relative z-10">
+        <span id="schedule-title" class="opacity-75 font-bold flex items-center gap-1.5 text-brandNavy dark:text-slate-300">
+          <svg class="w-3.5 h-3.5 text-brandTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          График работы магазина:
+        </span>
+        <span id="schedule-hours" class="bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-xl font-mono text-[11px] font-semibold tracking-tight text-center sm:text-right">
+          Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ribbon Main Section -->
+  <main class="max-w-2xl mx-auto ribbon-container">
+    <div id="ribbonWrapper" class="ribbon-wrapper">
+
+      <!-- TAB 0: ГЛАВНАЯ (HOME) -->
+      <section class="ribbon-tab active" data-index="0">
+        <div class="space-y-4">
+          <!-- Последние предложения -->
+          <div class="ios-glass-card p-6">
+            <h2 id="home-offers-title" class="text-lg font-bold mb-4">Последние предложения</h2>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center">
+                <div class="text-xs opacity-60 mb-1">10 грамм</div>
+                <div class="font-bold text-sm price-10g">15 ₽</div>
+              </div>
+              <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-4 text-center relative overflow-hidden">
+                <div class="text-xs opacity-60 mb-1">30 грамм</div>
+                <div class="font-bold text-sm price-30g">45 ₽</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Отзывы на главной -->
+          <div class="ios-glass-card p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 id="home-reviews-title" class="text-lg font-bold">Последние отзывы</h2>
+              <button onclick="switchTab(1)" class="text-xs text-brandTeal font-bold hover:underline">Все отзывы →</button>
+            </div>
+            <div id="homeRecentReviews" class="space-y-2">
+              <div class="bg-black/5 dark:bg-white/5 rounded-2xl p-4 text-left border border-black/5 dark:border-white/10">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-bold text-sm">Ксения</span>
+                  <span class="text-brandTeal text-xs tracking-widest">★★★★★</span>
+                </div>
+                <p class="text-xs opacity-80 leading-relaxed">
+                  «Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.»
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: ОТЗЫВЫ (REVIEWS) -->
+      <section class="ribbon-tab" data-index="1">
+        <div class="ios-glass-card p-6 min-h-[400px] flex flex-col">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center text-brandNavy dark:text-slate-300 shrink-0">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <h2 id="reviews-page-title" class="text-xl font-bold">Отзывы</h2>
+          </div>
+
+          <!-- Add Review Form -->
+          <div id="addReviewBox" class="mb-6 bg-black/5 dark:bg-white/5 rounded-2xl p-4 border border-black/5 dark:border-white/10">
+            <h3 class="text-xs font-bold uppercase tracking-wider mb-2 opacity-70">Оставить отзыв</h3>
+            <div class="flex items-center gap-1 mb-2 text-amber-400 text-lg">
+              <button onclick="setReviewRating(1)" class="star-btn">★</button>
+              <button onclick="setReviewRating(2)" class="star-btn">★</button>
+              <button onclick="setReviewRating(3)" class="star-btn">★</button>
+              <button onclick="setReviewRating(4)" class="star-btn">★</button>
+              <button onclick="setReviewRating(5)" class="star-btn">★</button>
+            </div>
+            <textarea id="reviewTextInput" placeholder="Напишите ваш отзыв..." class="w-full bg-white/80 dark:bg-black/30 border border-black/10 dark:border-white/10 rounded-xl p-3 text-xs focus:outline-none resize-none h-20 mb-2"></textarea>
+            <button onclick="submitReview()" class="w-full py-2 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform">
+              Отправить отзыв
+            </button>
+          </div>
+          
+          <div id="reviewsList" class="space-y-3 w-full">
+            <!-- Отзывы из базы -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ЧАТ (CHAT) - NEW IN BETA 2.0v -->
+      <section class="ribbon-tab" data-index="2">
+        <div class="ios-glass-card p-6 min-h-[450px] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brandTeal/15 text-brandTeal flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                </div>
+                <div>
+                  <h2 class="text-lg font-bold">Сетевой Чат</h2>
+                  <p class="text-[10px] opacity-60">Общение в реальном времени</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full font-bold">
+                ● Онлайн
+              </span>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chatMessages" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+              <!-- Сообщения чата будут здесь -->
+            </div>
+          </div>
+
+          <!-- Chat Input -->
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex gap-2">
+            <input type="text" id="chatInput" placeholder="Напишите сообщение..." class="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" class="px-4 py-2 bg-brandNavy dark:bg-brandTeal text-white rounded-xl text-xs font-bold active:scale-95 transition-transform">
+              Отправить
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: КАЛЬКУЛЯТОР (CALCULATOR) -->
+      <section class="ribbon-tab" data-index="3">
+        <div class="ios-glass-card p-6">
+          <div class="flex items-center gap-3 mb-6">
+            <h2 id="calc-title" class="text-xl font-bold">Услуги/Граммы в рубли</h2>
+          </div>
+
+          <!-- Slider Calc -->
+          <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-5 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <span id="calc-mass-label" class="text-xs font-bold uppercase tracking-wider opacity-70">Масса (грамм):</span>
+              <span id="calc-mass-display" class="text-lg font-black text-brandTeal">1 г</span>
+            </div>
+            <input type="range" id="massSlider" min="1" max="1000" step="1" value="1" oninput="updatePrice(this.value)">
+            <div class="flex justify-between text-[10px] opacity-50 mt-2 font-mono">
+              <span>1</span>
+              <span>250</span>
+              <span>500</span>
+              <span>1000</span>
+            </div>
+            
+            <div class="mt-5 pt-4 border-t border-black/10 dark:border-white/10 flex justify-between items-center">
+              <span id="calc-total-label" class="text-sm font-medium opacity-80">Примерная стоимость:</span>
+              <span id="calc-price-display" class="text-2xl font-black">2 ₽</span>
+            </div>
+          </div>
+
+          <!-- Price Table Info -->
+          <div class="space-y-1">
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5">
+              <span class="opacity-70">10 грамм</span>
+              <span class="font-semibold price-10g">15 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5 text-brandTeal">
+              <span class="flex items-center gap-2">30 грамм</span>
+              <span class="font-bold price-30g">45 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm border-b border-black/5 dark:border-white/5">
+              <span class="opacity-70">100 грамм</span>
+              <span class="font-semibold price-100g">150 ₽</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm font-bold mt-2">
+              <span>1 кг (1000 грамм)</span>
+              <span class="text-brandTeal price-1kg">1390 ₽</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ПРИМЕРНЫЕ ФОТО (GALLERY) -->
+      <section class="ribbon-tab" data-index="4">
+        <div class="ios-glass-card p-6 min-h-[400px] flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-brandNavy/10 dark:bg-brandNavy/30 flex items-center justify-center text-brandNavy dark:text-slate-300 shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+                <circle cx="19" cy="19" r="4.5" stroke-width="1.8"/>
+                <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
+              </svg>
+            </div>
+            <h2 id="gallery-page-title" class="text-xl font-bold">Услуги/Примерные фото</h2>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3 w-full">
+            <img src="handy_1789971277818.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 1">
+            <img src="handy_1789971265971.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 2">
+            <img src="handy_1789971235248.jpg" class="rounded-2xl w-full object-cover aspect-square border border-black/5 dark:border-white/10" alt="Фото работ 3">
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal-backdrop">
+    <div class="ios-glass-card max-w-sm w-full mx-4 p-6 relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
+      
+      <h2 id="authModalTitle" class="text-xl font-bold mb-4 text-center">Регистрация / Вход</h2>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Имя пользователя</label>
+          <input type="text" id="authUsernameInput" placeholder="Иван" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] uppercase font-bold tracking-wider opacity-60 mb-1 block">Пароль</label>
+          <input type="password" id="authPasswordInput" placeholder="••••••••" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none">
+        </div>
+
+        <p id="authError" class="text-red-500 text-[11px] font-semibold text-center hidden"></p>
+
+        <button onclick="performAuth()" class="w-full py-2.5 bg-brandTeal text-white font-bold rounded-xl text-xs active:scale-95 transition-transform shadow-md mt-2">
+          Войти или Зарегистрироваться
+        </button>
+        
+        <button id="logoutBtn" onclick="performLogout()" class="w-full py-2 bg-red-500/10 text-red-500 font-bold rounded-xl text-xs active:scale-95 transition-transform hidden">
+          Выйти из аккаунта
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Panel Modal -->
+  <div id="adminModal" class="modal-backdrop">
+    <div class="ios-glass-card max-w-lg w-full mx-4 p-6 relative max-h-[85vh] flex flex-col">
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-xs font-bold">✕</button>
+      
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
+        <h2 class="text-xl font-black text-brandNavy dark:text-white">Панель Администратора</h2>
+      </div>
+
+      <p class="text-xs opacity-75 mb-4">Зажмите кнопки <b class="text-brandTeal">+</b> или <b class="text-red-500">-</b> для быстрой непрерывной изменения баланса пользователя (1 рубль).</p>
+
+      <div id="adminUsersList" class="space-y-2 overflow-y-auto flex-1 pr-1">
+        <!-- Список пользователей в админке -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Dock Navigation -->
+  <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
+    <div class="dock-container">
+      
+      <!-- Home (Tab 0) -->
+      <button onclick="switchTab(0)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform active" data-index="0">
+        <div class="icon-bg w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+      </button>
+
+      <!-- Reviews (Tab 1) -->
+      <button onclick="switchTab(1)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="1">
+        <div class="icon-bg w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+      </button>
+
+      <!-- Chat (Tab 2) -->
+      <button onclick="switchTab(2)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="2">
+        <div class="icon-bg w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+        </div>
+      </button>
+
+      <!-- Calc (Tab 3) -->
+      <button onclick="switchTab(3)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="3">
+        <div class="icon-bg w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 5h10v2H4z M4 17h10v2H4z M5 7h8v10H5z"/>
+            <line x1="7" y1="7" x2="7" y2="17" stroke-dasharray="2 2"/>
+            <line x1="11" y1="7" x2="11" y2="17" stroke-dasharray="2 2"/>
+            <circle cx="18" cy="18" r="4.5" stroke-width="1.8"/>
+            <text x="18" y="19.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Gallery (Tab 4) -->
+      <button onclick="switchTab(4)" class="nav-btn group relative flex-1 flex flex-col items-center py-2 active:scale-95 transition-transform" data-index="4">
+        <div class="icon-bg w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 bg-transparent text-brandNavy dark:text-slate-400 opacity-60 group-[.active]:opacity-100 group-[.active]:shadow-md">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 13v7a1.5 1.5 0 003 0v-7 M7 7l1.5 6h4L14 7a2 2 0 00-2-2H9a2 2 0 00-2 2z M8 5V3a1 1 0 011-1h3a1 1 0 011 1v2"/>
+            <circle cx="19" cy="19" r="4.5" stroke-width="1.8"/>
+            <text x="19" y="20.5" font-size="5" text-anchor="middle" stroke="none" fill="currentColor" font-family="sans-serif" font-weight="bold">₽</text>
+          </svg>
+        </div>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Firebase Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'printcraft-app';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+      apiKey: "demo",
+      authDomain: "demo.firebaseapp.com",
+      projectId: "demo",
+      storageBucket: "demo.appspot.com",
+      messagingSenderId: "123456",
+      appId: "1:123456:web:demo"
+    };
+
+    let app, auth, db;
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    } catch(e) {
+      console.log("Firebase init fallback:", e);
+    }
+
+    window.firebaseDB = db;
+    window.appId = appId;
+    window.firebaseAuth = auth;
+
+    // Async init Auth
+    async function initAuth() {
+      if (!auth) return;
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch(e) {
+        console.log("Auth step:", e);
+      }
+    }
+    initAuth();
+  </script>
+
+  <script>
+    let isDark = false; 
+    let isRu = true;
+    const USD_RATE = 90;
+    
+    // In-memory fallback state synced with localStorage / Firestore
+    let currentUser = JSON.parse(localStorage.getItem('pc_user')) || null;
+    let selectedRating = 5;
+
+    // Default users store
+    let allUsers = JSON.parse(localStorage.getItem('pc_all_users')) || [
+      { id: 'usr_1', username: 'Ксения', balance: 150 },
+      { id: 'usr_2', username: 'Александр', balance: 0 },
+      { id: 'usr_3', username: 'ПринтКрафт_Дево', balance: 500 }
+    ];
+
+    // Reviews store
+    let reviewsData = JSON.parse(localStorage.getItem('pc_reviews')) || [
+      { id: 'r1', username: 'Ксения', rating: 5, text: 'Очень хороший магазин, качественные товары, распечатали мне подставку для часов, так она вошла как родная. Умеют делать по чертежам, рекомендую магазин.' }
+    ];
+
+    // Chat store
+    let chatMessagesData = JSON.parse(localStorage.getItem('pc_chat')) || [
+      { id: 'c1', username: 'Админ', text: 'Добро пожаловать в чат ПРИНТКРАФТ × АРТС&КРАФТИНГ (Beta 2.0v)!', isAdmin: true, time: '12:00' }
+    ];
+
+    const icons = {
+      mailLight: 'Gemini_Generated_Image_ome72pome72pome7.jpeg',
+      mailDark: 'Gemini_Generated_Image_whztzlwhztzlwhzt.jpeg',
+      maxLight: 'Gemini_Generated_Image_ilbgjailbgjailbg.jpeg',
+      maxDark: 'file_000000002c7482109485c990cd3b27f2.png'
+    };
+
+    const t = {
+      ru: {
+        scheduleTitle: 'График работы магазина:',
+        scheduleHours: 'Пн-Вт 15:00-20:00 | Ср 17:00-20:00 | Чт 15:00-20:00 | Пт 17:00-20:00',
+        homeOffers: 'Последние предложения',
+        homeReviewsTitle: 'Последние отзывы',
+        reviewsPageTitle: 'Отзывы',
+        calcTitle: 'Услуги/Граммы в рубли',
+        calcMassLabel: 'Масса (грамм):',
+        calcTotalLabel: 'Примерная стоимость:',
+        galleryTitle: 'Услуги/Примерные фото',
+        langBtn: 'RU (₽)',
+        cookieText: 'Мы используем файлы cookie. По всем вопросам о товарах обращайтесь в магазин <span class="font-bold text-brandTeal">«Артс&Крафтинг»</span>.'
+      },
+      en: {
+        scheduleTitle: 'Store Schedule:',
+        scheduleHours: 'Mon-Tue 15:00-20:00 | Wed 17:00-20:00 | Thu 15:00-20:00 | Fri 17:00-20:00',
+        homeOffers: 'Latest Offers',
+        homeReviewsTitle: 'Recent Reviews',
+        reviewsPageTitle: 'Reviews',
+        calcTitle: 'Services/Grams to USD',
+        calcMassLabel: 'Mass (grams):',
+        calcTotalLabel: 'Estimated Cost:',
+        galleryTitle: 'Services/Example Photos',
+        langBtn: 'EN ($)',
+        cookieText: 'We use cookies. For product inquiries, please contact <span class="font-bold text-brandTeal">Arts&Crafting</span> store.'
+      }
+    };
+
+    // Ribbon Slider Switch (5 tabs = 20% steps)
+    function switchTab(index) {
+      const wrapper = document.getElementById('ribbonWrapper');
+      wrapper.style.transform = `translateX(-${index * 20}%)`;
+
+      document.querySelectorAll('.ribbon-tab').forEach((tab, i) => {
+        if(i === index) tab.classList.add('active');
+        else tab.classList.remove('active');
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if(parseInt(btn.dataset.index) === index) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      updateThemeClasses();
+    }
+
+    function updateThemeClasses() {
+      const activeBtns = document.querySelectorAll('.nav-btn.active .icon-bg');
+      const allBtns = document.querySelectorAll('.nav-btn .icon-bg');
+
+      allBtns.forEach(bg => bg.classList.remove('bg-black', 'text-white', 'bg-white', 'text-black'));
+
+      activeBtns.forEach(bg => {
+        if (isDark) {
+          bg.classList.add('bg-white', 'text-black');
+        } else {
+          bg.classList.add('bg-black', 'text-white');
+        }
+      });
+
+      document.getElementById('mail-icon').src = isDark ? icons.mailDark : icons.mailLight;
+      document.getElementById('max-icon').src = isDark ? icons.maxDark : icons.maxLight;
+    }
+
+    function formatMoney(amount) {
+      const rounded = Math.round(amount);
+      if(isRu) return `${rounded} ₽`;
+      return `$${Math.round(rounded / USD_RATE)}`;
+    }
+
+    function updatePrice(grams) {
+      document.getElementById('calc-mass-display').innerText = `${grams} ${isRu ? 'г' : 'g'}`;
+      let rate = 1.5 - (0.11 * (grams / 1000));
+      let base = Math.round(grams * rate);
+      if (grams == 10) base = 15;
+      if (grams == 30) base = 45;
+      if (grams == 100) base = 150;
+      if (grams == 1000) base = 1390;
+      document.getElementById('calc-price-display').innerText = formatMoney(base);
+    }
+
+    function refreshStaticPrices() {
+      document.querySelectorAll('.price-10g').forEach(el => el.innerText = formatMoney(15));
+      document.querySelectorAll('.price-30g').forEach(el => el.innerText = formatMoney(45));
+      document.querySelectorAll('.price-100g').forEach(el => el.innerText = formatMoney(150));
+      document.querySelectorAll('.price-1kg').forEach(el => el.innerText = formatMoney(1390));
+      updatePrice(document.getElementById('massSlider').value);
+
+      const currencySymbol = isRu ? '₽' : '$';
+      document.querySelectorAll('text').forEach(text => {
+        if(text.innerHTML === '₽' || text.innerHTML === '$') {
+          text.innerHTML = currencySymbol;
+        }
+      });
+      updateUserUI();
+    }
+
+    function toggleLanguage() {
+      isRu = !isRu;
+      const lang = isRu ? 'ru' : 'en';
+      const d = t[lang];
+
+      document.getElementById('lang-text').innerText = d.langBtn;
+      document.getElementById('schedule-title').innerText = d.scheduleTitle;
+      document.getElementById('schedule-hours').innerText = d.scheduleHours;
+      document.getElementById('home-offers-title').innerText = d.homeOffers;
+      document.getElementById('home-reviews-title').innerText = d.homeReviewsTitle;
+      document.getElementById('reviews-page-title').innerText = d.reviewsPageTitle;
+      document.getElementById('calc-title').innerText = d.calcTitle;
+      document.getElementById('calc-mass-label').innerText = d.calcMassLabel;
+      document.getElementById('calc-total-label').innerText = d.calcTotalLabel;
+      document.getElementById('gallery-page-title').innerText = d.galleryTitle;
+      document.getElementById('cookie-text').innerHTML = d.cookieText;
+
+      refreshStaticPrices();
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.documentElement.classList.toggle('dark', isDark);
+      document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
+      updateThemeClasses();
+    }
+
+    // Multi-click Title Trigger (5 clicks = Admin Panel)
+    let titleClicks = 0;
+    let titleClickTimer = null;
+    function handleTitleClick() {
+      titleClicks++;
+      if (titleClickTimer) clearTimeout(titleClickTimer);
+      if (titleClicks >= 5) {
+        titleClicks = 0;
+        openAdminModal();
+      } else {
+        titleClickTimer = setTimeout(() => { titleClicks = 0; }, 1800);
+      }
+    }
+
+    // User Auth Modal Logic
+    function openAuthModal() {
+      document.getElementById('authModal').classList.add('active');
+    }
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('active');
+    }
+
+    function performAuth() {
+      const username = document.getElementById('authUsernameInput').value.trim();
+      const errEl = document.getElementById('authError');
+      if (!username) {
+        errEl.innerText = "Пожалуйста, введите имя!";
+        errEl.classList.remove('hidden');
+        return;
+      }
+      errEl.classList.add('hidden');
+
+      // Check existing user or create
+      let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+      if (!existing) {
+        existing = { id: 'usr_' + Date.now(), username: username, balance: 0 };
+        allUsers.push(existing);
+        saveAllUsers();
+      }
+
+      currentUser = existing;
+      localStorage.setItem('pc_user', JSON.stringify(currentUser));
+      updateUserUI();
+      closeAuthModal();
+      renderAdminUsers();
+    }
+
+    function performLogout() {
+      currentUser = null;
+      localStorage.removeItem('pc_user');
+      updateUserUI();
+      closeAuthModal();
+    }
+
+    function updateUserUI() {
+      const userBadge = document.getElementById('userHeaderBadge');
+      const authBtnText = document.getElementById('authBtnText');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (currentUser) {
+        // Sync user balance from store
+        const fresh = allUsers.find(u => u.id === currentUser.id);
+        if (fresh) currentUser.balance = fresh.balance;
+
+        userBadge.classList.remove('hidden');
+        userBadge.classList.add('flex');
+        document.getElementById('userNameHeader').innerText = currentUser.username;
+        document.getElementById('userBalanceHeader').innerText = formatMoney(currentUser.balance);
+        authBtnText.innerText = "Профиль";
+        logoutBtn.classList.remove('hidden');
+      } else {
+        userBadge.classList.add('hidden');
+        userBadge.classList.remove('flex');
+        authBtnText.innerText = "Войти";
+        logoutBtn.classList.add('hidden');
+      }
+    }
+
+    // Admin Panel Logic
+    function openAdminModal() {
+      renderAdminUsers();
+      document.getElementById('adminModal').classList.add('active');
+    }
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.remove('active');
+    }
+
+    // Continuous Press-and-Hold Logic for Balance Adjustment
+    let holdTimer = null;
+    let holdInterval = null;
+
+    function startBalanceHold(userId, delta) {
+      changeUserBalance(userId, delta);
+      holdTimer = setTimeout(() => {
+        holdInterval = setInterval(() => {
+          changeUserBalance(userId, delta);
+        }, 80); // Rapid increment/decrement every 80ms
+      }, 300);
+    }
+
+    function stopBalanceHold() {
+      if (holdTimer) clearTimeout(holdTimer);
+      if (holdInterval) clearInterval(holdInterval);
+      holdTimer = null;
+      holdInterval = null;
+    }
+
+    function changeUserBalance(userId, delta) {
+      const u = allUsers.find(user => user.id === userId);
+      if (u) {
+        u.balance = Math.max(0, u.balance + delta);
+        saveAllUsers();
+        renderAdminUsers();
+        updateUserUI();
+      }
+    }
+
+    function saveAllUsers() {
+      localStorage.setItem('pc_all_users', JSON.stringify(allUsers));
+    }
+
+    function renderAdminUsers() {
+      const container = document.getElementById('adminUsersList');
+      container.innerHTML = '';
+
+      if (allUsers.length === 0) {
+        container.innerHTML = '<div class="text-xs opacity-60 text-center py-4">Нет зарегистрированных пользователей</div>';
+        return;
+      }
+
+      allUsers.forEach(u => {
+        const item = document.createElement('div');
+        item.className = 'bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-3 flex items-center justify-between gap-2';
+        item.innerHTML = `
+          <div class="flex flex-col">
+            <span class="font-bold text-xs flex items-center gap-1">
+              ${u.username}
+              ${currentUser && currentUser.id === u.id ? '<span class="text-[9px] bg-brandTeal/20 text-brandTeal px-1.5 py-0.5 rounded-full">(Вы)</span>' : ''}
+            </span>
+            <span class="text-[11px] font-mono text-brandTeal font-bold">${formatMoney(u.balance)}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-hold w-9 h-9 rounded-xl bg-red-500/20 text-red-500 font-black text-lg flex items-center justify-center border border-red-500/30"
+              onmousedown="startBalanceHold('${u.id}', -1)" onmouseup="stopBalanceHold()" onmouseleave="stopBalanceHold()"
+              ontouchstart="startBalanceHold('${u.id}', -1)" ontouchend="stopBalanceHold()">
+              −
+            </button>
+            <button class="btn-hold w-9 h-9 rounded-xl bg-brandTeal/20 text-brandTeal font-black text-lg flex items-center justify-center border border-brandTeal/30"
+              onmousedown="startBalanceHold('${u.id}', 1)" onmouseup="stopBalanceHold()" onmouseleave="stopBalanceHold()"
+              ontouchstart="startBalanceHold('${u.id}', 1)" ontouchend="stopBalanceHold()">
+              +
+            </button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Reviews System
+    function setReviewRating(stars) {
+      selectedRating = stars;
+      document.querySelectorAll('.star-btn').forEach((btn, idx) => {
+        if (idx < stars) btn.classList.add('text-amber-400');
+        else btn.classList.remove('text-amber-400');
+      });
+    }
+
+    function submitReview() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('reviewTextInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const newRev = {
+        id: 'r_' + Date.now(),
+        username: currentUser.username,
+        rating: selectedRating,
+        text: text
+      };
+
+      reviewsData.unshift(newRev);
+      localStorage.setItem('pc_reviews', JSON.stringify(reviewsData));
+      input.value = '';
+      renderReviews();
+    }
+
+    function renderReviews() {
+      const container = document.getElementById('reviewsList');
+      const homeContainer = document.getElementById('homeRecentReviews');
+      container.innerHTML = '';
+
+      reviewsData.forEach(r => {
+        const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+        const card = `
+          <div class="bg-black/5 dark:bg-white/5 rounded-2xl p-4 border border-black/5 dark:border-white/10 text-left">
+            <div class="flex justify-between items-center mb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-brandTeal/20 text-brandTeal flex items-center justify-center font-bold text-xs">
+                  ${r.username.charAt(0).toUpperCase()}
+                </div>
+                <span class="font-bold text-xs">${r.username}</span>
+              </div>
+              <span class="text-amber-400 text-xs tracking-widest">${stars}</span>
+            </div>
+            <p class="text-xs opacity-80 leading-relaxed">«${r.text}»</p>
+          </div>
+        `;
+        container.innerHTML += card;
+      });
+
+      if (reviewsData.length > 0) {
+        const top = reviewsData[0];
+        const starsTop = '★'.repeat(top.rating);
+        homeContainer.innerHTML = `
+          <div class="bg-black/5 dark:bg-white/5 rounded-2xl p-4 text-left border border-black/5 dark:border-white/10">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-bold text-sm">${top.username}</span>
+              <span class="text-brandTeal text-xs tracking-widest">${starsTop}</span>
+            </div>
+            <p class="text-xs opacity-80 leading-relaxed">«${top.text}»</p>
+          </div>
+        `;
+      }
+    }
+
+    // Network Chat System
+    function sendChatMessage() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msg = {
+        id: 'c_' + Date.now(),
+        username: currentUser.username,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        isAdmin: currentUser.username.toLowerCase() === 'админ'
+      };
+
+      chatMessagesData.push(msg);
+      localStorage.setItem('pc_chat', JSON.stringify(chatMessagesData));
+      input.value = '';
+      renderChatMessages();
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chatMessages');
+      container.innerHTML = '';
+
+      chatMessagesData.forEach(m => {
+        const isMe = currentUser && currentUser.username === m.username;
+        const msgEl = document.createElement('div');
+        msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+        msgEl.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold ${m.isAdmin ? 'text-amber-500 font-black' : 'opacity-60'}">
+              ${m.isAdmin ? '👑 ' : ''}${m.username}
+            </span>
+            <span class="text-[9px] opacity-40">${m.time}</span>
+          </div>
+          <div class="px-3 py-2 rounded-2xl text-xs max-w-[80%] ${
+            isMe 
+              ? 'bg-brandTeal text-white rounded-tr-none' 
+              : m.isAdmin
+              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-tl-none font-medium'
+              : 'bg-black/5 dark:bg-white/10 rounded-tl-none'
+          }">
+            ${m.text}
+          </div>
+        `;
+        container.appendChild(msgEl);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Cookie Toast Logic
+    function checkCookies() {
+      if(!localStorage.getItem('cookieAccepted')) {
+        setTimeout(() => {
+          document.getElementById('cookieToast').classList.add('show');
+        }, 800);
+      }
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookieAccepted', 'true');
+      document.getElementById('cookieToast').classList.remove('show');
+    }
+
+    // Global Load Initialization
+    window.onload = () => {
+      switchTab(0);
+      refreshStaticPrices();
+      checkCookies();
+      updateThemeClasses();
+      updateUserUI();
+      renderReviews();
+      renderChatMessages();
+      setReviewRating(5);
+    };
+  </script>
 </body>
 </html>
