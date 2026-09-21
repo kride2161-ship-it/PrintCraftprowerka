@@ -7,6 +7,8 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Socket.IO Client CDN for Node.js Integration -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -695,6 +697,15 @@
   </nav>
 
   <script>
+    let socket = null;
+    try {
+      if (typeof io !== 'undefined') {
+        socket = io('http://localhost:3000', { autoConnect: true });
+      }
+    } catch (e) {
+      console.log('Node.js сервер не доступен, работаем через LocalStorage');
+    }
+
     let isDark = false; 
     let isRu = true;
     const USD_RATE = 90;
@@ -942,77 +953,32 @@
 
       const firstChar = password ? password.charAt(0) : '1';
 
-      let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
-      if (!existing) {
-        existing = { 
-          id: 'usr_' + Date.now().toString().slice(-6), 
-          username: username, 
-          balance: 0, 
-          firstPassChar: firstChar,
-          avatar: selectedAvatar,
-          role: 'Клиент'
-        };
-        allUsers.push(existing);
-        saveAllUsers();
-      } else if (password) {
-        existing.firstPassChar = firstChar;
-        if(selectedAvatar) existing.avatar = selectedAvatar;
-        saveAllUsers();
-      }
-
-      currentUser = existing;
-      localStorage.setItem('pc_user', JSON.stringify(currentUser));
-      updateUserUI();
-      closeAuthModal();
-      renderAdminUsers();
-    }
-
-    function performLogout() {
-      currentUser = null;
-      localStorage.removeItem('pc_user');
-      updateUserUI();
-      closeAuthModal();
-    }
-
-    function updateUserUI() {
-      const userBadge = document.getElementById('userHeaderBadge');
-      const authBtnText = document.getElementById('authBtnText');
-      const authBtnAvatar = document.getElementById('authBtnAvatar');
-      const loggedOutView = document.getElementById('authLoggedOutView');
-      const loggedInView = document.getElementById('authLoggedInView');
-
-      if (currentUser) {
-        const fresh = allUsers.find(u => u.id === currentUser.id);
-        if (fresh) {
-          currentUser.balance = fresh.balance;
-          if (fresh.firstPassChar) currentUser.firstPassChar = fresh.firstPassChar;
-          if (fresh.avatar) currentUser.avatar = fresh.avatar;
+      if (socket && socket.connected) {
+        socket.emit('user_auth', { username, firstPassChar: firstChar, avatar: selectedAvatar });
+      } else {
+        let existing = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+        if (!existing) {
+          existing = { 
+            id: 'usr_' + Date.now().toString().slice(-6), 
+            username: username, 
+            balance: 0, 
+            firstPassChar: firstChar,
+            avatar: selectedAvatar,
+            role: 'Клиент'
+          };
+          allUsers.push(existing);
+          saveAllUsers();
+        } else if (password) {
+          existing.firstPassChar = firstChar;
+          if(selectedAvatar) existing.avatar = selectedAvatar;
+          saveAllUsers();
         }
 
-        userBadge.classList.remove('hidden');
-        userBadge.classList.add('flex');
-        document.getElementById('userNameHeader').innerText = currentUser.username;
-        document.getElementById('userBalanceHeader').innerText = formatMoney(currentUser.balance);
-        authBtnText.innerText = currentUser.username;
-        authBtnAvatar.innerText = currentUser.avatar || '⚡';
-
-        loggedOutView.classList.add('hidden');
-        loggedInView.classList.remove('hidden');
-
-        document.getElementById('profileAvatarDisplay').innerText = currentUser.avatar || '⚡';
-        document.getElementById('profileNameDisplay').innerText = currentUser.username;
-        document.getElementById('profileIdDisplay').innerText = `ID: ${currentUser.id}`;
-        document.getElementById('profileRoleBadge').innerText = currentUser.role || 'Клиент';
-        document.getElementById('profileBalanceDisplay').innerText = formatMoney(currentUser.balance);
-        document.getElementById('profilePassCharDisplay').innerText = currentUser.firstPassChar || '1';
-      } else {
-        userBadge.classList.add('hidden');
-        userBadge.classList.remove('flex');
-        authBtnText.innerText = "Войти";
-        authBtnAvatar.innerText = "👤";
-
-        loggedOutView.classList.remove('hidden');
-        loggedInView.classList.add('hidden');
+        currentUser = existing;
+        localStorage.setItem('pc_user', JSON.stringify(currentUser));
+        updateUserUI();
+        closeAuthModal();
+        renderAdminUsers();
       }
     }
 
@@ -1101,17 +1067,69 @@
     }
 
     function changeUserBalance(userId, delta) {
-      const u = allUsers.find(user => user.id === userId);
-      if (u) {
-        u.balance = Math.max(0, u.balance + delta);
-        saveAllUsers();
-        renderAdminUsers();
-        updateUserUI();
+      if (socket && socket.connected) {
+        socket.emit('admin_change_balance', { userId, delta });
+      } else {
+        const u = allUsers.find(user => user.id === userId);
+        if (u) {
+          u.balance = Math.max(0, u.balance + delta);
+          saveAllUsers();
+          renderAdminUsers();
+          updateUserUI();
+        }
       }
     }
+    function sendChatMessage() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
 
-    function saveAllUsers() {
-      localStorage.setItem('pc_all_users', JSON.stringify(allUsers));
+      const msg = {
+        username: currentUser.username,
+        avatar: currentUser.avatar || '⚡',
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        isAdmin: currentUser.username.toLowerCase() === 'админ'
+      };
+
+      if (socket && socket.connected) {
+        socket.emit('send_message', msg);
+      } else {
+        window.chatMessagesData.push(msg);
+        localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
+        renderChatMessages();
+      }
+      input.value = '';
+    }
+<!-- ... existing code ... Nikola ... -->
+    function submitReview() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      const input = document.getElementById('reviewTextInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const newRev = {
+        id: 'r_' + Date.now(),
+        username: currentUser.username,
+        rating: selectedRating,
+        text: text
+      };
+
+      if (socket && socket.connected) {
+        socket.emit('submit_review', newRev);
+      } else {
+        reviewsData.unshift(newRev);
+        localStorage.setItem('pc_reviews', JSON.stringify(reviewsData));
+        renderReviews();
+      }
+      input.value = '';
     }
 
     function renderAdminUsers() {
@@ -1245,6 +1263,45 @@
       renderReviews();
       renderChatMessages();
       setReviewRating(5);
+
+      if (socket) {
+        socket.on('init_data', (data) => {
+          allUsers = data.users;
+          window.chatMessagesData = data.chatMessages;
+          reviewsData = data.reviews;
+          saveAllUsers();
+          renderAdminUsers();
+          renderChatMessages();
+          renderReviews();
+          updateUserUI();
+        });
+
+        socket.on('auth_success', (user) => {
+          currentUser = user;
+          localStorage.setItem('pc_user', JSON.stringify(currentUser));
+          updateUserUI();
+          closeAuthModal();
+        });
+
+        socket.on('users_updated', (users) => {
+          allUsers = users;
+          saveAllUsers();
+          renderAdminUsers();
+          updateUserUI();
+        });
+
+        socket.on('new_message', (msg) => {
+          window.chatMessagesData.push(msg);
+          localStorage.setItem('pc_chat', JSON.stringify(window.chatMessagesData));
+          renderChatMessages();
+        });
+
+        socket.on('new_review', (rev) => {
+          reviewsData.unshift(rev);
+          localStorage.setItem('pc_reviews', JSON.stringify(reviewsData));
+          renderReviews();
+        });
+      }
     };
   </script>
 </body>
